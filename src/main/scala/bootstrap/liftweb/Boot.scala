@@ -1,6 +1,7 @@
 package bootstrap.liftweb
 
 import net.liftweb._
+import net.liftweb.openid._
 import util._
 import Helpers._
 
@@ -37,8 +38,8 @@ class Boot {
     Schemifier.schemify(true, Schemifier.infoF _, User)
 
     // where to search snippet
-    LiftRules.addToPackages("code")
-
+    LiftRules.addToPackages("impulsestorm.liftapp")
+    
     // Build SiteMap
     val entries = List(
       Menu.i("Home") / "index", // the simple way to declare a menu
@@ -49,11 +50,14 @@ class Boot {
 	       "Static Content"))) :::
     // the User management menu items
     User.sitemap
-
+    
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    LiftRules.setSiteMap(SiteMap(entries:_*))
+    //LiftRules.setSiteMap(SiteMap(entries:_*))
 
+    // custom dispatch rules
+    LiftRules.dispatch.append(SimpleOpenIDVendor.dispatchPF)
+    
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
       Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
