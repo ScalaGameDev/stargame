@@ -11,7 +11,7 @@ import sitemap._
 import Loc._
 import mapper._
 
-import impulsestorm.liftapp.model._
+import impulsestorm.liftapp.lib.ImOpenIDVendor
 
 
 /**
@@ -35,7 +35,7 @@ class Boot {
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
     // any ORM you want
-    Schemifier.schemify(true, Schemifier.infoF _, User)
+    Schemifier.schemify(true, Schemifier.infoF _)
 
     // where to search snippet
     LiftRules.addToPackages("impulsestorm.liftapp")
@@ -47,16 +47,14 @@ class Boot {
       // more complex because this menu allows anything in the
       // /static path to be visible
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
-	       "Static Content"))) :::
-    // the User management menu items
-    User.sitemap
+	       "Static Content"))) 
     
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
     //LiftRules.setSiteMap(SiteMap(entries:_*))
 
     // custom dispatch rules
-    LiftRules.dispatch.append(SimpleOpenIDVendor.dispatchPF)
+    LiftRules.dispatch.append(ImOpenIDVendor.dispatchPF)
     
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
@@ -70,7 +68,7 @@ class Boot {
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
     // What is the function to test if a user is logged in?
-    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+    LiftRules.loggedInTest = Full(() => ImOpenIDVendor.currentUser.isDefined)
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)

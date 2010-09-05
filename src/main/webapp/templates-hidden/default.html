@@ -51,16 +51,21 @@
 
 
   /* ]]> */
+
   </style>
+  
+  <link rel="stylesheet" type="text/css" media="screen" href="/static/openid.css" />
   </head>
   <body>
     <div class="container">
-      <div class="column span-12" style="text-align: left">
+      <div class="column span-8" style="text-align: left">
         <h1 class="alt">impulsestorm games<img alt="" id="ajax-loader" style="display:none; margin-bottom: 0px; margin-left: 5px" src="/images/ajax-loader.gif"/></h1>
       </div>
-      <div class="column span-12 last" style="text-align: right">
+      <div class="column span-16 last" style="text-align: right">
         <lift:OpenId.form/> 
       </div>
+      <script type="text/javascript" src="/static/jquery.openid.js"></script>
+      <script type="text/javascript">  $(function() { $("form.openid:eq(0)").openid(); });</script>
 
       <hr/>
 
