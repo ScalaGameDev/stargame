@@ -1,83 +1,94 @@
 package impulsestorm.liftapp.lib
 
-import se.scalablesolutions.akka.stm._
-import se.scalablesolutions.akka.stm.local.atomic
+import se.scalablesolutions.akka.actor.{Actor, ActorRef}
 
 import net.liftweb.common.SimpleActor
 import java.util.Date
 
-// StateType is an immutable case class type
-class StateSupervisor[StateType <: State, SMasterT <: StateMaster[StateType]](
-  newMaster: (String) => SMasterT) extends Actor {
+class StateSupervisor(
+  newSMActor: (String) => ActorRef, SMTimeout: Int = 300) extends Actor {
   
-  val activeStateMasters = TransactionalMap[String, Ref[(Date, SMasterT)]]
+  object CleanOldActorsMsg
+    
+  private var activeSMs = 
+    scala.collection.mutable.HashMap[String, (Long, ActorRef)]()
   
-  def spawnNewStateMaster(id: String) = {
-    val newSM = newMaster(id)
-    newSM.readFromStorage(id)
-    Ref(new Date, newSM)
+  def spawnStateMaster(id: String) = ((new Date).getTime, newSMActor(id))
+  
+  def receive = {
+    case msg: FwdedMsg => {
+      val id = msg.id
+      val sMaster = 
+        activeSMs.getOrElseUpdate(id, spawnStateMaster(id))._2
+      
+      sMaster forward msg
+      
+      activeSMs.update(id, ((new Date).getTime, sMaster))
+    }
+    case CleanOldActorsMsg => cleanOldActors() 
+    case _ => println("Unknown message received by StateSupervisor")
   }
   
-  def mutate(id: String, mutateFunc: StateType => (StateType, Any)) = atomic {
-    // ensure existence of StateMaster
-    val smRef = activeStateMasters.getOrElseUpdate(id, spawnNewStateMaster(id))
+  def cleanOldActors() = {
+    val now = (new Date).getTime
     
-    // if smRef is null, it means we just killed the StateMaster, retry...
-    if(smRef.isEmpty) retry
+    // filter out all the ones which are more stale than SMTimeout
+    val killMap = activeSMs.filter( kvtup => now - kvtup._2._1 > SMTimeout)
     
-    val sm = smRef.get._2
+    killMap.values.foreach(dateSMasterTuple => {
+      val sMaster = dateSMasterTuple._2
+      // send the PrepareShutdownMsg and stop the actors.
+      (sMaster !! PrepareShutdownMsg) match {
+        case Some(OK) => {
+          sMaster.stop
+        }
+        case _ => throw new java.io.IOException("Failure on PrepareShutdownMsg")
+      }
+    })
     
-    sm.mutate(mutateFunc)
-    
-    
-    
+    killMap.keys.foreach(activeSMs.remove)
   }
+  
   
 }
 
+trait FwdedMsg { val id: String }
+case class MutateMsg(id: String, mutationData: Any) extends FwdedMsg
+case class SubscribeMsg(id: String, listener: SimpleActor[Any])
+  extends FwdedMsg
+case class UnsubscribeMsg(id: String, listener: SimpleActor[Any])
+  extends FwdedMsg
+object PrepareShutdownMsg
+object OK
+
 // Coordinates mutation, persistence, and notification of ONE state
-trait StateMaster[StateType <: State] {
+trait StateMaster[StateType <: State] extends Actor {
   
-  val id = Ref[String]
-  val state = Ref[StateType]
+  var state: StateType
+  var listeners: List[SimpleActor[Any]]
   
-  // mutateFunc out to give: newState and a hint as to what changed
-  def mutate(mutateFunc: StateType => (StateType, Any)) = atomic {
-    val (newstate, hint) = mutateFunc(state.get) 
-    state set newstate
-    notifyAll(newstate, hint)
+  def receive = {
+    case MutateMsg(id, mutationData) => { 
+      val (newstate, hint) = mutate(mutationData)
+      state = newstate
+      listeners.foreach( _ ! (newstate, hint) )
+    }
+    case SubscribeMsg(id, listener) => 
+      listeners = listener :: listeners // set
+    case UnsubscribeMsg(id, listener) => 
+      listeners = listeners.filter(_!=listener) // set
+    case PrepareShutdownMsg =>
+      saveToStorage()
+      self reply OK
   }
   
-  def readFromStorage(storageId: String) = atomic {
-    state set rawReadFromStorage(storageId)
-    id set state.get.id
-  }
-  
-  def saveToStorage() = atomic {
-    id set rawSaveToStorage()
-  }
-  
-  // observer pattern stuff
-  val listeners = TransactionalVector[SimpleActor[Any]]()
-  
-  // sub/unsub does NOT do safety checking
-  def subscribe(listener: SimpleActor[Any]) = atomic {
-    listeners.add(listener)
-  }
-  
-  def unsubscribe(listener: SimpleActor[Any]) = atomic {
-    listeners.drop(listeners.findIndexOf(_ == listener))
-  }
-  
-  def notifyAll(newstate: StateType, hint: Any) = {
-    listeners.foreach( _ ! (newstate, hint)) 
-  }
+  def mutate(mutationData: Any) : (StateType, Any)
   
   // non-atomic reading from durable storage. must return state instance
-  def rawReadFromStorage(id: String) : StateType
+  def readFromStorage(id: String) : StateType
   
-  // non-atomic saving to durable storage, must return ID
-  def rawSaveToStorage() : String 
+  // non-atomic saving to durable storage
+  def saveToStorage() 
 }
 
 trait State {
