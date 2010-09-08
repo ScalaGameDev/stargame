@@ -2,18 +2,22 @@ package impulsestorm.liftapp.lib
 
 import se.scalablesolutions.akka.actor.{Actor, ActorRef}
 
-import net.liftweb.common.SimpleActor
+import net.liftweb.common.{SimpleActor, Logger}
 import java.util.Date
 
 class StateSupervisor(
-  newSMActor: (String) => ActorRef, SMTimeout: Int = 300) extends Actor {
+  newSMActor: (String) => ActorRef, SMTimeout: Int = 300) extends Actor
+  with Logger {
   
   object CleanOldActorsMsg
     
   private var activeSMs = 
     scala.collection.mutable.HashMap[String, (Long, ActorRef)]()
   
-  def spawnStateMaster(id: String) = ((new Date).getTime, newSMActor(id))
+  def spawnStateMaster(id: String) = {
+    info("Spawned new StateMaster with ID: " + id) 
+    ((new Date).getTime, newSMActor(id))
+  }
   
   def receive = {
     case msg: FwdedMsg => {
@@ -26,7 +30,7 @@ class StateSupervisor(
       activeSMs.update(id, ((new Date).getTime, sMaster))
     }
     case CleanOldActorsMsg => cleanOldActors() 
-    case _ => println("Unknown message received by StateSupervisor")
+    case _ => error("Unknown message received by StateSupervisor")
   }
   
   def cleanOldActors() = {
@@ -45,6 +49,8 @@ class StateSupervisor(
         case _ => throw new java.io.IOException("Failure on PrepareShutdownMsg")
       }
     })
+    
+    info("Cleaned old actors: " + killMap.keys.toString)
     
     killMap.keys.foreach(activeSMs.remove)
   }

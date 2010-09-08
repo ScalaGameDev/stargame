@@ -2,6 +2,7 @@ package bootstrap.liftweb
 
 import net.liftweb._
 import net.liftweb.openid._
+import net.liftweb.mongodb._
 import util._
 import Helpers._
 
@@ -20,22 +21,9 @@ import impulsestorm.liftapp.lib.ImOpenIDVendor
  */
 class Boot {
   def boot {
-    if (!DB.jndiJdbcConnAvailable_?) {
-      val vendor = 
-	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
-			     Props.get("db.url") openOr 
-			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
-			     Props.get("db.user"), Props.get("db.password"))
-
-      LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
-
-      DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
-    }
-
-    // Use Lift's Mapper ORM to populate the database
-    // you don't need to use Mapper to use Lift... use
-    // any ORM you want
-    Schemifier.schemify(true, Schemifier.infoF _)
+    // mongo db definiton
+    MongoDB.defineDb(DefaultMongoIdentifier, 
+      MongoAddress(MongoHost("localhost", 27017), "impulsestormGames"))
 
     // where to search snippet
     LiftRules.addToPackages("impulsestorm.liftapp")
@@ -70,7 +58,5 @@ class Boot {
     // What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => ImOpenIDVendor.currentUser.isDefined)
 
-    // Make a transaction span the whole HTTP request
-    S.addAround(DB.buildLoanWrapper)
   }
 }
