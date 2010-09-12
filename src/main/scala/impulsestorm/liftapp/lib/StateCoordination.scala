@@ -71,7 +71,7 @@ object OK
 trait StateMaster[StateType <: State] extends Actor {
   
   var state: StateType
-  var listeners: List[SimpleActor[Any]]
+  var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
     case MutateMsg(id, mutationData) => { 
@@ -90,14 +90,10 @@ trait StateMaster[StateType <: State] extends Actor {
   
   def mutate(mutationData: Any) : (StateType, Any)
   
-  // non-atomic reading from durable storage. must return state instance
-  def readFromStorage(id: String) : StateType
-  
   // non-atomic saving to durable storage
   def saveToStorage() 
 }
 
 trait State {
-  val id : String
 }
 
