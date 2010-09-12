@@ -2,9 +2,28 @@ package impulsestorm.liftapp.lib
 
 import _root_.scala.xml.NodeSeq
 
+import net.liftweb.http._
+import net.liftweb.util._
+import net.liftweb.common._
+
 import _root_.net.liftweb.openid.SimpleOpenIDVendor
 
 object ImOpenIDVendor extends SimpleOpenIDVendor {
+  /*
+  override def dispatchPF: LiftRules.DispatchPF = NamedPF("Login default") {
+    case Req(PathRoot :: LogOutPath :: _, "", _) =>
+      () => {
+        logUserOut()
+        Full(RedirectResponse(S.referer openOr "/", S responseCookies :_*))
+      }
+
+    case r @ Req(PathRoot :: LoginPath :: _, "", PostRequest)
+      if r.param(PostParamName).isDefined =>
+      () => {
+          Full(OpenIDObject.is.authRequest(r.param(PostParamName).get, "/"+PathRoot+"/"+ResponsePath))
+      }
+  }*/
+  
   override def loginForm: NodeSeq = {
     <form class="openid" method="post" action={"/"+PathRoot+"/"+LoginPath}>
       <table class="openid">
@@ -37,4 +56,6 @@ object ImOpenIDVendor extends SimpleOpenIDVendor {
       </table>
     </form>  
   }
+  
+  
 }
