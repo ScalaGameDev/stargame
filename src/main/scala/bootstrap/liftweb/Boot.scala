@@ -13,6 +13,7 @@ import Loc._
 import mapper._
 
 import impulsestorm.liftapp.lib.ImOpenIDVendor
+import impulsestorm.liftapp.model.{StarView}
 
 
 /**
@@ -30,16 +31,16 @@ class Boot {
     
     // Build SiteMap
     val entries = List(
-      Menu.i("Home") / "index", // the simple way to declare a menu
-
+      Menu("Home") / "index", // the simple way to declare a menu
+      Menu("Login") / "login",
       // more complex because this menu allows anything in the
       // /static path to be visible
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
-	       "Static Content"))) 
-    
+	       "Static Content"))) ::: StarView.menus
+	  
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    //LiftRules.setSiteMap(SiteMap(entries:_*))
+    LiftRules.setSiteMap(SiteMap(entries:_*))
 
     // custom dispatch rules
     LiftRules.dispatch.append(ImOpenIDVendor.dispatchPF)

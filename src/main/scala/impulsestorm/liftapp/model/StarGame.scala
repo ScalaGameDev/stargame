@@ -1,6 +1,8 @@
 package impulsestorm.liftapp.model
 
-import _root_.net.liftweb.mongodb._ 
+import _root_.net.liftweb.mongodb._
+import _root_.net.liftweb.sitemap._
+import _root_.net.liftweb.sitemap.Loc._
 import impulsestorm.liftapp.lib._
 
 import java.util.Date
@@ -111,6 +113,26 @@ object StarGame {
   
   val supervisor = Actor.actorOf(new StateSupervisor(newSMActor))
   
+  
+}
+
+object StarView {
+  import impulsestorm.liftapp.lib.ImOpenIDVendor.loginFirst
+  
+  val newg = Menu(Loc("stargame-new", 
+                      List("stargame", "new"),
+                      "NewGame", loginFirst, Hidden))
+  val join = Menu(Loc("stargame-join", 
+                      List("stargame", "join")->true,
+                      "JoinGame", loginFirst, Hidden))
+  val play = Menu(Loc("stargame-play", 
+                      List("stargame", "play")->true,
+                      "PlayGame", loginFirst, Hidden))
+  
+  val root = Menu(Loc("stargame", List("stargame", "index"), "StarGame"), 
+                  newg)
+                      
+  val menus = List(root)
   
 }
 
