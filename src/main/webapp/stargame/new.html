@@ -1,7 +1,15 @@
 <lift:surround with="base-default" at="content">
   <h2>New Stargame</h2>
   
-  <lift:
+  <lift:msg id="newgame_msg" />
+  
+  <lift:StarGameSnip.newfrm form="POST">
+    <table>
+      <tr><td><form:mapSize /></td></tr>
+      <tr><td><form:nPlayers /></td></tr>
+      <tr><td><form:submit /></td></tr>
+    </table>
+  </lift:StarGameSnip.newfrm>
   
 </lift:surround>
 

@@ -85,27 +85,35 @@ class StarGameMaster(var state: StarGameState)
 
 object StarGame {
   
+  val starDensity = 1/36.0 // One per 36 square light years
+  
   val starClasses : List[(Double, String)] =
     List(0.13->"B", 0.6->"A", 3.0->"F", 7.6->"G", 12.1->"K", 76.45->"M")
   
-  def newState(name: String = "Untitled Game") = {
+  val sizesNStars   = List(24, 48, 70, 108)
+  val sizesAreas    = sizesNStars.map(_*starDensity)
+  val sizesNames    = List("Small", "Medium", "Large", "Huge")
+  val sizesSqLength = sizesAreas.map(A => math.sqrt(A))
+  val sizesIndices  = List(0,1,2,3)  
+  
+  // size: 0=Small, 1=Medium, etc.
+  def newState(name: String = "Untitled Game", size: Int = 1,
+               nPlayers: Int = 3) = {
     val id = new ObjectId
     val timeMultiplier = 24 // one year per real world hour
     
-    val starDensity = 1/36.0 // One per 36 square light years
-    
-    val mapSize = (600.0, 600.0)
-    
-    val numStars = (mapSize._1*mapSize._2*starDensity).toInt
+    val numStars = sizesNStars(size)
+    val mapSizeL = sizesSqLength(size)
     
     val stars = (1 to numStars).map( id => {
       Star(id, name="Star"+id.toString, 
            sClass=SimRandom.weightedRandom(starClasses),
-           x=Random.nextDouble*mapSize._1, y=Random.nextDouble*mapSize._2,
+           x=Random.nextDouble*mapSizeL, y=Random.nextDouble*mapSizeL,
            planets = Nil)
            
     })
     
+    id
   }
   
   val newSMActor = (id: String) => 
