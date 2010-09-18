@@ -16,4 +16,11 @@ object SimRandom {
     val rand = Random.nextDouble()
     (normalizedCumWeights zip objs).filter(_._1 > rand).head._2 
   }
+  
+  def randomObj[ObjT](li: List[ObjT]) =
+    li(Random.nextInt(li.length))
+  
+  // random integer between a and b 
+  def random(a: Int, b: Int) =
+    a + Random.nextInt(b-a+1)
 }

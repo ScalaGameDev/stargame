@@ -10,31 +10,55 @@ import se.scalablesolutions.akka.actor.{Actor}
 import org.bson.types.ObjectId
 import scala.util.Random
 
-case class Star( id: Long, name: String, sClass: String, x: Double, y: Double,
+case class Star( id: Long, name: String, sClass: StarClass.Value, x: Double, y: Double,
                  planets: List[Planet])
-
-case class Planet( id: Long, name: Option[String], pType: String, 
-                   distance: Double, baseEnvironment: Double )
                  
+object Star {
+  
+  import StarClass._
+  
+  def getRandom( mapSizeL: Double, id: Long ) = {
+    val sClass = SimRandom.weightedRandom(StarClass.abundances)
+    val sName = "S"+id.toString
+    
+    
+    Star(id, name=sName, sClass=sClass,
+         x=Random.nextDouble*mapSizeL, y=Random.nextDouble*mapSizeL,
+         planets = randomPlanets(sClass))
+  }
+  
+  def randomPlanets( sClass: StarClass.Value ) : List[Planet] = {
+    val nPlanets = StarClass.randomNPlanets(sClass)
+    
+    val zones = 
+      List.fill(nPlanets)(StarClass.randomZone(sClass, nPlanets)).sorted
+    
+    val idZonePairs = (1 to nPlanets).toList zip zones 
+    
+    idZonePairs.map(p => Planet.genRandom(p._1, sClass, p._2))
+  }
+  
+}
+
+case class Planet( id: Long, pType: PlanetType.Value, 
+                   zone: PlanetZone.Value ) 
+
+object Planet {
+  def genRandom( id: Long, sClass: StarClass.Value, zone: PlanetZone.Value ) = {
+    val pType = PlanetZone.randomPType(sClass, zone)
+    Planet(id, pType, zone)
+  }
+}
+                   
 case class Player( openid: String, alias: Option[String],
+                   traits: List[Trait.Value],
                    exploredStarIds: List[Long],
                    gold: Double,
                    colonies: List[Colony],
                    fleetsStationary: List[FleetStationary],
                    fleetsMoving: List[FleetMoving],
-                   techs: List[TechKey], 
-                   researchAlloc: Map[TechCategory.Value, Double]) 
-
-case class TechKey(key: String)
-object TechCategory extends Enumeration {
-  
-  val Ecology = Value("Ecology")
-  val Industry = Value("Industry")
-  val Society = Value("Society")
-  val Weaponry = Value("Weaponry")
-  val Shielding = Value("Shielding")
-  val Propulsion = Value("Propulsion")
-}
+                   techs: List[Tech.Value], 
+                   researchAlloc: Map[TechCategory.Value, Double] ) 
 
 case class Colony( starId: Long, settlements: List[Settlement] )
 
@@ -48,10 +72,10 @@ case class FleetMoving( ships: Map[ShipDesign, Long], fromStarId: Long, toStarId
 
 case class ShipDesign( warpSpeed: Double )                        
 
-case class StarGameState( _id: String, 
-                          name: String, 
-                          gameYear: Double, timeMultiplier: Double,
-                          realWorldTime: Date,
+case class StarGameState( _id: String, createdBy: String,
+                          name: String, started: Boolean = false,
+                          gameYear: Double = 0 , timeMultiplier: Double,
+                          realWorldTime: Date, nPlayers: Int,
                           stars: List[Star], players: List[Player] )
   extends State with MongoDocument[StarGameState] {
   
@@ -87,9 +111,6 @@ object StarGame {
   
   val starDensity = 1/36.0 // One per 36 square light years
   
-  val starClasses : List[(Double, String)] =
-    List(0.13->"B", 0.6->"A", 3.0->"F", 7.6->"G", 12.1->"K", 76.45->"M")
-  
   val sizesNStars   = List(24, 48, 70, 108)
   val sizesAreas    = sizesNStars.map(_*starDensity)
   val sizesNames    = List("Small", "Medium", "Large", "Huge")
@@ -97,21 +118,21 @@ object StarGame {
   val sizesIndices  = List(0,1,2,3)  
   
   // size: 0=Small, 1=Medium, etc.
-  def newState(name: String = "Untitled Game", size: Int = 1,
+  def newState(createdBy: String, name: String = "Untitled Game", size: Int = 1,
                nPlayers: Int = 3) = {
-    val id = new ObjectId
+    val id = (new ObjectId).toString
     val timeMultiplier = 24 // one year per real world hour
     
     val numStars = sizesNStars(size)
     val mapSizeL = sizesSqLength(size)
     
-    val stars = (1 to numStars).map( id => {
-      Star(id, name="Star"+id.toString, 
-           sClass=SimRandom.weightedRandom(starClasses),
-           x=Random.nextDouble*mapSizeL, y=Random.nextDouble*mapSizeL,
-           planets = Nil)
-           
-    })
+    val stars = (1 to numStars).map( Star.getRandom(mapSizeL, _) ).toList
+    
+    val state =
+      StarGameState(id, createdBy, name, timeMultiplier=timeMultiplier,
+        realWorldTime=new Date, nPlayers=nPlayers, stars=stars, players=Nil)
+    
+    state.save    
     
     id
   }

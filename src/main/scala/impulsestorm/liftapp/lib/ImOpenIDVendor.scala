@@ -53,4 +53,7 @@ object ImOpenIDVendor extends SimpleOpenIDVendor {
     }                 
   )
   
+  // gets identifier assuming logged in
+  def identifier = currentUser.get.getIdentifier
+  
 }

@@ -9,6 +9,7 @@ import _root_.net.liftweb.common._
 import _root_.net.liftweb.http._
 
 import impulsestorm.liftapp.model.StarGame
+import impulsestorm.liftapp.lib.ImOpenIDVendor
 
 class StarGameSnip {
   def newfrm(in: NodeSeq) : NodeSeq = {
@@ -16,7 +17,9 @@ class StarGameSnip {
     var nPlayers = 4;
     
     def handleForm() = {
-      val newGameId = StarGame.newState(size=mapSize, nPlayers=nPlayers)
+      val newGameId = 
+        StarGame.newState(createdBy=ImOpenIDVendor.identifier,
+                          size=mapSize, nPlayers=nPlayers)
       S.redirectTo("play/" + newGameId)
     }
     
