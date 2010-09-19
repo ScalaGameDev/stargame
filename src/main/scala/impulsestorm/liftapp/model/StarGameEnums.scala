@@ -2,6 +2,39 @@ package impulsestorm.liftapp.model
 
 import impulsestorm.liftapp.lib.SimRandom._
 
+import net.liftweb.json._
+import net.liftweb.json.JsonAST._
+
+class EnumSerializer[E <: Enumeration: ClassManifest](enum: E)
+  extends Serializer[E#Value] {
+
+  import JsonDSL._
+  val EnumerationClass = classOf[E#Value]
+
+  def deserialize(implicit format: Formats):
+    PartialFunction[(TypeInfo, JValue), E#Value] = {
+    case (TypeInfo(EnumerationClass, _), json) => json match {
+      case JString(value) => enum.withName(value)
+      case value => 
+        throw new MappingException("Can't convert " +
+                                   value + " to "+ EnumerationClass)
+    }
+  }
+  
+  def serialize(implicit format: Formats): PartialFunction[Any,JValue] = {
+    case i: E#Value => i.toString
+  }
+} 
+
+object EnumSerializers {
+  val li = 
+    List(TechCategory, Tech, Trait, StarClass, PlanetZone, PlanetType).map(
+      new EnumSerializer(_))
+      
+  
+  val formats = li.foldLeft(Serialization.formats(NoTypeHints))(_+_)
+}
+
 object TechCategory extends Enumeration {
   val Computers   = Value("Computers")
   val Ecology     = Value("Ecology")

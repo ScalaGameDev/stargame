@@ -10,8 +10,8 @@ import se.scalablesolutions.akka.actor.{Actor}
 import org.bson.types.ObjectId
 import scala.util.Random
 
-case class Star( id: Long, name: String, sClass: StarClass.Value, x: Double, y: Double,
-                 planets: List[Planet])
+case class Star( id: Long, name: String, sClass: StarClass.Value, 
+                 x: Double, y: Double, planets: List[Planet])
                  
 object Star {
   
@@ -67,13 +67,14 @@ case class Settlement( planetId: Long, population: Double, capital: Double )
 // no location: in transit
 case class FleetStationary( ships: Map[ShipDesign, Long], locationStarId: Long )
 
-case class FleetMoving( ships: Map[ShipDesign, Long], fromStarId: Long, toStarId: Long,
+case class FleetMoving( ships: Map[ShipDesign, Long], 
+                        fromStarId: Long, toStarId: Long,
                         departClock: Double, arriveClock: Double )
 
 case class ShipDesign( warpSpeed: Double )                        
 
-case class StarGameState( _id: String, createdBy: String,
-                          name: String, started: Boolean = false,
+case class StarGameState( _id: String, createdBy: String, name: String, 
+                          mapSize: String, started: Boolean = false,
                           gameYear: Double = 0 , timeMultiplier: Double,
                           realWorldTime: Date, nPlayers: Int,
                           stars: List[Star], players: List[Player] )
@@ -104,7 +105,11 @@ class StarGameMaster(var state: StarGameState)
     state = StarGameState.find(id).get
     
   // FIXME stub
-  def mutate(mutationData: Any) = (state, None)
+  def mutate(mutationData: Any) = {
+    val newState = state
+    saveToStorage()
+    (newState, None)
+  }
 }
 
 object StarGame {
@@ -116,6 +121,9 @@ object StarGame {
   val sizesNames    = List("Small", "Medium", "Large", "Huge")
   val sizesSqLength = sizesAreas.map(A => math.sqrt(A))
   val sizesIndices  = List(0,1,2,3)  
+  
+  import net.liftweb.json._
+  implicit val formats = EnumSerializers.formats
   
   // size: 0=Small, 1=Medium, etc.
   def newState(createdBy: String, name: String = "Untitled Game", size: Int = 1,
@@ -129,8 +137,10 @@ object StarGame {
     val stars = (1 to numStars).map( Star.getRandom(mapSizeL, _) ).toList
     
     val state =
-      StarGameState(id, createdBy, name, timeMultiplier=timeMultiplier,
-        realWorldTime=new Date, nPlayers=nPlayers, stars=stars, players=Nil)
+      StarGameState(id, createdBy, name, sizesNames(size), 
+                    timeMultiplier=timeMultiplier,
+                    realWorldTime=new Date, nPlayers=nPlayers, stars=stars,
+                    players=Nil)
     
     state.save    
     
@@ -151,9 +161,6 @@ object StarView {
   val newg = Menu(Loc("stargame-new", 
                       List("stargame", "new"),
                       "NewGame", loginFirst, Hidden))
-  val join = Menu(Loc("stargame-join", 
-                      List("stargame", "join")->true,
-                      "JoinGame", loginFirst, Hidden))
   val play = Menu(Loc("stargame-play", 
                       List("stargame", "play")->true,
                       "PlayGame", loginFirst, Hidden))

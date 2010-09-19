@@ -1,5 +1,26 @@
 <lift:surround with="base-default" at="content">
   <h2>Welcome to stargame</h2>
   <p><a href="new">New game</a></p>
+  
+  <lift:StarGameSnip.list>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Map size</th>
+      <th>Players</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+    <list:listgames>
+      <tr>
+        <td><game:name /></td>
+        <td><game:mapSize /></td>
+        <td><game:nPlayers /></td>
+        <td><game:status /></td>
+        <td><game:playLink /></td>
+      </tr>
+    </list:listgames>
+  </table>
+  </lift:StarGameSnip.list>
 </lift:surround>
 

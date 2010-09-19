@@ -8,7 +8,7 @@ import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.common._
 import _root_.net.liftweb.http._
 
-import impulsestorm.liftapp.model.StarGame
+import impulsestorm.liftapp.model.{StarGame, StarGameState}
 import impulsestorm.liftapp.lib.ImOpenIDVendor
 
 class StarGameSnip {
@@ -38,9 +38,26 @@ class StarGameSnip {
                                          onSubmit = nPlayers = _),
       "submit"   -> SHtml.submit("Create game", handleForm)
     )
+  }
+  
+  def list(in: NodeSeq) : NodeSeq = {
     
+    val allGames = StarGameState.findAll
     
+    def bindGames(template: NodeSeq) : NodeSeq = {
+      allGames.flatMap( g => 
+        bind("game", template,
+          "name"->g.name,
+          "mapSize"->g.mapSize,
+          "nPlayers"->g.nPlayers,
+          "status"-> (if(g.started) "In progress" else "Waiting for players"),
+          "playLink"-> <a href={"play/"+g._id}>Play</a>
+        )
+      )
+    }
     
+    bind("list", in,
+      "listgames" -> bindGames _)
   }
   
 }
