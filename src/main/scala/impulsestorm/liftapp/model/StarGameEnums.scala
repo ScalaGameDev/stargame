@@ -24,15 +24,14 @@ class EnumSerializer[E <: Enumeration: ClassManifest](enum: E)
   def serialize(implicit format: Formats): PartialFunction[Any,JValue] = {
     case i: E#Value => i.toString
   }
-} 
+}
 
 object EnumSerializers {
   val li = 
     List(TechCategory, Tech, Trait, StarClass, PlanetZone, PlanetType).map(
       new EnumSerializer(_))
-      
   
-  val formats = li.foldLeft(Serialization.formats(NoTypeHints))(_+_)
+  val formats: Formats = li.foldLeft(Serialization.formats(NoTypeHints))(_+_)
 }
 
 object TechCategory extends Enumeration {
@@ -98,8 +97,8 @@ object StarClass extends Enumeration {
     else if ( List(F, G, K)        contains sClass )
       // shift probability towards outer for 6 or more planets
       weightedRandom( 
-        List( math.min(1/3.0, 0.5-totalPlanets/16.0)->PlanetZone.Inner,
-              math.min(1/3.0, 0.5-totalPlanets/16.0)->PlanetZone.Middle,
+        List( math.min(1/3.0, 0.5-totalPlanets/32.0)->PlanetZone.Inner,
+              math.min(1/3.0, 0.5-totalPlanets/32.0)->PlanetZone.Middle,
               math.max(1/3.0, totalPlanets/16.0)    ->PlanetZone.Outer ) )
     else PlanetZone.Outer
     

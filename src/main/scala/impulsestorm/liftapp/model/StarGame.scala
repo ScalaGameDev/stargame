@@ -41,7 +41,7 @@ object Star {
 }
 
 case class Planet( id: Long, pType: PlanetType.Value, 
-                   zone: PlanetZone.Value ) 
+                   zone: PlanetZone.Value )
 
 object Planet {
   def genRandom( id: Long, sClass: StarClass.Value, zone: PlanetZone.Value ) = {
@@ -58,7 +58,7 @@ case class Player( openid: String, alias: Option[String],
                    fleetsStationary: List[FleetStationary],
                    fleetsMoving: List[FleetMoving],
                    techs: List[Tech.Value], 
-                   researchAlloc: Map[TechCategory.Value, Double] ) 
+                   researchAlloc: Map[TechCategory.Value, Double] )
 
 case class Colony( starId: Long, settlements: List[Settlement] )
 
@@ -93,6 +93,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
 }
 
 object StarGameState extends MongoDocumentMeta[StarGameState] {
+  override def formats = EnumSerializers.formats
   override def collectionName = "StarGameState"
 }
 
@@ -117,17 +118,17 @@ object StarGame {
   val starDensity = 1/36.0 // One per 36 square light years
   
   val sizesNStars   = List(24, 48, 70, 108)
-  val sizesAreas    = sizesNStars.map(_*starDensity)
+  val sizesAreas    = sizesNStars.map(_ / starDensity)
   val sizesNames    = List("Small", "Medium", "Large", "Huge")
   val sizesSqLength = sizesAreas.map(A => math.sqrt(A))
   val sizesIndices  = List(0,1,2,3)  
   
-  import net.liftweb.json._
-  implicit val formats = EnumSerializers.formats
-  
   // size: 0=Small, 1=Medium, etc.
   def newState(createdBy: String, name: String = "Untitled Game", size: Int = 1,
                nPlayers: Int = 3) = {
+    
+    implicit val formats = EnumSerializers.formats
+    
     val id = (new ObjectId).toString
     val timeMultiplier = 24 // one year per real world hour
     
