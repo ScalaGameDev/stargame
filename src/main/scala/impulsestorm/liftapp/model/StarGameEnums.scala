@@ -5,16 +5,22 @@ import impulsestorm.liftapp.lib.SimRandom._
 import net.liftweb.json._
 import net.liftweb.json.JsonAST._
 
-class EnumSerializer[E <: Enumeration: ClassManifest](enum: E)
+class EnumSerializer[E <: Enumeration: ClassManifest](val enum: E)
   extends Serializer[E#Value] {
 
   import JsonDSL._
-  val EnumerationClass = classOf[E#Value]
+  val EnumerationClass = classOf[enum.Value] 
 
+  println(enum.toString)
+  println(EnumerationClass)
+  
   def deserialize(implicit format: Formats):
     PartialFunction[(TypeInfo, JValue), E#Value] = {
-    case (TypeInfo(EnumerationClass, _), json) => json match {
-      case JString(value) => enum.withName(value)
+    case (TypeInfo(x, z), json) if x==EnumerationClass => json match {
+      case JString(value) => {
+        println(x)
+        enum.withName(value)
+      }
       case value => 
         throw new MappingException("Can't convert " +
                                    value + " to "+ EnumerationClass)
