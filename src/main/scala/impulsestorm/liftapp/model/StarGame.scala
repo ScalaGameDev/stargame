@@ -93,7 +93,6 @@ case class StarGameState( _id: String, createdBy: String, name: String,
 }
 
 object StarGameState extends MongoDocumentMeta[StarGameState] {
-  override def formats = EnumSerializers.formats
   override def collectionName = "StarGameState"
 }
 
@@ -126,8 +125,6 @@ object StarGame {
   // size: 0=Small, 1=Medium, etc.
   def newState(createdBy: String, name: String = "Untitled Game", size: Int = 1,
                nPlayers: Int = 3) = {
-    
-    implicit val formats = EnumSerializers.formats
     
     val id = (new ObjectId).toString
     val timeMultiplier = 24 // one year per real world hour

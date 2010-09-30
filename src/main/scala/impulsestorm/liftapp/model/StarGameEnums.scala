@@ -5,42 +5,16 @@ import impulsestorm.liftapp.lib.SimRandom._
 import net.liftweb.json._
 import net.liftweb.json.JsonAST._
 
-class EnumSerializer[E <: Enumeration: ClassManifest](val enum: E)
-  extends Serializer[E#Value] {
-
-  import JsonDSL._
-  val EnumerationClass = classOf[enum.Value] 
-
-  println(enum.toString)
-  println(EnumerationClass)
-  
-  def deserialize(implicit format: Formats):
-    PartialFunction[(TypeInfo, JValue), E#Value] = {
-    case (TypeInfo(x, z), json) if x==EnumerationClass => json match {
-      case JString(value) => {
-        println(x)
-        enum.withName(value)
-      }
-      case value => 
-        throw new MappingException("Can't convert " +
-                                   value + " to "+ EnumerationClass)
-    }
+trait GhettoEnum {
+  type Value = String
+  def Value(s: String) : Value = {
+    values = s :: values
+    s
   }
-  
-  def serialize(implicit format: Formats): PartialFunction[Any,JValue] = {
-    case i: E#Value => i.toString
-  }
+  var values : List[Value] = Nil
 }
 
-object EnumSerializers {
-  val li = 
-    List(TechCategory, Tech, Trait, StarClass, PlanetZone, PlanetType).map(
-      new EnumSerializer(_))
-  
-  val formats: Formats = li.foldLeft(Serialization.formats(NoTypeHints))(_+_)
-}
-
-object TechCategory extends Enumeration {
+object TechCategory extends GhettoEnum {
   val Computers   = Value("Computers")
   val Ecology     = Value("Ecology")
   val Industry    = Value("Industry")
@@ -49,10 +23,10 @@ object TechCategory extends Enumeration {
   val Propulsion  = Value("Propulsion")
 }
 
-object Tech extends Enumeration {
+object Tech extends GhettoEnum {
 }
 
-object Trait extends Enumeration {
+object Trait extends GhettoEnum {
   val Militaristic  = Value("Militaristic")
   val Scientific    = Value("Scientific")
   val Expansionist  = Value("Expansionist")
@@ -62,7 +36,7 @@ object Trait extends Enumeration {
   val Commercial    = Value("Commercial")  
 }
 
-object StarClass extends Enumeration {
+object StarClass extends GhettoEnum {
   val Giant   = Value("Giant")
   val B       = Value("B")
   val A       = Value("A")
@@ -99,7 +73,7 @@ object StarClass extends Enumeration {
   
   def randomZone(sClass: Value, totalPlanets: Int) =
     if      ( List(Giant, B, A, M) contains sClass )
-      randomObj(PlanetZone.listZones)
+      randomObj(PlanetZone.values)
     else if ( List(F, G, K)        contains sClass )
       // shift probability towards outer for 6 or more planets
       weightedRandom( 
@@ -111,12 +85,10 @@ object StarClass extends Enumeration {
     
 }
 
-object PlanetZone extends Enumeration {
+object PlanetZone extends GhettoEnum {
   val Inner  = Value("Inner")
   val Middle = Value("Middle")
   val Outer  = Value("Outer")
-  
-  val listZones = this.values.toList
   
   def randomPType(sClass: StarClass.Value, 
                   zone: PlanetZone.Value) : PlanetType.Value = {
@@ -164,7 +136,7 @@ object PlanetZone extends Enumeration {
   }
 }
 
-object PlanetType extends Enumeration {
+object PlanetType extends GhettoEnum {
   val Terran    = Value("Terran")
   val Ocean     = Value("Ocean")
   val Arid      = Value("Arid")
@@ -174,6 +146,4 @@ object PlanetType extends Enumeration {
   val Inferno   = Value("Inferno")
   val Asteroid  = Value("Asteroid")
   val GasGiant  = Value("Gas Giant")
-  
-  val listTypes = this.values.toList
 }
