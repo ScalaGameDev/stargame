@@ -15,7 +15,6 @@ import mapper._
 import impulsestorm.liftapp.lib.ImOpenIDVendor
 import impulsestorm.liftapp.model.{StarView}
 
-
 /**
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
@@ -42,7 +41,8 @@ class Boot {
     // each page, just comment this line out.
     LiftRules.setSiteMap(SiteMap(entries:_*))
 
-    // custom dispatch rules
+    LiftRules.statelessRewrite.prepend(StarView.rewrites)
+    
     LiftRules.dispatch.append(ImOpenIDVendor.dispatchPF)
     
     //Show the spinny image when an Ajax call starts

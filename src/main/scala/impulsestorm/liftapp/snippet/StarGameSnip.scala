@@ -12,6 +12,7 @@ import impulsestorm.liftapp.model.{StarGame, StarGameState}
 import impulsestorm.liftapp.lib.ImOpenIDVendor
 
 class StarGameSnip {
+  
   def newfrm(in: NodeSeq) : NodeSeq = {
     var mapSize = 1;
     var nPlayers = 4;
@@ -60,6 +61,12 @@ class StarGameSnip {
       "listgames" -> bindGames _)
   }
   
+  def play(in: NodeSeq) : NodeSeq = {
+    S.param("gameId") match {
+      case Full(gameId) => Text(gameId)
+      case _ => S.redirectTo("/stargame/")
+    }
+  }
 }
 
 }

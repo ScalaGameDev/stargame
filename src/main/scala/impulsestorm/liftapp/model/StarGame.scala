@@ -1,6 +1,8 @@
 package impulsestorm.liftapp.model
 
 import _root_.net.liftweb.mongodb._
+import _root_.net.liftweb.util._
+import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import impulsestorm.liftapp.lib._
@@ -155,18 +157,20 @@ object StarGame {
 
 object StarView {
   import impulsestorm.liftapp.lib.ImOpenIDVendor.loginFirst
-  
-  val newg = Menu(Loc("stargame-new", 
-                      List("stargame", "new"),
-                      "NewGame", loginFirst, Hidden))
-  val play = Menu(Loc("stargame-play", 
-                      List("stargame", "play")->true,
-                      "PlayGame", loginFirst, Hidden))
-  
-  val root = Menu(Loc("stargame", List("stargame", "index"), "StarGame"), 
-                  newg)
                       
-  val menus = List(root)
+  val root = Menu("Stargame") / "stargame" / "index" submenus (
+    Menu("New Stargame") / "stargame" / "new" >> loginFirst >> Hidden,
+    Menu("Play Stargame") / "stargame" / "play" / ** >> loginFirst >> Hidden
+  )
+
+  val menus = List(root)  
+    
+  val rewrites = NamedPF[RewriteRequest, RewriteResponse]("StarGame") {
+    case RewriteRequest(
+          ParsePath("stargame" :: "play" :: gameId :: Nil, _, _, _), _, _) =>
+      RewriteResponse(
+        "stargame" :: "play" :: Nil, Map("gameId"->gameId))
+  }
   
 }
 
