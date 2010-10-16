@@ -1,5 +1,7 @@
 <lift:surround with="base-default" at="content">
-  <h2>Play Stargame</h2>
-  <lift:StarGameSnip.play />
+  <script src="/static/stargame/stargame.js" />
+  <lift:comet type="StarGameComet" name="none">
+    <comet:message />
+  </lift:comet>
 </lift:surround>
 

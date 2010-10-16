@@ -14,22 +14,28 @@ import impulsestorm.liftapp.lib.ImOpenIDVendor
 class StarGameSnip {
   
   def newfrm(in: NodeSeq) : NodeSeq = {
+    var name = "Untitled Game"
     var mapSize = 1;
     var nPlayers = 4;
     
     def handleForm() = {
-      val newGameId = 
-        StarGame.newState(createdBy=ImOpenIDVendor.identifier,
-                          size=mapSize, nPlayers=nPlayers)
-      S.redirectTo("play/" + newGameId)
+      val gameName = if(name != "") name else "Untitled Game"
+      val newGameState = 
+        StarGameState.newState(name=name, createdBy=ImOpenIDVendor.identifier,
+                               size=mapSize, nPlayers=nPlayers)
+     
+      newGameState.save
+      
+      S.redirectTo("play/" + newGameState._id)
     }
     
     val sizesOpts = 
-      StarGame.sizesIndices zip StarGame.sizesNames
+      StarGameState.sizesIndices zip StarGameState.sizesNames
     
     // FIXME : wtf why doesn't type inferencing figure out what the type of
     // the onSubmit function argument is...
     bind("form", in,
+      "name"     -> SHtml.text(name, name = _),
       "mapSize"  -> SHtml.selectObj[Int](options = sizesOpts, 
                                          default = Full(mapSize),
                                          onSubmit = mapSize = _ ),
@@ -50,7 +56,7 @@ class StarGameSnip {
         bind("game", template,
           "name"->g.name,
           "mapSize"->g.mapSize,
-          "nPlayers"->g.nPlayers,
+          "nPlayers"->"%d/%d".format(g.players.length, g.nPlayers),
           "status"-> (if(g.started) "In progress" else "Waiting for players"),
           "playLink"-> <a href={"play/"+g._id}>Play</a>
         )
@@ -62,10 +68,7 @@ class StarGameSnip {
   }
   
   def play(in: NodeSeq) : NodeSeq = {
-    S.param("gameId") match {
-      case Full(gameId) => Text(gameId)
-      case _ => S.redirectTo("/stargame/")
-    }
+    Text("Playing game")
   }
 }
 

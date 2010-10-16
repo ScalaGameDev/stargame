@@ -20,6 +20,18 @@ object SimRandom {
   def randomObj[ObjT](li: List[ObjT]) =
     li(Random.nextInt(li.length))
   
+  // random in "li" not already in "existing"
+  // "li" should be >> than "existing"
+  def randomNoCollisions[ObjT](li: List[ObjT], existing: List[ObjT]) : ObjT = {
+    val selected = li(Random.nextInt(li.length))
+    
+    if( !existing.contains(selected) ) 
+      selected
+    else
+      randomNoCollisions(li, existing)
+  }
+    
+  
   // random integer between a and b 
   def random(a: Int, b: Int) =
     a + Random.nextInt(b-a+1)
