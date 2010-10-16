@@ -30,9 +30,12 @@ object SimRandom {
     else
       randomNoCollisions(li, existing)
   }
-    
   
   // random integer between a and b 
   def random(a: Int, b: Int) =
     a + Random.nextInt(b-a+1)
+  
+  def random(a: Double, b: Double) = 
+    a + Random.nextDouble()*(b-a)
+    
 }

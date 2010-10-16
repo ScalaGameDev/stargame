@@ -5,6 +5,8 @@ import net.liftweb.common.Logger
 
 import org.bson.types.ObjectId
 
+import scala.util.Random
+
 import java.util.Date
 
 import _root_.net.liftweb.mongodb._
@@ -12,16 +14,48 @@ import _root_.net.liftweb.mongodb._
 case class StarGameState( _id: String, createdBy: String, name: String, 
                           mapSize: String, started: Boolean = false,
                           gameYear: Double = 0 , timeMultiplier: Double,
-                          realWorldTime: Date, nPlayers: Int,
+                          realStartTime: Date, nPlayers: Int,
                           stars: List[Star], players: List[Player],
+                          fleets: List[Fleet], colonies: List[Colony],
                           availableStartStarIds: List[Int])
   extends State with MongoDocument[StarGameState] {
   
+  // copy constructor
+  def copy( src: StarGameState, 
+            replacePlayers: Option[List[Player]] = None,
+            replaceAvailableStartStarIds: Option[List[Int]] = None,
+            replaceFleets: Option[List[Fleet]] = None,
+            replaceColonies: Option[List[Colony]] = None) = 
+  {
+    
+    val players = replacePlayers getOrElse src.players
+    val availableStartStarIds = 
+      replaceAvailableStartStarIds getOrElse src.availableStartStarIds
+    val fleets = replaceFleets getOrElse src.fleets
+    val colonies = replaceColonies getOrElse src.colonies
+              
+    StarGameState(  _id = src._id,
+                    createdBy = src.createdBy,
+                    name = src.name,
+                    mapSize = src.mapSize,
+                    started = src.started,
+                    gameYear = src.gameYear,
+                    timeMultiplier = src.timeMultiplier,
+                    realStartTime = src.realStartTime,
+                    nPlayers = src.nPlayers,
+                    stars = src.stars,
+                    players = players,
+                    fleets = fleets,
+                    colonies = colonies,
+                    availableStartStarIds = availableStartStarIds )
+  }
+    
   def meta = StarGameState
   
-  def newGameYear = {
+  // what game year it should be given the current real time
+  def shouldBeGameYear = {
     val secondsOld = 
-      ( (new java.util.Date).getTime - realWorldTime.getTime ) / 1000.0
+      ( (new java.util.Date).getTime - realStartTime.getTime ) / 1000.0
     val daysOld = secondsOld/86400.0
       
     val newGameYear = gameYear + daysOld*timeMultiplier 
@@ -70,7 +104,12 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
     val numStars = sizesNStars(size)
     val mapSizeL = sizesSqLength(size)
     
-    val stars = (1 to numStars).map( Star.getRandom(mapSizeL, _) ).toList
+    val shuffledNames = Random.shuffle(Star.names)
+    
+    val stars = 
+      (0 until numStars).map( 
+        starId => Star.getRandom(mapSizeL, starId, shuffledNames(starId)) 
+      ).toList
     
     val starIdsWithTerran = 
       stars.filter( _.planets.exists(_.pType == PlanetType.Terran) ).map(_.id)
@@ -79,8 +118,9 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       // currently does no filtering to ensure players start far from each other
       StarGameState(id, createdBy, name, sizesNames(size), 
                     timeMultiplier=timeMultiplier,
-                    realWorldTime=new Date, nPlayers=nPlayers, stars=stars,
-                    players=Nil, availableStartStarIds = starIdsWithTerran)
+                    realStartTime=new Date, nPlayers=nPlayers, stars=stars,
+                    players=Nil, fleets=Nil, colonies=Nil,
+                    availableStartStarIds = starIdsWithTerran)
     } else {
       info("Insufficient # of available starting planets: " + 
            "(%d/%d) found.".format(starIdsWithTerran.length, nPlayers))
@@ -91,3 +131,4 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   }
 }
 
+case class StarGameDeltaHint() // NOT DONE

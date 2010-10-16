@@ -9,6 +9,7 @@ import net.liftweb.actor._
 import net.liftweb.common.{Box, Full, Logger}
 
 import scala.xml._
+import scala.util.Random
 
 import impulsestorm.liftapp.model._
 import impulsestorm.liftapp.lib._
@@ -64,6 +65,8 @@ class StarGameComet extends CometActor with Logger {
     var alias : String = 
       SimRandom.randomNoCollisions(StarGameState.aliases, 
                                    state.players.map(_.alias))
+    
+    var traits = Random.shuffle(Trait.values) take 2
                                    
     def processJoinForm(alias: String) = {
       info("Registered : " + alias)
@@ -76,12 +79,41 @@ class StarGameComet extends CometActor with Logger {
     
       <h3>Your new player</h3> ++
       ajaxForm(
-        <p>Your player alias: {text(alias, processJoinForm)}<br/>
-        { ajaxButton("New random name", () => { 
+        <table>
+        <tr>
+        <td>Your player alias:</td><td>{text(alias, processJoinForm)}</td>
+        </tr>
+        <tr>
+        <td>Trait 1: </td>
+        <td>
+        {
+          selectObj[Trait.Value](Trait.values zip Trait.values.map(_.toString),
+                                 Full(traits(0)), 
+                                 t => traits = List(t, traits(1)))
+        }
+        </td>
+        </tr>
+        <tr>
+        <td>Trait 2: </td>
+        <td>
+        {
+          selectObj[Trait.Value](Trait.values zip Trait.values.map(_.toString),
+                                 Full(traits(1)), 
+                                 t => traits = List(traits(0), t))
+        }
+        </td>
+        </tr>
+        <tr>
+        <td/>
+        <td>
+        { ajaxButton("Randomize", () => { 
           reRender
           JsCmds.Noop
         }) }
-        <input type="submit" value="Join game" /></p>
+        <input type="submit" value="Join game" />
+        </td>
+        </tr>
+        </table>
       )
     )
   }

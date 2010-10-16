@@ -83,13 +83,15 @@ trait StateMaster[StateType <: State] extends Actor {
   // Class specific mutate messages
   case class Mutate
     ( mutateF: StateType => (StateType, Any),
-      stateId: String = _id ) extends FwdedMsg
+      stateId: String = stateId ) extends FwdedMsg
   
+  val stateId: String;
+      
   var state: StateType
   var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
-    case Mutate(id, mutateF) => { 
+    case Mutate(mutateF, stateId) => { 
       val (newstate, hint) = mutateF(state)
       listeners.foreach( _ ! (newstate, hint) )
       

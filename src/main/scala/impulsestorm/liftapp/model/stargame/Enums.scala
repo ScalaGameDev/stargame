@@ -21,6 +21,15 @@ object TechCategory extends GhettoEnum {
   val Weaponry    = Value("Weaponry")
   val Shielding   = Value("Shielding")
   val Propulsion  = Value("Propulsion")
+  
+  val defaultAllocation : Map[Value, Double] = Map(
+    Computers ->1.0/6,
+    Ecology   ->1.0/6,
+    Industry  ->1.0/6,
+    Weaponry  ->1.0/6,
+    Shielding ->1.0/6,
+    Propulsion->1.0/6
+  )
 }
 
 object Tech extends GhettoEnum {
@@ -146,4 +155,28 @@ object PlanetType extends GhettoEnum {
   val Inferno   = Value("Inferno")
   val Asteroid  = Value("Asteroid")
   val GasGiant  = Value("Gas Giant")
+  
+  def randomBaseMaxPop(pType: Value) = pType match {
+    case Terran   => random(60.0, 130.0)
+    case Ocean    => random(30.0, 70.0)
+    case Arid     => random(20.0, 50.0)
+    case Ice      => random(10.0, 30.0)
+    case Barren   => random(5.0,  20.0)
+    case Dead     => random(3.0,  15.0)
+    case Inferno  => random(2.0,  10.0)
+    case Asteroid => random(1.0,  2.0)
+    case GasGiant => random(10.0, 30.0)
+  }
+  
+  def randomMineralWealth(pType: Value) = pType match {
+    case Terran   => random(0.8,  1.2)
+    case Ocean    => random(0.2,  1.0)
+    case Arid     => random(0.8,  2.5)
+    case Ice      => random(0.8,  1.5)
+    case Barren   => random(1.2,  2.5)
+    case Dead     => random(1.2,  3.0)
+    case Inferno  => random(2.0,  4.0)
+    case Asteroid => random(3.0,  6.0)
+    case GasGiant => random(0.0,  0.2)
+  }
 }

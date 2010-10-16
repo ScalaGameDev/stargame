@@ -12,43 +12,17 @@ import scala.util.Random
 
 import se.scalablesolutions.akka.actor.{Actor}
 
-case class Star( id: Int, name: String, sClass: StarClass.Value, 
-                 x: Double, y: Double, planets: List[Planet])
-                 
-object Star {
-  
-  import StarClass._
-  
-  def getRandom( mapSizeL: Double, id: Int ) = {
-    val sClass = SimRandom.weightedRandom(StarClass.abundances)
-    val sName = "S"+id.toString
-    
-    
-    Star(id, name=sName, sClass=sClass,
-         x=Random.nextDouble*mapSizeL, y=Random.nextDouble*mapSizeL,
-         planets = randomPlanets(sClass))
-  }
-  
-  def randomPlanets( sClass: StarClass.Value ) : List[Planet] = {
-    val nPlanets = StarClass.randomNPlanets(sClass)
-    
-    val zones = 
-      List.fill(nPlanets)(StarClass.randomZone(sClass, nPlanets)).sorted
-    
-    val idZonePairs = (1 to nPlanets).toList zip zones 
-    
-    idZonePairs.map(p => Planet.genRandom(p._1, sClass, p._2))
-  }
-  
-}
-
 case class Planet( id: Int, pType: PlanetType.Value, 
-                   zone: PlanetZone.Value )
+                   zone: PlanetZone.Value, baseMaxPop: Double,
+                   mineralWealth: Double )
 
 object Planet {
   def genRandom( id: Int, sClass: StarClass.Value, zone: PlanetZone.Value ) = {
     val pType = PlanetZone.randomPType(sClass, zone)
-    Planet(id, pType, zone)
+    Planet(id, pType, zone, 
+           PlanetType.randomBaseMaxPop(pType),
+           PlanetType.randomMineralWealth(pType)
+          )
   }
 }
                    
@@ -56,22 +30,36 @@ case class Player( openid: Option[String], alias: String,
                    traits: List[Trait.Value],
                    exploredStarIds: List[Int],
                    gold: Double,
-                   colonies: List[Colony],
-                   fleetsStationary: List[FleetStationary],
-                   fleetsMoving: List[FleetMoving],
                    techs: List[Tech.Value], 
                    researchAlloc: Map[TechCategory.Value, Double] )
 
+object Player {
+  def startingPlayer( openid: Option[String], alias: String,
+                      traits: List[Trait.Value], startingStarId: Int) = {
+    Player(openid, alias, traits, exploredStarIds = List(startingStarId),
+           gold = 0, techs = Nil, 
+           researchAlloc=TechCategory.defaultAllocation)
+  }
+}
+
 case class Colony( starId: Int, settlements: List[Settlement] )
+
+object Colony {
+  def startingColony( star: Star ) = {
+    val startingPlanet = SimRandom.randomObj(
+      star.planets.filter(_.pType == PlanetType.Terran)
+    )
+      
+    Colony(star.id, List(Settlement(startingPlanet.Id, 50, 50))) 
+  }
+}
 
 case class Settlement( planetId: Int, population: Double, capital: Double )
 
-// no location: in transit
-case class FleetStationary( ships: Map[ShipDesign, Int], locationStarId: Int )
-
-case class FleetMoving( ships: Map[ShipDesign, Int], 
-                        fromStarId: Int, toStarId: Int,
-                        departClock: Double, arriveClock: Double )
+// if not moving, will just use the fromStarId attr and the others are undef
+case class Fleet( ships: Map[ShipDesign, Int], moving: Boolean, 
+                  fromStarId: Int, toStarId: Int,
+                  departClock: Double, arriveClock: Double )
 
 case class ShipDesign( warpSpeed: Double )                        
 
