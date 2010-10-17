@@ -1,5 +1,7 @@
 package impulsestorm.liftapp.model
 
+import impulsestorm.liftapp.model.stargame._
+
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
@@ -54,14 +56,7 @@ object Colony {
   }
 }
 
-case class Settlement( planetId: Int, population: Double, capital: Double )
-
-// if not moving, will just use the fromStarId attr and the others are undef
-case class Fleet( ships: Map[ShipDesign, Int], moving: Boolean, 
-                  fromStarId: Int, toStarId: Int,
-                  departClock: Double, arriveClock: Double )
-
-case class ShipDesign( warpSpeed: Double )                        
+case class Settlement( planetId: Int, population: Double, capital: Double )                   
 
 object StarGame {  
   val supervisor = 

@@ -1,11 +1,11 @@
-package impulsestorm.liftapp.model
+package impulsestorm.liftapp.model.stargame
 
 import impulsestorm.liftapp.lib.SimRandom._
 
 import net.liftweb.json._
 import net.liftweb.json.JsonAST._
 
-trait GhettoEnum {
+trait MyEnum {
   type Value = String
   def Value(s: String) : Value = {
     values = s :: values
@@ -14,7 +14,7 @@ trait GhettoEnum {
   var values : List[Value] = Nil
 }
 
-object TechCategory extends GhettoEnum {
+object TechCategory extends MyEnum {
   val Computers   = Value("Computers")
   val Ecology     = Value("Ecology")
   val Industry    = Value("Industry")
@@ -32,10 +32,10 @@ object TechCategory extends GhettoEnum {
   )
 }
 
-object Tech extends GhettoEnum {
+object Tech extends MyEnum {
 }
 
-object Trait extends GhettoEnum {
+object Trait extends MyEnum {
   val Militaristic  = Value("Militaristic")
   val Scientific    = Value("Scientific")
   val Expansionist  = Value("Expansionist")
@@ -45,7 +45,7 @@ object Trait extends GhettoEnum {
   val Commercial    = Value("Commercial")  
 }
 
-object StarClass extends GhettoEnum {
+object StarClass extends MyEnum {
   val Giant   = Value("Giant")
   val B       = Value("B")
   val A       = Value("A")
@@ -94,7 +94,7 @@ object StarClass extends GhettoEnum {
     
 }
 
-object PlanetZone extends GhettoEnum {
+object PlanetZone extends MyEnum {
   val Inner  = Value("Inner")
   val Middle = Value("Middle")
   val Outer  = Value("Outer")
@@ -145,7 +145,7 @@ object PlanetZone extends GhettoEnum {
   }
 }
 
-object PlanetType extends GhettoEnum {
+object PlanetType extends MyEnum {
   val Terran    = Value("Terran")
   val Ocean     = Value("Ocean")
   val Arid      = Value("Arid")
