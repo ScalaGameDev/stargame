@@ -152,4 +152,4 @@ object Player {
   }
 }
 
-case class StarGameDeltaHint() // NOT DONE
+

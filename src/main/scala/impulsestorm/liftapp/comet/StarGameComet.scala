@@ -36,16 +36,13 @@ class StarGameComet extends CometActor with Loggable {
   }
   
   override def lowPriority = {
-    case (state: StarGameState, hint: StarGameDeltaHint) => {
-      logger.info("StarGameComet gets hinted state")
-      lastState = Some(state)
-      reRender
-    }
     case state: StarGameState => {
       logger.info("StarGameComet gets unhinted state")
       lastState = Some(state)
       reRender
     }
+    case Actions.ActionError(s) =>
+      this.error(s)
     case NoSuchGame =>
     {
       noSuchGame = true
@@ -88,7 +85,7 @@ class StarGameComet extends CometActor with Loggable {
                                    
     def processJoinForm() = {
       logger.info("Registered : " + alias)
-      sg ! Actions.RegisterPlayer(stateId, Full(openid), alias, traits)
+      sg ! Actions.RegisterPlayer(stateId, this, Full(openid), alias, traits)
       JsCmds.Noop
     }
     

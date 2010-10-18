@@ -70,7 +70,9 @@ class StarGameSnip {
   
   def play(in: NodeSeq) : NodeSeq = S.param("gameId") match {
     case Full(gameId) => {
-      <lift:comet type="StarGameComet" name={ gameId }>
+      val cometName = 
+        ImOpenIDVendor.identifier + "/@/" + gameId
+      <lift:comet type="StarGameComet" name={ cometName }>
         <comet:message />
       </lift:comet>
     }

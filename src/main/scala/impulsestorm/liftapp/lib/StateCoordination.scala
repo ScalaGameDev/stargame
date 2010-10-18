@@ -39,9 +39,7 @@ class StateSupervisor(
       case Some(sMaster) => sMaster ! msg
       case None => {
         error("Requested: %s, but no such game".format(msg.stateId))
-        msg match {
-          case m: hasListener => m.listener ! NoSuchGame
-        }
+        msg.listener ! NoSuchGame
       }
     }
     case CleanOldActorsMsg => cleanOldActors() 
@@ -73,17 +71,19 @@ class StateSupervisor(
   
 }
 
-trait FwdedMsg { val stateId: String }
-trait hasListener { val listener: SimpleActor[Any] }
+trait FwdedMsg { 
+  val stateId: String
+  val listener: SimpleActor[Any]
+}
 case class Inquire(stateId: String, listener: SimpleActor[Any]) 
-  extends FwdedMsg with hasListener
+  extends FwdedMsg
 case class Subscribe(stateId: String, listener: SimpleActor[Any])
-  extends FwdedMsg with hasListener
+  extends FwdedMsg
 case class Unsubscribe(stateId: String, listener: SimpleActor[Any])
-  extends FwdedMsg with hasListener
+  extends FwdedMsg
 
-case class Mutate[StateType](stateId: String, 
-                  mutateF: StateType => (StateType, Any))
+case class Mutate[StateType](stateId: String, listener: SimpleActor[Any],
+                  mutateF: StateType => StateType)
   extends FwdedMsg
 
 object NoSuchGame
@@ -98,12 +98,9 @@ trait StateMaster[StateType <: State] extends Actor {
   var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
-    case Mutate(stateId, mutateF) => { 
-      val (newstate, hint) = mutateF(state)
-      hint match {
-        case None => listeners.foreach(_ ! newstate)
-        case x    => listeners.foreach(_ ! (newstate, hint))
-      }
+    case Mutate(stateId, listener, mutateF) => { 
+      val newstate = mutateF(state)
+      listeners.foreach(_ ! newstate)
       
       state = newstate.asInstanceOf[StateType]
       saveToStorage()    
