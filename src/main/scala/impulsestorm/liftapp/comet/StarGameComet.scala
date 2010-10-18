@@ -6,36 +6,54 @@ import http.js._
 import http.SHtml._
 
 import net.liftweb.actor._
-import net.liftweb.common.{Box, Full, Logger}
+import net.liftweb.common.{Box, Full, Loggable}
 
 import scala.xml._
 import scala.util.Random
 
 import impulsestorm.liftapp.model._
+import impulsestorm.liftapp.model.stargame._
 import impulsestorm.liftapp.lib._
 
-class StarGameComet extends CometActor with Logger {
-  val user = ImOpenIDVendor.identifier
+class StarGameComet extends CometActor with Loggable {
+  import impulsestorm.liftapp.model.StarGame.{supervisor => sg}
+  val openid = ImOpenIDVendor.identifier
   val stateId = S.param("gameId").get 
   
   var lastState: Option[StarGameState] = None
   
+  var noSuchGame = false
+  
   override def defaultPrefix = Full("comet")
   
   override def localSetup() = {
-    StarGame.supervisor ! Subscribe(stateId, this)
-    StarGame.supervisor ! Inquire(stateId, this)
+    sg ! Subscribe(stateId, this)
+    sg ! Inquire(stateId, this)
   }
   
   override def localShutdown() = {
-    StarGame.supervisor ! Unsubscribe(stateId, this)
+    sg ! Unsubscribe(stateId, this)
   }
   
   override def lowPriority = {
-    case state: StarGameState => {
+    case (state: StarGameState, hint: StarGameDeltaHint) => {
+      logger.info("StarGameComet gets hinted state")
       lastState = Some(state)
       reRender
     }
+    case state: StarGameState => {
+      logger.info("StarGameComet gets unhinted state")
+      lastState = Some(state)
+      reRender
+    }
+    case NoSuchGame =>
+    {
+      noSuchGame = true
+      reRender
+      logger.error("No such game.")
+    }
+    case x => 
+      logger.error("StarGameComet unknown message: %s".format(x.toString))
   }
   
   def listExistingPlayers : NodeSeq = {
@@ -68,8 +86,10 @@ class StarGameComet extends CometActor with Logger {
     
     var traits = Random.shuffle(Trait.values) take 2
                                    
-    def processJoinForm(alias: String) = {
-      info("Registered : " + alias)
+    def processJoinForm() = {
+      logger.info("Registered : " + alias)
+      sg ! Actions.RegisterPlayer(stateId, Full(openid), alias, traits)
+      JsCmds.Noop
     }
     
     (
@@ -81,15 +101,15 @@ class StarGameComet extends CometActor with Logger {
       ajaxForm(
         <table>
         <tr>
-        <td>Your player alias:</td><td>{text(alias, processJoinForm)}</td>
+        <td>Your player alias:</td><td>{text(alias, alias = _)}</td>
         </tr>
         <tr>
         <td>Trait 1: </td>
         <td>
         {
-          selectObj[Trait.Value](Trait.values zip Trait.values.map(_.toString),
-                                 Full(traits(0)), 
-                                 t => traits = List(t, traits(1)))
+          selectObj[Trait](Trait.values zip Trait.values.map(_.name),
+                           Full(traits(0)), 
+                           t => traits = List(t, traits(1)))
         }
         </td>
         </tr>
@@ -97,9 +117,9 @@ class StarGameComet extends CometActor with Logger {
         <td>Trait 2: </td>
         <td>
         {
-          selectObj[Trait.Value](Trait.values zip Trait.values.map(_.toString),
-                                 Full(traits(1)), 
-                                 t => traits = List(traits(0), t))
+          selectObj[Trait](Trait.values zip Trait.values.map(_.name),
+                           Full(traits(1)), 
+                           t => traits = List(traits(0), t))
         }
         </td>
         </tr>
@@ -110,7 +130,7 @@ class StarGameComet extends CometActor with Logger {
           reRender
           JsCmds.Noop
         }) }
-        <input type="submit" value="Join game" />
+        { ajaxSubmit("Join game", processJoinForm _) }
         </td>
         </tr>
         </table>
@@ -119,8 +139,13 @@ class StarGameComet extends CometActor with Logger {
   }
   
   def render = lastState match {
-    case None => <p>Loading StarGame data... refresh stuck here</p>
-    case Some(state) => if(state.isOneOfThePlayers(user)) {
+    case None => {
+      if(noSuchGame)
+        <p>No such game. Oops!</p>
+      else
+        <p />
+    }
+    case Some(state) => if(state.isOneOfThePlayers(openid)) {
       renderPlayerView
     } else if(state.started) {
       renderObserverView

@@ -4,7 +4,7 @@ import impulsestorm.liftapp.lib._
 
 import scala.util.Random
 
-case class Star( id: Int, name: String, sClass: StarClass.Value, 
+case class Star( id: Int, name: String, sClass: StarClass, 
                  x: Double, y: Double, planets: List[Planet])
                  
 object Star {
@@ -19,11 +19,12 @@ object Star {
          planets = randomPlanets(sClass))
   }
   
-  def randomPlanets( sClass: StarClass.Value ) : List[Planet] = {
+  def randomPlanets( sClass: StarClass ) : List[Planet] = {
     val nPlanets = StarClass.randomNPlanets(sClass)
     
     val zones = 
-      List.fill(nPlanets)(StarClass.randomZone(sClass, nPlanets)).sorted
+      List.fill(nPlanets)(
+        StarClass.randomZone(sClass, nPlanets)).sortBy(_.order)
     
     val idZonePairs = (1 to nPlanets).toList zip zones 
     

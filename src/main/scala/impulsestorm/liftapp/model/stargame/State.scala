@@ -61,12 +61,15 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     val newGameYear = gameYear + daysOld*timeMultiplier 
   }
   
-  def isOneOfThePlayers(openid: String) = players.exists(_.openid == openid)
+  def isOneOfThePlayers(openid: String) = 
+    players.exists(_.openid.get == openid)
 
 }
 
 object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   override def collectionName = "StarGameState"
+  
+  override def formats = EnumSerializer.formats
   
   val starDensity = 1/36.0 // One per 36 square light years
   
@@ -128,6 +131,24 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       // try again
       newState(createdBy, name, size, nPlayers)
     }
+  }
+}
+
+case class Player( id: Int, openid: Option[String], alias: String,
+                   traits: List[Trait],
+                   exploredStarIds: List[Int],
+                   designs: List[Design],
+                   gold: Double,
+                   techs: List[Tech], 
+                   researchAlloc: List[Double] )
+
+object Player {
+  def startingPlayer( id: Int, openid: Option[String], alias: String,
+                      traits: List[Trait], startingStarId: Int) = {
+    Player(id, openid, alias, traits, 
+           exploredStarIds = List(startingStarId),
+           gold = 0, designs = Design.startingDesigns, techs = Nil, 
+           researchAlloc=TechCategory.defaultAllocation)
   }
 }
 

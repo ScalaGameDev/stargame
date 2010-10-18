@@ -8,7 +8,8 @@ import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.common._
 import _root_.net.liftweb.http._
 
-import impulsestorm.liftapp.model.{StarGame, StarGameState}
+import impulsestorm.liftapp.model.StarGame
+import impulsestorm.liftapp.model.stargame.StarGameState
 import impulsestorm.liftapp.lib.ImOpenIDVendor
 
 class StarGameSnip {
@@ -67,8 +68,13 @@ class StarGameSnip {
       "listgames" -> bindGames _)
   }
   
-  def play(in: NodeSeq) : NodeSeq = {
-    Text("Playing game")
+  def play(in: NodeSeq) : NodeSeq = S.param("gameId") match {
+    case Full(gameId) => {
+      <lift:comet type="StarGameComet" name={ gameId }>
+        <comet:message />
+      </lift:comet>
+    }
+    case _ => S.redirectTo("/stargame/")
   }
 }
 

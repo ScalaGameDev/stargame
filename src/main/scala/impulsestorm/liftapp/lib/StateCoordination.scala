@@ -37,7 +37,12 @@ class StateSupervisor(
     case msg: FwdedMsg => getStateMaster(msg.stateId) match {
       // if can get stateMaster, forward, otherwise, drop
       case Some(sMaster) => sMaster ! msg
-      case None => Unit
+      case None => {
+        error("Requested: %s, but no such game".format(msg.stateId))
+        msg match {
+          case m: hasListener => m.listener ! NoSuchGame
+        }
+      }
     }
     case CleanOldActorsMsg => cleanOldActors() 
     case _ => error("Unknown message received by StateSupervisor")
@@ -69,37 +74,42 @@ class StateSupervisor(
 }
 
 trait FwdedMsg { val stateId: String }
-case class Inquire(stateId: String, interested: SimpleActor[Any]) extends FwdedMsg
+trait hasListener { val listener: SimpleActor[Any] }
+case class Inquire(stateId: String, listener: SimpleActor[Any]) 
+  extends FwdedMsg with hasListener
 case class Subscribe(stateId: String, listener: SimpleActor[Any])
-  extends FwdedMsg
+  extends FwdedMsg with hasListener
 case class Unsubscribe(stateId: String, listener: SimpleActor[Any])
+  extends FwdedMsg with hasListener
+
+case class Mutate[StateType](stateId: String, 
+                  mutateF: StateType => (StateType, Any))
   extends FwdedMsg
+
+object NoSuchGame
+  
 object PrepareShutdown
 object OK
 
 // Coordinates mutation, persistence, and notification of ONE state
 trait StateMaster[StateType <: State] extends Actor {
-  
-  // Class specific mutate messages
-  case class Mutate
-    ( mutateF: StateType => (StateType, Any),
-      stateId: String = stateId ) extends FwdedMsg
-  
-  val stateId: String;
       
   var state: StateType
   var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
-    case Mutate(mutateF, stateId) => { 
+    case Mutate(stateId, mutateF) => { 
       val (newstate, hint) = mutateF(state)
-      listeners.foreach( _ ! (newstate, hint) )
+      hint match {
+        case None => listeners.foreach(_ ! newstate)
+        case x    => listeners.foreach(_ ! (newstate, hint))
+      }
       
-      state = newstate
+      state = newstate.asInstanceOf[StateType]
       saveToStorage()    
     }
-    case Inquire(id, interested) => {
-      interested ! state
+    case Inquire(id, listener) => {
+      listener ! state
     }
     case Subscribe(id, listener) => 
       listeners = listener :: listeners // set
