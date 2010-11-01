@@ -68,7 +68,14 @@ class StarGameComet extends CometActor with Loggable {
     </div>
   }
   
-  def renderPlayerView = <p>PlayerView</p>
+  def playerResearch = {
+    
+  }
+  
+  def renderPlayerView = {
+    (<h2>Player view</h2> ++
+    listExistingPlayers)
+  }
   
   def renderObserverView = {
     (<h2>{"Game '%s' in progress".format(lastState.get.name)}</h2> ++

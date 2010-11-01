@@ -28,12 +28,12 @@ object Design {
   val startingDesigns = 
     List(
       Design(0, "Scout", true,
-             ShipSize.Strikecraft,
+             ShipSize.Fighter,
              Engine.Chemical, 
              Sensor.Alpha,
              List(ShipModule.ReserveTanks)),
       Design(1, "Colony Ship", true,
-             ShipSize.Destroyer,
+             ShipSize.Capital,
              Engine.Chemical,
              Sensor.Alpha,
              List(ShipModule.ColonyKit))
@@ -44,10 +44,10 @@ object Design {
 case class ShipSize(name: String, space: Double) extends hasName
 
 object ShipSize extends Enumerator[ShipSize] {
-  val Strikecraft   = Value("Strikecraft", 40)
+  val Fighter       = Value("Fighter", 40)
   val Corvette      = Value("Corvette", 200)
   val Frigate       = Value("Frigate", 1000)
-  val Destroyer     = Value("Destroyer", 5000)
+  val Capital       = Value("Capital", 5000)
   
   val eclass = classOf[ShipSize]
   private def Value(name: String, space: Double) =
