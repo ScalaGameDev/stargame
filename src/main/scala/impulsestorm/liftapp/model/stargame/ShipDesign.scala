@@ -21,7 +21,7 @@ case class Design( id: Int,
                    active: Boolean,
                    size: ShipSize,
                    engine: Engine, 
-                   sensor: Sensor, 
+                   sensor: Option[Sensor], 
                    modules: List[ShipModule] )
 
 object Design {
@@ -30,12 +30,12 @@ object Design {
       Design(0, "Scout", true,
              ShipSize.Fighter,
              Engine.Chemical, 
-             Sensor.Alpha,
+             None,
              List(ShipModule.ReserveTanks)),
       Design(1, "Colony Ship", true,
              ShipSize.Capital,
              Engine.Chemical,
-             Sensor.Alpha,
+             None,
              List(ShipModule.ColonyKit))
       )
 }
