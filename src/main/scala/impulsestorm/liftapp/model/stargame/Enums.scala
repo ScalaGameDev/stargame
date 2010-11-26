@@ -1,5 +1,6 @@
 package impulsestorm.liftapp.model.stargame
 
+import scala.util.Random
 import impulsestorm.liftapp.lib.SimRandom._
 
 import net.liftweb.json._
@@ -7,6 +8,7 @@ import net.liftweb.json.JsonAST._
 
 trait hasName {
   val name: String
+  override def toString = name
 }
 
 trait Enumerator[EnumeratedT <: hasName] {
@@ -14,10 +16,10 @@ trait Enumerator[EnumeratedT <: hasName] {
   
   def withName(name: String) = vmap(name)
   
-  def addToMap(instance: EnumeratedT) = {
-    vmap = vmap + (instance.name->instance)
-    values = instance :: values
-    instance
+  def addToMap(value: EnumeratedT) = {
+    vmap = vmap + (value.name->value)
+    values = values :+ value
+    value
   }
   
   var vmap : Map[String, EnumeratedT] = Map()
@@ -78,6 +80,9 @@ object TechCategory extends Enumerator[TechCategory] {
   // 5 - Productivity and allegiance
   val Policy     = Value("Policy")
 
+  def organizeTechs(techs: List[Tech]) = values.map { cat =>  
+      techs.filter(_.category==cat).sortBy(_.level)
+  }
   
   val eclass = classOf[TechCategory]
   private def Value(name: String) =
@@ -90,6 +95,9 @@ case class Tech(name: String, longName: String, category: TechCategory,
                 level: Int,
                 description: String) 
   extends hasName
+{
+  override def toString = longName
+}
 
 object Tech extends Enumerator[Tech] {
   import TechCategory.{Propulsion, Weapons, Protection, Sensors, Civil, Policy}
@@ -130,14 +138,14 @@ object Tech extends Enumerator[Tech] {
                             30, "Eqipped ships move at warp speed 6")
                                 
   //---------------------------------------------------------------------
-  val Beam1        = Value("Beam1", "Laser", Weapons,
-                           1, "1-4 energy damage")
-  val Missile1     = Value("Missile1", "Missiles", Weapons,
-                           1, "4 damage to target, +1 to hit")
   val Gun1         = Value("Gun1", "Chaingun", Weapons,
-                           1, "2-8 physical damage, -1 to hit")                               
+                           1, "2-8 physical damage, -1 to hit")
+  val Beam1        = Value("Beam1", "Laser", Weapons,
+                           2, "1-4 energy damage")
+  val Missile1     = Value("Missile1", "Missiles", Weapons,
+                           2, "4 damage to target, +1 to hit")                               
   val Bomb1        = Value("Bomb1", "Planetary bombs", Weapons,
-                           2, "3-12 damage to planetary targets only")
+                           3, "3-12 damage to planetary targets only")
   val Missile2     = Value("Missile2", "Thermite Missiles", Weapons,
                            4, "6 damage to target, +1 to hit")
   val BeamMulti1   = Value("BeamMulti1", "Gatling lasers", Weapons,
@@ -294,29 +302,42 @@ object Tech extends Enumerator[Tech] {
                           28, "Reduces the cost of a factory to 4 RU")
  
   // Policy - productivity and allegiance
-  val Allies  = Value("Allies", "Diplomatic solution", Policy,
-                      3, "Can attempt to turn pre-settled worlds into allies")
+  val Grow1   = Value("Grow1", "Colonial medicine", Policy,
+                      3, "Population growth rate +20%")
   val Alleg10 = Value("Alleg10", "Humane goverance", Policy,
-                      7, "+10% Allegiance colonies, allies, & occupied worlds")
+                      7, "Allegiance +10%")
   val Prod2   = Value("Prod2", "Competent industrial management", Policy,
                       8, "200% factory productivity")
   val Sci1    = Value("Sci1", "Specialist Economy", Policy,
                       10, "+20% research for all planets with >40M colonists")
+  val Grow2   = Value("Grow2", "Incentivized colonization", Policy,
+                      12, "Population growth rate +40%")
   val Alleg20 = Value("Alleg20", "Federated governance", Policy,
                       13, "+20% Allegiance colonies, allies, & occupied worlds")
   val Prod3   = Value("Prod3", "Operations research", Policy,
                       15, "300% factory productivity")
-  val Allies2 = Value("Allies2", "Diverse social engineering", Policy,
-                      17, "Allies become citizens")
+  val Grow3   = Value("Grow3", "Abundant opportunity", Policy,
+                      18, "Population growth rate +70%")
   val Prod4   = Value("Prod4", "Lean manufacturing", Policy,
                       21, "400% factory productivity")
   val Sci2    = Value("Sci2", "Deep Specialization", Policy,
                       22, "+40% research for all planets with >40M colonists")
   val Alleg30 = Value("Alleg30", "Enlightened governance", Policy,
                       24, "Allegiance from all worlds: +30%")
+  val Grow4   = Value("Grow4", "Colonial self-sufficiency", Policy,
+                      25, "Population growth rate +100%")
   val Prod5   = Value("Prod5", "Complete automation", Policy,
                       28, "500% factory productivity")
   
+  val startingTechs = List(Engines1, Gun1, Armor1)
+  
+  val categorizedVals = TechCategory.organizeTechs(values)
+  
+  // returns list of techs you can research, listed first by category, then
+  // by tech level. i.e. [[propulsion1, propulsion2, ...], [weapons1...], ...]
+  def generateCanResearchTechs() =
+    categorizedVals.map(l => Random.shuffle(l).take((0.6*l.length).toInt))
+                      
   val eclass = classOf[Tech]
   
   private def Value(name: String, longName: String, category: TechCategory,

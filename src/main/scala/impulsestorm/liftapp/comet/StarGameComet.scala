@@ -3,6 +3,8 @@ package impulsestorm.liftapp.comet
 import net.liftweb._
 import http._
 import http.js._
+import http.js.JE._
+import http.js.JsCmds._
 import http.SHtml._
 
 import net.liftweb.actor._
@@ -20,11 +22,17 @@ class StarGameComet extends CometActor with Loggable {
   val openid = ImOpenIDVendor.identifier
   val stateId = S.param("gameId").get 
   
-  var lastState: Option[StarGameState] = None
-  
-  var noSuchGame = false
+  var stateOpt: Option[StarGameState] = None
+  var playerOpt: Option[Player] = None
+  def state = stateOpt.get
+  def player = playerOpt.get
   
   override def defaultPrefix = Full("comet")
+  
+  def acceptNewState(state: StarGameState) {
+    stateOpt  = Some(state)
+    playerOpt = state.players.find(_.openid == Some(openid))
+  }
   
   override def localSetup() = {
     sg ! Subscribe(stateId, this)
@@ -38,25 +46,60 @@ class StarGameComet extends CometActor with Loggable {
   override def lowPriority = {
     case state: StarGameState => {
       logger.info("StarGameComet gets unhinted state")
-      lastState = Some(state)
+      acceptNewState(state)
       reRender
     }
     case Actions.ActionError(s) =>
       this.error(s)
     case NoSuchGame =>
     {
-      noSuchGame = true
-      reRender
-      logger.error("No such game.")
+      this.error("No such game")
     }
     case x => 
       logger.error("StarGameComet unknown message: %s".format(x.toString))
   }
   
-  def listExistingPlayers : NodeSeq = {
-    val players = lastState.get.players
-    <div id="player-list">
-      <h3>Existing players</h3>
+  def viewPlayer =
+    setTitle("Player view") & setHtmlPlayersList & setHtmlResearch &
+      showPanes(List("playersList", "research"))
+  
+  def viewObserver =
+    setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
+      showPane("playerList")
+  
+  def viewJoin =
+    setTitle("Join game") & setHtmlPlayersList & setHtmlJoin &
+      showPanes(List("playersList", "join"))
+  
+  def render = {
+    logger.info("Call to render")
+    stateOpt match {
+      case None => {
+        <p>Loading state...</p>
+      }
+      case Some(state) => if(state.isOneOfThePlayers(openid)) {
+        viewPlayer
+      } else if(state.started) {
+        viewObserver
+      } else {
+        viewJoin
+      }
+    }
+  }
+  
+  def showPanes(panes: List[String]) = {
+    val cmd = "$('.pane').hide();" :: panes.map("$('#" + _ + "').show();") 
+    JsRaw(cmd.mkString("\n"))
+  }
+  
+  def showPane(pane: String) = showPanes(List(pane))
+  
+  def setTitle(title: String) = SetHtml("title", <h1>{title}</h1>)
+  
+  def setHtmlPlayersList : JsCmd = {
+    val players = state.players
+    SetHtml("playersList",
+      <h2>Existing players</h2>
       <table>
         {
           if(players.isEmpty)
@@ -65,25 +108,10 @@ class StarGameComet extends CometActor with Loggable {
             players.map( p => <tr><td></td><td>{p.alias}</td></tr> )
         }
       </table>
-    </div>
+    )
   }
   
-  def playerResearch = {
-    
-  }
-  
-  def renderPlayerView = {
-    (<h2>Player view</h2> ++
-    listExistingPlayers)
-  }
-  
-  def renderObserverView = {
-    (<h2>{"Game '%s' in progress".format(lastState.get.name)}</h2> ++
-     listExistingPlayers )
-  }
-  
-  def renderJoinView = {
-    val state = lastState.get
+  def setHtmlJoin : JsCmd = {
     var alias : String = 
       SimRandom.randomNoCollisions(StarGameState.aliases, 
                                    state.players.map(_.alias))
@@ -95,12 +123,8 @@ class StarGameComet extends CometActor with Loggable {
       sg ! Actions.RegisterPlayer(stateId, this, Full(openid), alias, traits)
       JsCmds.Noop
     }
-    
-    (
-      <h2>Join game {state.name}</h2> ++ 
-    
-      listExistingPlayers ++ 
-    
+
+    val joinHtml = if(state.players.length < state.nPlayers)
       <h3>Your new player</h3> ++
       ajaxForm(
         <table>
@@ -139,25 +163,63 @@ class StarGameComet extends CometActor with Loggable {
         </tr>
         </table>
       )
-    )
+    else
+      <p>Sorry, this game is full. Join another or make a new one!</p>
+    
+    SetHtml("join", joinHtml)
   }
   
-  def render = lastState match {
-    case None => {
-      if(noSuchGame)
-        <p>No such game. Oops!</p>
-      else
-        <p />
+  def setHtmlResearch : JsCmd = {
+    def adjustAlloc(allocationIndex: Int, newAllocation: String) = {
+      println("New allocation %s - %s".format(allocationIndex, newAllocation))
+      JsCmds.Noop
     }
-    case Some(state) => if(state.isOneOfThePlayers(openid)) {
-      renderPlayerView
-    } else if(state.started) {
-      renderObserverView
-    } else {
-      if(state.players.length < state.nPlayers)
-        renderJoinView
-      else
-        <p>Sorry, this game is full. Join another or make a new one!</p>
-    }
+    
+    SetHtml("research", (<h2>Research</h2> ++
+        <table>
+        <tr>
+        <td>
+        <div id="researched-techs">
+          <h3>Researched technologies</h3>
+          <ul>
+          {
+            (TechCategory.values zip player.organizedTechs).map {
+              case(category, techs) => 
+                <li>{category}
+                  <ul>
+                  {techs.map(t => <li>{t}</li>)}
+                  </ul>
+                </li>
+            }
+          }
+          </ul>
+        </div>
+        </td>
+        <td>
+        <div id="research-allocation">
+        {
+          (0 until TechCategory.values.length).map(i => {
+            <p>{TechCategory.values(i)}
+              <br/>
+              <div id={"research-slider-"+i.toString} 
+                class="research-slider" />
+            </p>
+          })
+        }
+        
+        </div>
+        </td>
+        </tr>
+        </table>
+        <button onclick="techSaveClicked()">Save</button>
+    )) & 
+    JsRaw("function techSaveClicked() {" + 
+        jsonSend("research-alloc-save", Call("getSliderVals")).toJsCmd +
+        "}") &
+    (
+      Call("setupSliders") &
+      Call("setSliderVals", JsArray(player.researchAlloc.map(Num(_)) : _*))
+    )
+    
   }
 }

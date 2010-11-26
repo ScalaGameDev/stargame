@@ -18,6 +18,9 @@ object Actions {
       } else if(s.players.exists(_.alias == alias)) {
         listener ! ActionError("Could not register. Alias taken.")
         s
+      } else if(s.players.exists(_.openid == openid)) {
+        listener ! ActionError("You are already registered as a player.")
+        s
       } else {
         val newPlayerId = s.players.length // same as array index
         val homeStarId = s.availableStartStarIds.head

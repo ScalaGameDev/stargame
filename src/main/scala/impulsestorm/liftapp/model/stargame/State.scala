@@ -62,7 +62,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
   }
   
   def isOneOfThePlayers(openid: String) = 
-    players.exists(_.openid.get == openid)
+    players.exists(_.openid == Some(openid))
 
 }
 
@@ -140,15 +140,24 @@ case class Player( id: Int, openid: Option[String], alias: String,
                    designs: List[Design],
                    gold: Double,
                    techs: List[Tech], 
-                   researchAlloc: List[Double] )
+                   researchAlloc: List[Double],
+                   researchChoices: List[Tech],
+                   canResearchTechs: List[List[Tech]])
+{
+  lazy val organizedTechs = TechCategory.organizeTechs(techs)
+}
 
 object Player {
   def startingPlayer( id: Int, openid: Option[String], alias: String,
                       traits: List[Trait], startingStarId: Int) = {
+    val canResearchTechs = Tech.generateCanResearchTechs()
     Player(id, openid, alias, traits, 
            exploredStarIds = List(startingStarId),
-           gold = 0, designs = Design.startingDesigns, techs = Nil, 
-           researchAlloc=TechCategory.defaultAllocation)
+           gold = 0, designs = Design.startingDesigns, 
+           techs = Tech.startingTechs, 
+           researchAlloc=TechCategory.defaultAllocation,
+           researchChoices=canResearchTechs.map(_.head),
+           canResearchTechs=canResearchTechs)
   }
 }
 
