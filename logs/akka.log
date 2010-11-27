@@ -1,0 +1,792 @@
+[WARN] [2010-11-27 14:35:28,016] [161630@qtp-3070558-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:35:28,142] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) / took 513 Milliseconds
+[INFO] [2010-11-27 14:35:28,377] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 170 Milliseconds
+[INFO] [2010-11-27 14:35:28,384] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 177 Milliseconds
+[INFO] [2010-11-27 14:35:28,378] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 209 Milliseconds
+[INFO] [2010-11-27 14:35:28,580] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:35:28,726] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js;jsessionid=169mg0lw92v8s took 21 Milliseconds
+[INFO] [2010-11-27 14:35:28,770] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /favicon.ico took 3 Milliseconds
+[INFO] [2010-11-27 14:35:31,189] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /favicon.ico took 3 Milliseconds
+[WARN] [2010-11-27 14:35:40,475] [25100916@qtp-3070558-2] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:35:40,492] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /stargame/;jsessionid=169mg0lw92v8s took 280 Milliseconds
+[INFO] [2010-11-27 14:35:40,545] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 3 Milliseconds
+[INFO] [2010-11-27 14:35:40,547] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:40,551] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:40,882] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:35:41,004] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:35:42,364] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 23 Milliseconds
+[WARN] [2010-11-27 14:35:42,405] [14918824@qtp-3070558-3] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:35:42,405] [14918824@qtp-3070558-3] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:35:42,412] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /login took 39 Milliseconds
+[INFO] [2010-11-27 14:35:42,487] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:42,492] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:42,498] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:42,828] [18896937@qtp-3070558-6] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:35:42,955] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 22 Milliseconds
+[WARN] [2010-11-27 14:35:45,316] [161630@qtp-3070558-0] o.o.s.RealmVerifier: RP discovery / realm validation disabled; 
+[INFO] [2010-11-27 14:35:45,409] [161630@qtp-3070558-0] n.l.o.SimpleOpenIDVendor$$anon$1: Creating openId auth request.  returnToUrl: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:35:45,411] [161630@qtp-3070558-0] o.o.d.Discovery: Starting discovery on URL identifier: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:35:47,784] [161630@qtp-3070558-0] o.o.d.y.YadisResolver: Yadis discovered 2 endpoints from: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:35:47,784] [161630@qtp-3070558-0] o.o.d.Discovery: Discovered 2 OpenID endpoints.
+[INFO] [2010-11-27 14:35:47,784] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Trying to associate with http://pip.verisignlabs.com/server attempts left: 4
+[WARN] [2010-11-27 14:35:47,784] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA1:OpenID2
+[WARN] [2010-11-27 14:35:47,784] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA256:OpenID2
+[INFO] [2010-11-27 14:35:48,089] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Associated with http://pip.verisignlabs.com/server handle: 4c68d710-fa6e-11df-b51f-fddc63e410df
+[INFO] [2010-11-27 14:35:48,091] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Creating authentication request for OP-endpoint: http://pip.verisignlabs.com/server claimedID: http://tommycli.keepword.com/ OP-specific ID: http://tommycli.pip.verisignlabs.com/
+[INFO] [2010-11-27 14:35:48,092] [161630@qtp-3070558-0] o.o.s.RealmVerifier: Return URL: http://localhost:8080/openid/response matches realm: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:35:48,097] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (POST) /openid/login took 2880 Milliseconds
+[INFO] [2010-11-27 14:35:54,380] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Verifying authentication response...
+[INFO] [2010-11-27 14:35:54,382] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Received positive auth response.
+[INFO] [2010-11-27 14:35:54,383] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Found association: 4c68d710-fa6e-11df-b51f-fddc63e410df verifying signature locally...
+[INFO] [2010-11-27 14:35:54,399] [161630@qtp-3070558-0] o.o.c.ConsumerManager: Verification succeeded for: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:35:54,410] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /openid/response took 37 Milliseconds
+[INFO] [2010-11-27 14:35:54,455] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /login took 5 Milliseconds
+[WARN] [2010-11-27 14:35:54,610] [pool-3-thread-3] s.s.a.c.Config$: 
+Can't load 'akka.conf'.
+One of the three ways of locating the 'akka.conf' file needs to be defined:
+	1. Define the '-Dakka.config=...' system property option.
+	2. Put the 'akka.conf' file on the classpath.
+	3. Define 'AKKA_HOME' environment variable pointing to the root of the Akka distribution.
+I have no way of finding the 'akka.conf' configuration file.
+Using default values everywhere.
+[DEBUG] [2010-11-27 14:35:54,679] [pool-3-thread-3] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Creating a se.scalablesolutions.akka.dispatch.Dispatchers$globalExecutorBasedEventDrivenDispatcher$ with config [core-pool:16,max-pool:128,timeout:60000,allowCoreTimeout:false,rejectPolicy:CallerRunsPolicy]
+[DEBUG] [2010-11-27 14:35:54,726] [pool-3-thread-3] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Starting up ExecutorBasedEventDrivenDispatcher[akka:event-driven:dispatcher:global]
+	with throughput [5]
+[DEBUG] [2010-11-27 14:35:54,811] [akka:event-driven:dispatcher:global-1] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-1
+[DEBUG] [2010-11-27 14:35:54,812] [akka:event-driven:dispatcher:global-2] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-2
+[WARN] [2010-11-27 14:35:54,915] [161630@qtp-3070558-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:35:54,954] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 440 Milliseconds
+[DEBUG] [2010-11-27 14:35:55,000] [akka:event-driven:dispatcher:global-4] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-4
+[DEBUG] [2010-11-27 14:35:55,001] [akka:event-driven:dispatcher:global-3] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-3
+[INFO] [2010-11-27 14:35:55,009] [pool-3-thread-4] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:35:55,019] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:55,026] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:55,035] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:35:55,344] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:35:55,427] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 5 Milliseconds
+[INFO] [2010-11-27 14:35:55,446] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /comet_request/169mg0lw92v8s/cometAjax.js took 5 Milliseconds
+[DEBUG] [2010-11-27 14:36:10,286] [akka:event-driven:dispatcher:global-5] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-5
+[DEBUG] [2010-11-27 14:36:10,338] [akka:event-driven:dispatcher:global-6] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-6
+[INFO] [2010-11-27 14:36:10,363] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F1019958358782AYB/ took 91 Milliseconds
+[WARN] [2010-11-27 14:36:13,685] [161630@qtp-3070558-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:36:13,691] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 31 Milliseconds
+[INFO] [2010-11-27 14:36:13,747] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:36:13,752] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:36:13,755] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:36:14,073] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:36:14,151] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:36:14,168] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (GET) /comet_request/169mg0lw92v8s/cometAjax.js took 1 Milliseconds
+[DEBUG] [2010-11-27 14:36:18,203] [akka:event-driven:dispatcher:global-7] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-7
+[DEBUG] [2010-11-27 14:36:18,210] [akka:event-driven:dispatcher:global-8] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-8
+[INFO] [2010-11-27 14:36:18,210] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 9 Milliseconds
+[INFO] [2010-11-27 14:36:20,770] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 3 Milliseconds
+[DEBUG] [2010-11-27 14:36:20,773] [akka:event-driven:dispatcher:global-9] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-9
+[DEBUG] [2010-11-27 14:36:20,774] [akka:event-driven:dispatcher:global-10] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-10
+[DEBUG] [2010-11-27 14:36:30,441] [akka:event-driven:dispatcher:global-11] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-11
+[DEBUG] [2010-11-27 14:36:30,442] [akka:event-driven:dispatcher:global-12] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-12
+[INFO] [2010-11-27 14:36:30,443] [161630@qtp-3070558-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 4 Milliseconds
+[DEBUG] [2010-11-27 14:36:31,088] [akka:event-driven:dispatcher:global-13] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-13
+[DEBUG] [2010-11-27 14:36:31,088] [akka:event-driven:dispatcher:global-14] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-14
+[INFO] [2010-11-27 14:36:31,089] [26159222@qtp-3070558-7] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 4 Milliseconds
+[DEBUG] [2010-11-27 14:36:31,626] [akka:event-driven:dispatcher:global-15] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-15
+[DEBUG] [2010-11-27 14:36:31,627] [akka:event-driven:dispatcher:global-16] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-16
+[INFO] [2010-11-27 14:36:31,628] [26159222@qtp-3070558-7] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 8 Milliseconds
+[INFO] [2010-11-27 14:36:32,163] [26159222@qtp-3070558-7] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 5 Milliseconds
+[INFO] [2010-11-27 14:36:32,800] [26159222@qtp-3070558-7] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588043GA/ took 2 Milliseconds
+[WARN] [2010-11-27 14:36:35,100] [26159222@qtp-3070558-7] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:36:35,106] [26159222@qtp-3070558-7] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 22 Milliseconds
+[INFO] [2010-11-27 14:36:35,169] [26159222@qtp-3070558-7] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:36:35,171] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:36:35,174] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:36:35,473] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:36:35,557] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:36:35,574] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /comet_request/169mg0lw92v8s/cometAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:36:51,941] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10199583588061OD/ took 3 Milliseconds
+[INFO] [2010-11-27 14:37:43,483] [pool-5-thread-3] n.l.h.CometActor: The CometActor impulsestorm.liftapp.comet.StarGameComet@9e7d08 Received Shutdown
+[INFO] [2010-11-27 14:37:45,303] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 120 Milliseconds
+[WARN] [2010-11-27 14:37:45,431] [25100916@qtp-3070558-2] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:37:45,432] [25100916@qtp-3070558-2] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:37:45,483] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /login took 174 Milliseconds
+[INFO] [2010-11-27 14:37:45,597] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 53 Milliseconds
+[INFO] [2010-11-27 14:37:45,615] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 59 Milliseconds
+[INFO] [2010-11-27 14:37:45,597] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 62 Milliseconds
+[INFO] [2010-11-27 14:37:45,926] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:37:46,036] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 21 Milliseconds
+[WARN] [2010-11-27 14:37:49,718] [21337935@qtp-3070558-8] o.o.s.RealmVerifier: RP discovery / realm validation disabled; 
+[INFO] [2010-11-27 14:37:49,720] [21337935@qtp-3070558-8] n.l.o.SimpleOpenIDVendor$$anon$1: Creating openId auth request.  returnToUrl: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:37:49,722] [21337935@qtp-3070558-8] o.o.d.Discovery: Starting discovery on URL identifier: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:37:50,914] [21337935@qtp-3070558-8] o.o.d.y.YadisResolver: Yadis discovered 2 endpoints from: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:37:50,914] [21337935@qtp-3070558-8] o.o.d.Discovery: Discovered 2 OpenID endpoints.
+[INFO] [2010-11-27 14:37:50,914] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Trying to associate with http://pip.verisignlabs.com/server attempts left: 4
+[WARN] [2010-11-27 14:37:50,914] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA1:OpenID2
+[WARN] [2010-11-27 14:37:50,915] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA256:OpenID2
+[INFO] [2010-11-27 14:37:51,143] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Associated with http://pip.verisignlabs.com/server handle: 95c582a0-fa6e-11df-b51f-fddc63e410df
+[INFO] [2010-11-27 14:37:51,145] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Creating authentication request for OP-endpoint: http://pip.verisignlabs.com/server claimedID: http://tommycli.keepword.com/ OP-specific ID: http://tommycli.pip.verisignlabs.com/
+[INFO] [2010-11-27 14:37:51,146] [21337935@qtp-3070558-8] o.o.s.RealmVerifier: Return URL: http://localhost:8080/openid/response matches realm: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:37:51,150] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (POST) /openid/login took 1493 Milliseconds
+[INFO] [2010-11-27 14:37:51,446] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Verifying authentication response...
+[INFO] [2010-11-27 14:37:51,447] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Received positive auth response.
+[INFO] [2010-11-27 14:37:51,448] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Found association: 95c582a0-fa6e-11df-b51f-fddc63e410df verifying signature locally...
+[INFO] [2010-11-27 14:37:51,449] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Verification succeeded for: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:37:51,457] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /openid/response took 15 Milliseconds
+[INFO] [2010-11-27 14:37:51,508] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /login took 8 Milliseconds
+[WARN] [2010-11-27 14:37:51,610] [pool-9-thread-1] s.s.a.c.Config$: 
+Can't load 'akka.conf'.
+One of the three ways of locating the 'akka.conf' file needs to be defined:
+	1. Define the '-Dakka.config=...' system property option.
+	2. Put the 'akka.conf' file on the classpath.
+	3. Define 'AKKA_HOME' environment variable pointing to the root of the Akka distribution.
+I have no way of finding the 'akka.conf' configuration file.
+Using default values everywhere.
+[DEBUG] [2010-11-27 14:37:51,661] [pool-9-thread-1] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Creating a se.scalablesolutions.akka.dispatch.Dispatchers$globalExecutorBasedEventDrivenDispatcher$ with config [core-pool:16,max-pool:128,timeout:60000,allowCoreTimeout:false,rejectPolicy:CallerRunsPolicy]
+[DEBUG] [2010-11-27 14:37:51,686] [pool-9-thread-1] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Starting up ExecutorBasedEventDrivenDispatcher[akka:event-driven:dispatcher:global]
+	with throughput [5]
+[DEBUG] [2010-11-27 14:37:51,735] [akka:event-driven:dispatcher:global-2] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-2
+[DEBUG] [2010-11-27 14:37:51,735] [akka:event-driven:dispatcher:global-1] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-1
+[WARN] [2010-11-27 14:37:51,797] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:37:51,806] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 254 Milliseconds
+[INFO] [2010-11-27 14:37:51,848] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:37:51,851] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:37:51,854] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 3 Milliseconds
+[DEBUG] [2010-11-27 14:37:51,936] [akka:event-driven:dispatcher:global-3] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-3
+[DEBUG] [2010-11-27 14:37:51,938] [akka:event-driven:dispatcher:global-4] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-4
+[INFO] [2010-11-27 14:37:51,943] [pool-9-thread-2] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:37:52,187] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 1 Milliseconds
+[INFO] [2010-11-27 14:37:52,262] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 5 Milliseconds
+[INFO] [2010-11-27 14:37:52,282] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /comet_request/vs5s4t81nsx6/cometAjax.js took 6 Milliseconds
+[DEBUG] [2010-11-27 14:37:53,881] [akka:event-driven:dispatcher:global-5] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-5
+[DEBUG] [2010-11-27 14:37:53,883] [akka:event-driven:dispatcher:global-6] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-6
+[INFO] [2010-11-27 14:37:53,891] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 27 Milliseconds
+[DEBUG] [2010-11-27 14:37:55,800] [akka:event-driven:dispatcher:global-7] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-7
+[DEBUG] [2010-11-27 14:37:55,800] [akka:event-driven:dispatcher:global-8] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-8
+[INFO] [2010-11-27 14:37:55,801] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 4 Milliseconds
+[DEBUG] [2010-11-27 14:37:58,738] [akka:event-driven:dispatcher:global-9] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-9
+[DEBUG] [2010-11-27 14:37:58,739] [akka:event-driven:dispatcher:global-10] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-10
+[INFO] [2010-11-27 14:37:58,739] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 5 Milliseconds
+[DEBUG] [2010-11-27 14:37:59,684] [akka:event-driven:dispatcher:global-11] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-11
+[DEBUG] [2010-11-27 14:37:59,685] [akka:event-driven:dispatcher:global-12] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-12
+[INFO] [2010-11-27 14:37:59,686] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 5 Milliseconds
+[INFO] [2010-11-27 14:38:00,288] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 3 Milliseconds
+[DEBUG] [2010-11-27 14:38:00,289] [akka:event-driven:dispatcher:global-13] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-13
+[DEBUG] [2010-11-27 14:38:00,290] [akka:event-driven:dispatcher:global-14] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-14
+[DEBUG] [2010-11-27 14:38:01,024] [akka:event-driven:dispatcher:global-15] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-15
+[INFO] [2010-11-27 14:38:01,024] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 19 Milliseconds
+[DEBUG] [2010-11-27 14:38:01,040] [akka:event-driven:dispatcher:global-16] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-16
+[INFO] [2010-11-27 14:38:03,352] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 3 Milliseconds
+[INFO] [2010-11-27 14:38:09,664] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 3 Milliseconds
+[INFO] [2010-11-27 14:38:11,729] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F488317990128B1F/ took 3 Milliseconds
+[INFO] [2010-11-27 14:38:34,486] [pool-11-thread-3] n.l.h.CometActor: The CometActor impulsestorm.liftapp.comet.StarGameComet@a5b899 Received Shutdown
+[INFO] [2010-11-27 14:38:44,476] [14918824@qtp-3070558-3] n.l.u.TimeHelpers: Service request (GET) /comet_request/20683065824/vs5s4t81nsx6 took 41 Milliseconds
+[INFO] [2010-11-27 14:38:44,590] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /comet_request/90644213285/vs5s4t81nsx6 took 2 Milliseconds
+[INFO] [2010-11-27 14:38:44,594] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 111 Milliseconds
+[INFO] [2010-11-27 14:38:44,609] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf07c0a8ffea1051d7efd34 took 2 Milliseconds
+[INFO] [2010-11-27 14:38:44,724] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /comet_request/87453981901/vs5s4t81nsx6 took 10 Milliseconds
+[WARN] [2010-11-27 14:38:44,752] [21337935@qtp-3070558-8] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:38:44,753] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[WARN] [2010-11-27 14:38:44,755] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:38:44,820] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /login took 201 Milliseconds
+[INFO] [2010-11-27 14:38:44,820] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) / took 82 Milliseconds
+[INFO] [2010-11-27 14:38:44,919] [25100916@qtp-3070558-2] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 20 Milliseconds
+[INFO] [2010-11-27 14:38:44,920] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 21 Milliseconds
+[INFO] [2010-11-27 14:38:44,920] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 29 Milliseconds
+[INFO] [2010-11-27 14:38:45,425] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 4 Milliseconds
+[INFO] [2010-11-27 14:38:45,564] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 16 Milliseconds
+[WARN] [2010-11-27 14:38:59,872] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:38:59,878] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 242 Milliseconds
+[INFO] [2010-11-27 14:38:59,940] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:38:59,943] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:38:59,948] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:00,278] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:00,396] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:02,841] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 2 Milliseconds
+[WARN] [2010-11-27 14:39:02,872] [233505@qtp-3070558-5] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:39:02,883] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:39:02,890] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /login took 33 Milliseconds
+[INFO] [2010-11-27 14:39:02,945] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:02,947] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:02,950] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:03,265] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:03,341] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 3 Milliseconds
+[WARN] [2010-11-27 14:39:05,857] [21337935@qtp-3070558-8] o.o.s.RealmVerifier: RP discovery / realm validation disabled; 
+[INFO] [2010-11-27 14:39:05,860] [21337935@qtp-3070558-8] n.l.o.SimpleOpenIDVendor$$anon$1: Creating openId auth request.  returnToUrl: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:39:05,862] [21337935@qtp-3070558-8] o.o.d.Discovery: Starting discovery on URL identifier: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:39:06,978] [21337935@qtp-3070558-8] o.o.d.y.YadisResolver: Yadis discovered 2 endpoints from: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:39:06,979] [21337935@qtp-3070558-8] o.o.d.Discovery: Discovered 2 OpenID endpoints.
+[INFO] [2010-11-27 14:39:06,979] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Trying to associate with http://pip.verisignlabs.com/server attempts left: 4
+[WARN] [2010-11-27 14:39:06,979] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA1:OpenID2
+[WARN] [2010-11-27 14:39:06,979] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA256:OpenID2
+[INFO] [2010-11-27 14:39:07,160] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Associated with http://pip.verisignlabs.com/server handle: c31787d0-fa6e-11df-b51f-fddc63e410df
+[INFO] [2010-11-27 14:39:07,161] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Creating authentication request for OP-endpoint: http://pip.verisignlabs.com/server claimedID: http://tommycli.keepword.com/ OP-specific ID: http://tommycli.pip.verisignlabs.com/
+[INFO] [2010-11-27 14:39:07,163] [21337935@qtp-3070558-8] o.o.s.RealmVerifier: Return URL: http://localhost:8080/openid/response matches realm: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:39:07,167] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (POST) /openid/login took 1371 Milliseconds
+[INFO] [2010-11-27 14:39:07,455] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Verifying authentication response...
+[INFO] [2010-11-27 14:39:07,457] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Received positive auth response.
+[INFO] [2010-11-27 14:39:07,458] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Found association: c31787d0-fa6e-11df-b51f-fddc63e410df verifying signature locally...
+[INFO] [2010-11-27 14:39:07,459] [21337935@qtp-3070558-8] o.o.c.ConsumerManager: Verification succeeded for: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:39:07,469] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /openid/response took 18 Milliseconds
+[INFO] [2010-11-27 14:39:07,537] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /login took 5 Milliseconds
+[WARN] [2010-11-27 14:39:07,590] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:39:07,598] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 55 Milliseconds
+[INFO] [2010-11-27 14:39:07,638] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:07,641] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:07,644] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:07,955] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:08,020] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 5 Milliseconds
+[INFO] [2010-11-27 14:39:09,373] [233505@qtp-3070558-5] i.l.m.s.StarGameState: Insufficient # of available starting planets: (3/4) found.
+[INFO] [2010-11-27 14:39:09,493] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /stargame/new took 152 Milliseconds
+[WARN] [2010-11-27 14:39:09,604] [pool-15-thread-3] s.s.a.c.Config$: 
+Can't load 'akka.conf'.
+One of the three ways of locating the 'akka.conf' file needs to be defined:
+	1. Define the '-Dakka.config=...' system property option.
+	2. Put the 'akka.conf' file on the classpath.
+	3. Define 'AKKA_HOME' environment variable pointing to the root of the Akka distribution.
+I have no way of finding the 'akka.conf' configuration file.
+Using default values everywhere.
+[DEBUG] [2010-11-27 14:39:09,653] [pool-15-thread-3] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Creating a se.scalablesolutions.akka.dispatch.Dispatchers$globalExecutorBasedEventDrivenDispatcher$ with config [core-pool:16,max-pool:128,timeout:60000,allowCoreTimeout:false,rejectPolicy:CallerRunsPolicy]
+[DEBUG] [2010-11-27 14:39:09,701] [pool-15-thread-3] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Starting up ExecutorBasedEventDrivenDispatcher[akka:event-driven:dispatcher:global]
+	with throughput [5]
+[DEBUG] [2010-11-27 14:39:09,755] [akka:event-driven:dispatcher:global-1] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-1
+[DEBUG] [2010-11-27 14:39:09,758] [akka:event-driven:dispatcher:global-2] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-2
+[DEBUG] [2010-11-27 14:39:09,814] [akka:event-driven:dispatcher:global-3] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-3
+[DEBUG] [2010-11-27 14:39:09,816] [akka:event-driven:dispatcher:global-4] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-4
+[WARN] [2010-11-27 14:39:09,830] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:39:09,830] [pool-15-thread-4] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:39:09,843] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17a7d86b5a10539e3a137 took 343 Milliseconds
+[INFO] [2010-11-27 14:39:09,894] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:09,898] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:09,901] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 1 Milliseconds
+[INFO] [2010-11-27 14:39:10,213] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:10,284] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:10,309] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /comet_request/u69h0fw1sus9/cometAjax.js took 6 Milliseconds
+[INFO] [2010-11-27 14:39:13,108] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 27 Milliseconds
+[INFO] [2010-11-27 14:39:14,861] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 2 Milliseconds
+[INFO] [2010-11-27 14:39:15,802] [pool-15-thread-11] i.l.c.StarGameComet: Registered : Beper
+[DEBUG] [2010-11-27 14:39:15,804] [akka:event-driven:dispatcher:global-5] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-5
+[INFO] [2010-11-27 14:39:15,805] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 12 Milliseconds
+[DEBUG] [2010-11-27 14:39:15,810] [akka:event-driven:dispatcher:global-6] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-6
+[INFO] [2010-11-27 14:39:15,817] [pool-15-thread-12] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[ERROR] [2010-11-27 14:39:15,865] [akka:event-driven:dispatcher:global-6] s.s.a.a.Actor$: Exception when invoking 
+	actor [Actor[impulsestorm.liftapp.model.stargame.StarGameMaster:1292236127087]] 
+	with message [Mutate(4cf17a7d86b5a10539e3a137,impulsestorm.liftapp.comet.StarGameComet@11b178f,<function1>)]
+scala.MatchError: (3,0)
+	at net.liftweb.json.Extraction$$anonfun$decompose$1.apply(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$1.apply(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.Map$Map2.foreach(Map.scala:127) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.Map$Map2.map(Map.scala:110) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:84) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$2.apply(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$2.apply(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:84) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.JsonObjectMeta.toJObject(JsonObject.scala:49) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$class.save(MongoDocument.scala:184) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState$.save(State.scala:59) ~[classes/:na]
+	at net.liftweb.mongodb.MongoDocumentMeta$$anonfun$save$1.apply(MongoDocument.scala:176) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$$anonfun$save$1.apply(MongoDocument.scala:175) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDB$.use(Mongo.scala:129) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$class.save(MongoDocument.scala:175) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState$.save(State.scala:59) ~[classes/:na]
+	at net.liftweb.mongodb.MongoDocument$class.save(MongoDocument.scala:41) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState.save(State.scala:14) ~[classes/:na]
+	at impulsestorm.liftapp.model.stargame.StarGameMaster.saveToStorage(Master.scala:9) ~[classes/:na]
+	at impulsestorm.liftapp.lib.StateMaster$$anonfun$receive$2.apply(StateCoordination.scala:106) ~[classes/:na]
+	at impulsestorm.liftapp.lib.StateMaster$$anonfun$receive$2.apply(StateCoordination.scala:100) ~[classes/:na]
+	at se.scalablesolutions.akka.actor.Actor$$anonfun$2.apply(Actor.scala:485) ~[akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.Actor$$anonfun$2.apply(Actor.scala:475) ~[akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.Actor$class.apply(Actor.scala:471) ~[akka-core_2.8.0-0.10.jar:na]
+	at impulsestorm.liftapp.model.stargame.StarGameMaster.apply(Master.scala:6) ~[classes/:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef.se$scalablesolutions$akka$actor$LocalActorRef$$dispatch(ActorRef.scala:1221) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply$mcV$sp(ActorRef.scala:1027) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply(ActorRef.scala:1022) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply(ActorRef.scala:1022) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.util.ReentrantGuard.withGuard(LockUtil.scala:18) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef.invoke(ActorRef.scala:1021) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.MessageInvocation.invoke(MessageHandling.scala:27) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.ExecutorBasedEventDrivenDispatcher.processMailbox(ExecutorBasedEventDrivenDispatcher.scala:139) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.ExecutorBasedEventDrivenDispatcher$$anon$1.run(ExecutorBasedEventDrivenDispatcher.scala:115) [akka-core_2.8.0-0.10.jar:na]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110) [na:1.6.0_18]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603) [na:1.6.0_18]
+	at java.lang.Thread.run(Thread.java:636) [na:1.6.0_18]
+	at se.scalablesolutions.akka.dispatch.ThreadPoolBuilder$MonitorableThread.run(ThreadPoolBuilder.scala:298) [akka-core_2.8.0-0.10.jar:na]
+[DEBUG] [2010-11-27 14:39:20,167] [akka:event-driven:dispatcher:global-7] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-7
+[INFO] [2010-11-27 14:39:20,170] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 8 Milliseconds
+[DEBUG] [2010-11-27 14:39:20,171] [akka:event-driven:dispatcher:global-8] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-8
+[INFO] [2010-11-27 14:39:21,569] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 4 Milliseconds
+[DEBUG] [2010-11-27 14:39:21,583] [akka:event-driven:dispatcher:global-9] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-9
+[DEBUG] [2010-11-27 14:39:21,584] [akka:event-driven:dispatcher:global-10] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-10
+[DEBUG] [2010-11-27 14:39:27,415] [akka:event-driven:dispatcher:global-11] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-11
+[INFO] [2010-11-27 14:39:27,415] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 25 Milliseconds
+[DEBUG] [2010-11-27 14:39:27,417] [akka:event-driven:dispatcher:global-12] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-12
+[INFO] [2010-11-27 14:39:28,054] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 9 Milliseconds
+[DEBUG] [2010-11-27 14:39:28,061] [akka:event-driven:dispatcher:global-13] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-13
+[DEBUG] [2010-11-27 14:39:28,078] [akka:event-driven:dispatcher:global-14] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-14
+[INFO] [2010-11-27 14:39:28,914] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 13 Milliseconds
+[DEBUG] [2010-11-27 14:39:28,918] [akka:event-driven:dispatcher:global-15] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-15
+[DEBUG] [2010-11-27 14:39:28,932] [akka:event-driven:dispatcher:global-16] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-16
+[INFO] [2010-11-27 14:39:29,424] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F2532969733001ZL/ took 3 Milliseconds
+[WARN] [2010-11-27 14:39:45,915] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:39:45,934] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 42 Milliseconds
+[INFO] [2010-11-27 14:39:46,027] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:46,030] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:46,039] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:46,362] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:46,420] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:39:50,987] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:39:50,993] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 116 Milliseconds
+[INFO] [2010-11-27 14:39:51,036] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:51,039] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:51,044] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:51,371] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:51,440] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:39:53,316] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:39:53,322] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17a7d86b5a10539e3a137 took 32 Milliseconds
+[INFO] [2010-11-27 14:39:53,372] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:53,375] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:53,378] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:39:53,696] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:53,783] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:39:53,806] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /comet_request/u69h0fw1sus9/cometAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:40:19,379] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:40:19,394] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17a7d86b5a10539e3a137 took 54 Milliseconds
+[INFO] [2010-11-27 14:40:20,383] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:20,386] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 1 Milliseconds
+[INFO] [2010-11-27 14:40:20,395] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 6 Milliseconds
+[INFO] [2010-11-27 14:40:20,721] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:40:20,799] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 3 Milliseconds
+[INFO] [2010-11-27 14:40:20,819] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /comet_request/u69h0fw1sus9/cometAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:40:22,230] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:40:22,236] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 25 Milliseconds
+[INFO] [2010-11-27 14:40:22,300] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 1 Milliseconds
+[INFO] [2010-11-27 14:40:22,306] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 5 Milliseconds
+[INFO] [2010-11-27 14:40:22,315] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 6 Milliseconds
+[INFO] [2010-11-27 14:40:22,640] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:40:22,698] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:40:23,709] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:40:23,723] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 32 Milliseconds
+[INFO] [2010-11-27 14:40:23,759] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:23,765] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:23,774] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:24,147] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:40:24,217] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 7 Milliseconds
+[WARN] [2010-11-27 14:40:25,026] [233505@qtp-3070558-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:40:25,054] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 58 Milliseconds
+[INFO] [2010-11-27 14:40:25,081] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:25,084] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:25,090] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:25,403] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:40:25,465] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 1 Milliseconds
+[INFO] [2010-11-27 14:40:26,489] [21337935@qtp-3070558-8] i.l.m.s.StarGameState: Insufficient # of available starting planets: (3/4) found.
+[INFO] [2010-11-27 14:40:26,506] [21337935@qtp-3070558-8] i.l.m.s.StarGameState: Insufficient # of available starting planets: (1/4) found.
+[INFO] [2010-11-27 14:40:26,538] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (POST) /stargame/new took 76 Milliseconds
+[WARN] [2010-11-27 14:40:26,574] [21337935@qtp-3070558-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:40:26,576] [pool-15-thread-16] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:40:26,580] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17aca86b5a1053ce3a137 took 35 Milliseconds
+[INFO] [2010-11-27 14:40:26,632] [21337935@qtp-3070558-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:26,635] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:26,641] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:40:26,983] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:40:27,065] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:40:27,091] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (GET) /comet_request/u69h0fw1sus9/cometAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:40:33,790] [pool-15-thread-10] i.l.c.StarGameComet: Registered : Queyos
+[INFO] [2010-11-27 14:40:33,791] [pool-15-thread-13] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:40:33,791] [233505@qtp-3070558-5] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F253296973368GMU/ took 4 Milliseconds
+[ERROR] [2010-11-27 14:40:33,817] [akka:event-driven:dispatcher:global-7] s.s.a.a.Actor$: Exception when invoking 
+	actor [Actor[impulsestorm.liftapp.model.stargame.StarGameMaster:1292236203855]] 
+	with message [Mutate(4cf17aca86b5a1053ce3a137,impulsestorm.liftapp.comet.StarGameComet@affac2,<function1>)]
+scala.MatchError: (3,0)
+	at net.liftweb.json.Extraction$$anonfun$decompose$1.apply(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$1.apply(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.Map$Map2.foreach(Map.scala:127) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.Map$Map2.map(Map.scala:110) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:84) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$2.apply(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$2.apply(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:84) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.JsonObjectMeta.toJObject(JsonObject.scala:49) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$class.save(MongoDocument.scala:184) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState$.save(State.scala:59) ~[classes/:na]
+	at net.liftweb.mongodb.MongoDocumentMeta$$anonfun$save$1.apply(MongoDocument.scala:176) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$$anonfun$save$1.apply(MongoDocument.scala:175) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDB$.use(Mongo.scala:129) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$class.save(MongoDocument.scala:175) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState$.save(State.scala:59) ~[classes/:na]
+	at net.liftweb.mongodb.MongoDocument$class.save(MongoDocument.scala:41) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState.save(State.scala:14) ~[classes/:na]
+	at impulsestorm.liftapp.model.stargame.StarGameMaster.saveToStorage(Master.scala:9) ~[classes/:na]
+	at impulsestorm.liftapp.lib.StateMaster$$anonfun$receive$2.apply(StateCoordination.scala:106) ~[classes/:na]
+	at impulsestorm.liftapp.lib.StateMaster$$anonfun$receive$2.apply(StateCoordination.scala:100) ~[classes/:na]
+	at se.scalablesolutions.akka.actor.Actor$$anonfun$2.apply(Actor.scala:485) ~[akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.Actor$$anonfun$2.apply(Actor.scala:475) ~[akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.Actor$class.apply(Actor.scala:471) ~[akka-core_2.8.0-0.10.jar:na]
+	at impulsestorm.liftapp.model.stargame.StarGameMaster.apply(Master.scala:6) ~[classes/:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef.se$scalablesolutions$akka$actor$LocalActorRef$$dispatch(ActorRef.scala:1221) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply$mcV$sp(ActorRef.scala:1027) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply(ActorRef.scala:1022) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply(ActorRef.scala:1022) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.util.ReentrantGuard.withGuard(LockUtil.scala:18) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef.invoke(ActorRef.scala:1021) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.MessageInvocation.invoke(MessageHandling.scala:27) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.ExecutorBasedEventDrivenDispatcher.processMailbox(ExecutorBasedEventDrivenDispatcher.scala:139) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.ExecutorBasedEventDrivenDispatcher$$anon$1.run(ExecutorBasedEventDrivenDispatcher.scala:115) [akka-core_2.8.0-0.10.jar:na]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110) [na:1.6.0_18]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603) [na:1.6.0_18]
+	at java.lang.Thread.run(Thread.java:636) [na:1.6.0_18]
+	at se.scalablesolutions.akka.dispatch.ThreadPoolBuilder$MonitorableThread.run(ThreadPoolBuilder.scala:298) [akka-core_2.8.0-0.10.jar:na]
+[INFO] [2010-11-27 14:41:51,053] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /comet_request/80882940127/u69h0fw1sus9 took 62 Milliseconds
+[INFO] [2010-11-27 14:41:51,163] [15169409@qtp-24942249-2] n.l.u.TimeHelpers: Service request (GET) /comet_request/44704240268/u69h0fw1sus9 took 1 Milliseconds
+[INFO] [2010-11-27 14:41:51,206] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17aca86b5a1053ce3a137 took 141 Milliseconds
+[INFO] [2010-11-27 14:41:51,209] [15169409@qtp-24942249-2] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17aca86b5a1053ce3a137 took 28 Milliseconds
+[INFO] [2010-11-27 14:41:51,296] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /comet_request/69477798492/u69h0fw1sus9 took 9 Milliseconds
+[WARN] [2010-11-27 14:41:51,419] [2248917@qtp-24942249-3] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[WARN] [2010-11-27 14:41:51,422] [20245380@qtp-24942249-0] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:41:51,422] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:41:51,499] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) / took 185 Milliseconds
+[INFO] [2010-11-27 14:41:51,499] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /login took 284 Milliseconds
+[INFO] [2010-11-27 14:41:51,671] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 36 Milliseconds
+[INFO] [2010-11-27 14:41:51,673] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 38 Milliseconds
+[INFO] [2010-11-27 14:41:51,678] [30791525@qtp-24942249-4] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 40 Milliseconds
+[WARN] [2010-11-27 14:41:51,718] [24228422@qtp-24942249-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:41:51,731] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) / took 56 Milliseconds
+[INFO] [2010-11-27 14:41:51,770] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 6 Milliseconds
+[INFO] [2010-11-27 14:41:51,773] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:41:51,776] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 5 Milliseconds
+[INFO] [2010-11-27 14:41:52,089] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:41:52,222] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 18 Milliseconds
+[INFO] [2010-11-27 14:41:54,000] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 3 Milliseconds
+[WARN] [2010-11-27 14:41:54,042] [24228422@qtp-24942249-5] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:41:54,043] [24228422@qtp-24942249-5] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:41:54,053] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) /login took 43 Milliseconds
+[INFO] [2010-11-27 14:41:54,111] [24228422@qtp-24942249-5] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 3 Milliseconds
+[INFO] [2010-11-27 14:41:54,113] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 3 Milliseconds
+[INFO] [2010-11-27 14:41:54,116] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 3 Milliseconds
+[INFO] [2010-11-27 14:41:54,447] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:41:54,522] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 3 Milliseconds
+[WARN] [2010-11-27 14:41:56,604] [2248917@qtp-24942249-3] o.o.s.RealmVerifier: RP discovery / realm validation disabled; 
+[INFO] [2010-11-27 14:41:56,615] [2248917@qtp-24942249-3] n.l.o.SimpleOpenIDVendor$$anon$1: Creating openId auth request.  returnToUrl: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:41:56,617] [2248917@qtp-24942249-3] o.o.d.Discovery: Starting discovery on URL identifier: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:41:57,802] [2248917@qtp-24942249-3] o.o.d.y.YadisResolver: Yadis discovered 2 endpoints from: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:41:57,802] [2248917@qtp-24942249-3] o.o.d.Discovery: Discovered 2 OpenID endpoints.
+[INFO] [2010-11-27 14:41:57,802] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Trying to associate with http://pip.verisignlabs.com/server attempts left: 4
+[WARN] [2010-11-27 14:41:57,802] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA1:OpenID2
+[WARN] [2010-11-27 14:41:57,802] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA256:OpenID2
+[INFO] [2010-11-27 14:41:58,033] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Associated with http://pip.verisignlabs.com/server handle: 28ef00b0-fa6f-11df-b51f-fddc63e410df
+[INFO] [2010-11-27 14:41:58,034] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Creating authentication request for OP-endpoint: http://pip.verisignlabs.com/server claimedID: http://tommycli.keepword.com/ OP-specific ID: http://tommycli.pip.verisignlabs.com/
+[INFO] [2010-11-27 14:41:58,036] [2248917@qtp-24942249-3] o.o.s.RealmVerifier: Return URL: http://localhost:8080/openid/response matches realm: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:41:58,045] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (POST) /openid/login took 1502 Milliseconds
+[INFO] [2010-11-27 14:41:58,323] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Verifying authentication response...
+[INFO] [2010-11-27 14:41:58,326] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Received positive auth response.
+[INFO] [2010-11-27 14:41:58,328] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Found association: 28ef00b0-fa6f-11df-b51f-fddc63e410df verifying signature locally...
+[INFO] [2010-11-27 14:41:58,331] [2248917@qtp-24942249-3] o.o.c.ConsumerManager: Verification succeeded for: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:41:58,342] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /openid/response took 30 Milliseconds
+[INFO] [2010-11-27 14:41:58,420] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /login took 6 Milliseconds
+[WARN] [2010-11-27 14:41:58,507] [2248917@qtp-24942249-3] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:41:58,521] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 95 Milliseconds
+[INFO] [2010-11-27 14:41:58,558] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:41:58,561] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:41:58,564] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:41:58,850] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 4 Milliseconds
+[INFO] [2010-11-27 14:41:58,924] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 9 Milliseconds
+[WARN] [2010-11-27 14:42:02,549] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:42:02,557] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 221 Milliseconds
+[INFO] [2010-11-27 14:42:02,611] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:42:02,617] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:42:02,620] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:42:02,946] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:42:03,024] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 3 Milliseconds
+[WARN] [2010-11-27 14:42:04,948] [pool-3-thread-2] s.s.a.c.Config$: 
+Can't load 'akka.conf'.
+One of the three ways of locating the 'akka.conf' file needs to be defined:
+	1. Define the '-Dakka.config=...' system property option.
+	2. Put the 'akka.conf' file on the classpath.
+	3. Define 'AKKA_HOME' environment variable pointing to the root of the Akka distribution.
+I have no way of finding the 'akka.conf' configuration file.
+Using default values everywhere.
+[DEBUG] [2010-11-27 14:42:05,020] [pool-3-thread-2] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Creating a se.scalablesolutions.akka.dispatch.Dispatchers$globalExecutorBasedEventDrivenDispatcher$ with config [core-pool:16,max-pool:128,timeout:60000,allowCoreTimeout:false,rejectPolicy:CallerRunsPolicy]
+[DEBUG] [2010-11-27 14:42:05,051] [pool-3-thread-2] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Starting up ExecutorBasedEventDrivenDispatcher[akka:event-driven:dispatcher:global]
+	with throughput [5]
+[DEBUG] [2010-11-27 14:42:05,064] [akka:event-driven:dispatcher:global-1] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-1
+[DEBUG] [2010-11-27 14:42:05,064] [akka:event-driven:dispatcher:global-2] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-2
+[WARN] [2010-11-27 14:42:05,112] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:42:05,123] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17aca86b5a1053ce3a137 took 229 Milliseconds
+[DEBUG] [2010-11-27 14:42:05,164] [akka:event-driven:dispatcher:global-4] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-4
+[DEBUG] [2010-11-27 14:42:05,164] [akka:event-driven:dispatcher:global-3] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-3
+[INFO] [2010-11-27 14:42:05,167] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:42:05,173] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:42:05,179] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 10 Milliseconds
+[INFO] [2010-11-27 14:42:05,182] [pool-3-thread-3] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:42:05,520] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:42:05,602] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 3 Milliseconds
+[INFO] [2010-11-27 14:42:05,625] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /comet_request/19743vpogi9t1/cometAjax.js took 9 Milliseconds
+[DEBUG] [2010-11-27 14:42:17,958] [akka:event-driven:dispatcher:global-5] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-5
+[DEBUG] [2010-11-27 14:42:17,959] [akka:event-driven:dispatcher:global-6] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-6
+[INFO] [2010-11-27 14:42:17,964] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 17 Milliseconds
+[DEBUG] [2010-11-27 14:42:18,564] [akka:event-driven:dispatcher:global-7] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-7
+[INFO] [2010-11-27 14:42:18,566] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 16 Milliseconds
+[DEBUG] [2010-11-27 14:42:18,566] [akka:event-driven:dispatcher:global-8] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-8
+[DEBUG] [2010-11-27 14:42:19,121] [akka:event-driven:dispatcher:global-9] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-9
+[INFO] [2010-11-27 14:42:19,122] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 10 Milliseconds
+[DEBUG] [2010-11-27 14:42:19,127] [akka:event-driven:dispatcher:global-10] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-10
+[DEBUG] [2010-11-27 14:42:19,762] [akka:event-driven:dispatcher:global-11] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-11
+[DEBUG] [2010-11-27 14:42:19,763] [akka:event-driven:dispatcher:global-12] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-12
+[INFO] [2010-11-27 14:42:19,764] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 5 Milliseconds
+[DEBUG] [2010-11-27 14:42:21,234] [akka:event-driven:dispatcher:global-13] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-13
+[DEBUG] [2010-11-27 14:42:21,235] [akka:event-driven:dispatcher:global-14] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-14
+[INFO] [2010-11-27 14:42:21,235] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 3 Milliseconds
+[INFO] [2010-11-27 14:45:16,250] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 4 Milliseconds
+[INFO] [2010-11-27 14:45:17,776] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 3 Milliseconds
+[INFO] [2010-11-27 14:45:18,296] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 5 Milliseconds
+[INFO] [2010-11-27 14:45:18,749] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 4 Milliseconds
+[INFO] [2010-11-27 14:45:19,197] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 3 Milliseconds
+[INFO] [2010-11-27 14:45:19,646] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 2 Milliseconds
+[INFO] [2010-11-27 14:45:20,092] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 4 Milliseconds
+[INFO] [2010-11-27 14:45:20,527] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 3 Milliseconds
+[INFO] [2010-11-27 14:45:20,960] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 4 Milliseconds
+[INFO] [2010-11-27 14:45:21,407] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F531094202922FCD/ took 11 Milliseconds
+[WARN] [2010-11-27 14:45:31,850] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:45:31,858] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 25 Milliseconds
+[INFO] [2010-11-27 14:45:31,933] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 3 Milliseconds
+[INFO] [2010-11-27 14:45:31,936] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:31,939] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:32,254] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:45:32,307] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:45:33,064] [2248917@qtp-24942249-3] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:45:33,070] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 23 Milliseconds
+[INFO] [2010-11-27 14:45:33,116] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 3 Milliseconds
+[INFO] [2010-11-27 14:45:33,119] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:33,122] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:33,455] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:45:33,532] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:45:34,875] [2248917@qtp-24942249-3] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:45:34,882] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 25 Milliseconds
+[INFO] [2010-11-27 14:45:34,933] [2248917@qtp-24942249-3] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:34,936] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:34,939] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:35,242] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:45:35,308] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:45:36,634] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /stargame/new took 96 Milliseconds
+[DEBUG] [2010-11-27 14:45:36,651] [akka:event-driven:dispatcher:global-16] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-16
+[DEBUG] [2010-11-27 14:45:36,651] [akka:event-driven:dispatcher:global-15] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-15
+[WARN] [2010-11-27 14:45:36,663] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:45:36,680] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17c00586ba105504a5a78 took 40 Milliseconds
+[INFO] [2010-11-27 14:45:36,719] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:36,725] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:36,730] [pool-3-thread-12] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:45:36,732] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:45:37,045] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:45:37,116] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:45:37,139] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /comet_request/19743vpogi9t1/cometAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:13,816] [pool-5-thread-3] n.l.h.CometActor: The CometActor impulsestorm.liftapp.comet.StarGameComet@9320e4 Received Shutdown
+[INFO] [2010-11-27 14:47:13,816] [pool-5-thread-4] n.l.h.CometActor: The CometActor impulsestorm.liftapp.comet.StarGameComet@1e3eb6a Received Shutdown
+[INFO] [2010-11-27 14:47:23,882] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /comet_request/5988860054/19743vpogi9t1 took 66 Milliseconds
+[INFO] [2010-11-27 14:47:23,963] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /comet_request/39218435503/19743vpogi9t1 took 1 Milliseconds
+[INFO] [2010-11-27 14:47:24,077] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17c00586ba105504a5a78 took 189 Milliseconds
+[INFO] [2010-11-27 14:47:24,080] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17c00586ba105504a5a78 took 99 Milliseconds
+[INFO] [2010-11-27 14:47:24,112] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /comet_request/97273961156/19743vpogi9t1 took 13 Milliseconds
+[WARN] [2010-11-27 14:47:24,265] [24874301@qtp-24942249-7] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[WARN] [2010-11-27 14:47:24,266] [20245380@qtp-24942249-0] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:47:24,267] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:47:24,407] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /login took 321 Milliseconds
+[INFO] [2010-11-27 14:47:24,444] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) / took 315 Milliseconds
+[INFO] [2010-11-27 14:47:24,531] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 47 Milliseconds
+[INFO] [2010-11-27 14:47:24,534] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 61 Milliseconds
+[INFO] [2010-11-27 14:47:24,537] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 62 Milliseconds
+[INFO] [2010-11-27 14:47:24,845] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 3 Milliseconds
+[INFO] [2010-11-27 14:47:25,002] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 21 Milliseconds
+[WARN] [2010-11-27 14:47:31,657] [20245380@qtp-24942249-0] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:47:31,663] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /stargame/ took 68 Milliseconds
+[INFO] [2010-11-27 14:47:31,721] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 3 Milliseconds
+[INFO] [2010-11-27 14:47:31,724] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:31,729] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:32,042] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:32,168] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:33,180] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 1 Milliseconds
+[WARN] [2010-11-27 14:47:33,208] [27434898@qtp-24942249-8] n.l.u.BindHelpers: No binding values match the <lift:bind> name attribute: topRight
+[WARN] [2010-11-27 14:47:33,209] [27434898@qtp-24942249-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:47:33,215] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /login took 22 Milliseconds
+[INFO] [2010-11-27 14:47:33,269] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 5 Milliseconds
+[INFO] [2010-11-27 14:47:33,273] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:33,276] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:33,582] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:33,652] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[WARN] [2010-11-27 14:47:35,772] [20245380@qtp-24942249-0] o.o.s.RealmVerifier: RP discovery / realm validation disabled; 
+[INFO] [2010-11-27 14:47:35,775] [20245380@qtp-24942249-0] n.l.o.SimpleOpenIDVendor$$anon$1: Creating openId auth request.  returnToUrl: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:47:35,776] [20245380@qtp-24942249-0] o.o.d.Discovery: Starting discovery on URL identifier: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:47:36,978] [20245380@qtp-24942249-0] o.o.d.y.YadisResolver: Yadis discovered 2 endpoints from: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:47:36,978] [20245380@qtp-24942249-0] o.o.d.Discovery: Discovered 2 OpenID endpoints.
+[INFO] [2010-11-27 14:47:36,978] [20245380@qtp-24942249-0] o.o.c.ConsumerManager: Trying to associate with http://pip.verisignlabs.com/server attempts left: 4
+[WARN] [2010-11-27 14:47:36,979] [20245380@qtp-24942249-0] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA1:OpenID2
+[WARN] [2010-11-27 14:47:36,979] [20245380@qtp-24942249-0] o.o.c.ConsumerManager: Could not create association of type: no-encryption:HMAC-SHA256:OpenID2
+[INFO] [2010-11-27 14:47:37,174] [20245380@qtp-24942249-0] o.o.c.ConsumerManager: Associated with http://pip.verisignlabs.com/server handle: f3152f90-fa6f-11df-9f71-4744d99c1d04
+[INFO] [2010-11-27 14:47:37,176] [20245380@qtp-24942249-0] o.o.c.ConsumerManager: Creating authentication request for OP-endpoint: http://pip.verisignlabs.com/server claimedID: http://tommycli.keepword.com/ OP-specific ID: http://tommycli.pip.verisignlabs.com/
+[INFO] [2010-11-27 14:47:37,178] [20245380@qtp-24942249-0] o.o.s.RealmVerifier: Return URL: http://localhost:8080/openid/response matches realm: http://localhost:8080/openid/response
+[INFO] [2010-11-27 14:47:37,182] [20245380@qtp-24942249-0] n.l.u.TimeHelpers: Service request (POST) /openid/login took 1483 Milliseconds
+[INFO] [2010-11-27 14:47:37,454] [27434898@qtp-24942249-8] o.o.c.ConsumerManager: Verifying authentication response...
+[INFO] [2010-11-27 14:47:37,456] [27434898@qtp-24942249-8] o.o.c.ConsumerManager: Received positive auth response.
+[INFO] [2010-11-27 14:47:37,458] [27434898@qtp-24942249-8] o.o.c.ConsumerManager: Found association: f3152f90-fa6f-11df-9f71-4744d99c1d04 verifying signature locally...
+[INFO] [2010-11-27 14:47:37,460] [27434898@qtp-24942249-8] o.o.c.ConsumerManager: Verification succeeded for: http://tommycli.keepword.com/
+[INFO] [2010-11-27 14:47:37,469] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /openid/response took 20 Milliseconds
+[INFO] [2010-11-27 14:47:37,516] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /login took 7 Milliseconds
+[WARN] [2010-11-27 14:47:37,588] [27434898@qtp-24942249-8] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:47:37,596] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /stargame/new took 53 Milliseconds
+[INFO] [2010-11-27 14:47:37,633] [27434898@qtp-24942249-8] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:37,636] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:37,639] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:37,930] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:37,991] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 8 Milliseconds
+[INFO] [2010-11-27 14:47:40,304] [24874301@qtp-24942249-7] i.l.m.s.StarGameState: Insufficient # of available starting planets: (2/4) found.
+[INFO] [2010-11-27 14:47:40,318] [24874301@qtp-24942249-7] i.l.m.s.StarGameState: Insufficient # of available starting planets: (3/4) found.
+[INFO] [2010-11-27 14:47:40,480] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (POST) /stargame/new took 212 Milliseconds
+[WARN] [2010-11-27 14:47:40,572] [pool-9-thread-2] s.s.a.c.Config$: 
+Can't load 'akka.conf'.
+One of the three ways of locating the 'akka.conf' file needs to be defined:
+	1. Define the '-Dakka.config=...' system property option.
+	2. Put the 'akka.conf' file on the classpath.
+	3. Define 'AKKA_HOME' environment variable pointing to the root of the Akka distribution.
+I have no way of finding the 'akka.conf' configuration file.
+Using default values everywhere.
+[DEBUG] [2010-11-27 14:47:40,624] [pool-9-thread-2] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Creating a se.scalablesolutions.akka.dispatch.Dispatchers$globalExecutorBasedEventDrivenDispatcher$ with config [core-pool:16,max-pool:128,timeout:60000,allowCoreTimeout:false,rejectPolicy:CallerRunsPolicy]
+[DEBUG] [2010-11-27 14:47:40,683] [pool-9-thread-2] s.s.a.d.Dispatchers$globalExecutorBasedEventDrivenDispatcher$: Starting up ExecutorBasedEventDrivenDispatcher[akka:event-driven:dispatcher:global]
+	with throughput [5]
+[DEBUG] [2010-11-27 14:47:40,729] [akka:event-driven:dispatcher:global-1] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-1
+[DEBUG] [2010-11-27 14:47:40,730] [akka:event-driven:dispatcher:global-2] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-2
+[WARN] [2010-11-27 14:47:40,802] [24874301@qtp-24942249-7] n.l.u.BindHelpers: Unused binding values for <lift:bind>: content
+[INFO] [2010-11-27 14:47:40,820] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /stargame/play/4cf17c7c586ba10537b590d7 took 333 Milliseconds
+[INFO] [2010-11-27 14:47:40,890] [24874301@qtp-24942249-7] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/screen.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:40,890] [14829128@qtp-24942249-10] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/print.css took 2 Milliseconds
+[INFO] [2010-11-27 14:47:40,893] [22982527@qtp-24942249-9] n.l.u.TimeHelpers: Service request (GET) /classpath/blueprint/plugins/fancy-type/screen.css took 2 Milliseconds
+[DEBUG] [2010-11-27 14:47:40,899] [akka:event-driven:dispatcher:global-3] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-3
+[DEBUG] [2010-11-27 14:47:40,933] [akka:event-driven:dispatcher:global-4] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-4
+[INFO] [2010-11-27 14:47:40,940] [pool-9-thread-3] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[INFO] [2010-11-27 14:47:41,193] [15061983@qtp-24942249-11] n.l.u.TimeHelpers: Service request (GET) /classpath/json.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:41,273] [15061983@qtp-24942249-11] n.l.u.TimeHelpers: Service request (GET) /ajax_request/liftAjax.js took 2 Milliseconds
+[INFO] [2010-11-27 14:47:41,295] [15061983@qtp-24942249-11] n.l.u.TimeHelpers: Service request (GET) /comet_request/eu1ev48g9aim/cometAjax.js took 6 Milliseconds
+[INFO] [2010-11-27 14:47:45,135] [pool-9-thread-14] i.l.c.StarGameComet: Registered : Skullezard
+[DEBUG] [2010-11-27 14:47:45,136] [akka:event-driven:dispatcher:global-5] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-5
+[DEBUG] [2010-11-27 14:47:45,137] [akka:event-driven:dispatcher:global-6] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-6
+[INFO] [2010-11-27 14:47:45,142] [15061983@qtp-24942249-11] n.l.u.TimeHelpers: Service request (POST) /ajax_request/F10291783622002QN/ took 28 Milliseconds
+[INFO] [2010-11-27 14:47:45,154] [pool-9-thread-15] i.l.c.StarGameComet: StarGameComet gets unhinted state
+[ERROR] [2010-11-27 14:47:45,175] [akka:event-driven:dispatcher:global-6] s.s.a.a.Actor$: Exception when invoking 
+	actor [Actor[impulsestorm.liftapp.model.stargame.StarGameMaster:1292236638167]] 
+	with message [Mutate(4cf17c7c586ba10537b590d7,impulsestorm.liftapp.comet.StarGameComet@500f01,<function1>)]
+scala.MatchError: (3,0)
+	at net.liftweb.json.Extraction$$anonfun$decompose$1.apply(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$1.apply(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.Map$Map2.foreach(Map.scala:127) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.Map$Map2.map(Map.scala:110) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:76) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:84) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$2.apply(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$2.apply(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:77) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:84) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.json.Extraction$$anonfun$decompose$6.apply(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:61) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:206) ~[scala-library.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library.jar:na]
+	at net.liftweb.json.Extraction$.decompose(Extraction.scala:81) ~[lift-json_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.JsonObjectMeta.toJObject(JsonObject.scala:49) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$class.save(MongoDocument.scala:184) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState$.save(State.scala:61) ~[classes/:na]
+	at net.liftweb.mongodb.MongoDocumentMeta$$anonfun$save$1.apply(MongoDocument.scala:176) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$$anonfun$save$1.apply(MongoDocument.scala:175) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDB$.use(Mongo.scala:129) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at net.liftweb.mongodb.MongoDocumentMeta$class.save(MongoDocument.scala:175) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState$.save(State.scala:61) ~[classes/:na]
+	at net.liftweb.mongodb.MongoDocument$class.save(MongoDocument.scala:41) ~[lift-mongodb_2.8.0-2.2-SNAPSHOT.jar:2.2-SNAPSHOT]
+	at impulsestorm.liftapp.model.stargame.StarGameState.save(State.scala:14) ~[classes/:na]
+	at impulsestorm.liftapp.model.stargame.StarGameMaster.saveToStorage(Master.scala:9) ~[classes/:na]
+	at impulsestorm.liftapp.lib.StateMaster$$anonfun$receive$2.apply(StateCoordination.scala:106) ~[classes/:na]
+	at impulsestorm.liftapp.lib.StateMaster$$anonfun$receive$2.apply(StateCoordination.scala:100) ~[classes/:na]
+	at se.scalablesolutions.akka.actor.Actor$$anonfun$2.apply(Actor.scala:485) ~[akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.Actor$$anonfun$2.apply(Actor.scala:475) ~[akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.Actor$class.apply(Actor.scala:471) ~[akka-core_2.8.0-0.10.jar:na]
+	at impulsestorm.liftapp.model.stargame.StarGameMaster.apply(Master.scala:6) ~[classes/:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef.se$scalablesolutions$akka$actor$LocalActorRef$$dispatch(ActorRef.scala:1221) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply$mcV$sp(ActorRef.scala:1027) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply(ActorRef.scala:1022) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef$$anonfun$invoke$1.apply(ActorRef.scala:1022) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.util.ReentrantGuard.withGuard(LockUtil.scala:18) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.actor.LocalActorRef.invoke(ActorRef.scala:1021) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.MessageInvocation.invoke(MessageHandling.scala:27) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.ExecutorBasedEventDrivenDispatcher.processMailbox(ExecutorBasedEventDrivenDispatcher.scala:139) [akka-core_2.8.0-0.10.jar:na]
+	at se.scalablesolutions.akka.dispatch.ExecutorBasedEventDrivenDispatcher$$anon$1.run(ExecutorBasedEventDrivenDispatcher.scala:115) [akka-core_2.8.0-0.10.jar:na]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110) [na:1.6.0_18]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603) [na:1.6.0_18]
+	at java.lang.Thread.run(Thread.java:636) [na:1.6.0_18]
+	at se.scalablesolutions.akka.dispatch.ThreadPoolBuilder$MonitorableThread.run(ThreadPoolBuilder.scala:298) [akka-core_2.8.0-0.10.jar:na]
+[INFO] [2010-11-27 14:48:54,704] [pool-11-thread-3] n.l.h.CometActor: The CometActor impulsestorm.liftapp.comet.StarGameComet@500f01 Received Shutdown
+[DEBUG] [2010-11-27 14:48:54,710] [akka:event-driven:dispatcher:global-7] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-7
+[DEBUG] [2010-11-27 14:48:54,710] [akka:event-driven:dispatcher:global-8] s.s.a.d.ThreadPoolBuilder$MonitorableThread: Created thread akka:event-driven:dispatcher:global-8

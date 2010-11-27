@@ -336,7 +336,9 @@ object Tech extends Enumerator[Tech] {
   // returns list of techs you can research, listed first by category, then
   // by tech level. i.e. [[propulsion1, propulsion2, ...], [weapons1...], ...]
   def generateCanResearchTechs() =
-    categorizedVals.map(l => Random.shuffle(l).take((0.6*l.length).toInt))
+    categorizedVals.map(l => 
+      Random.shuffle(l).filter(t => !startingTechs.contains(t))
+        .take((0.6*l.length).toInt).sortBy(_.level))
                       
   val eclass = classOf[Tech]
   

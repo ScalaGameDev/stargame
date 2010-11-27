@@ -39,7 +39,7 @@ class StateSupervisor(
       case Some(sMaster) => sMaster ! msg
       case None => {
         error("Requested: %s, but no such game".format(msg.stateId))
-        msg.listener ! NoSuchGame
+        msg.sender ! NoSuchGame
       }
     }
     case CleanOldActorsMsg => cleanOldActors() 
@@ -73,16 +73,16 @@ class StateSupervisor(
 
 trait FwdedMsg { 
   val stateId: String
-  val listener: SimpleActor[Any]
+  val sender: SimpleActor[Any]
 }
-case class Inquire(stateId: String, listener: SimpleActor[Any]) 
+case class Inquire(stateId: String, sender: SimpleActor[Any]) 
   extends FwdedMsg
-case class Subscribe(stateId: String, listener: SimpleActor[Any])
+case class Subscribe(stateId: String, sender: SimpleActor[Any])
   extends FwdedMsg
-case class Unsubscribe(stateId: String, listener: SimpleActor[Any])
+case class Unsubscribe(stateId: String, sender: SimpleActor[Any])
   extends FwdedMsg
 
-case class Mutate[StateType](stateId: String, listener: SimpleActor[Any],
+case class Mutate[StateType](stateId: String, sender: SimpleActor[Any],
                   mutateF: StateType => StateType)
   extends FwdedMsg
 
@@ -98,20 +98,20 @@ trait StateMaster[StateType <: State] extends Actor {
   var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
-    case Mutate(stateId, listener, mutateF) => { 
+    case Mutate(stateId, sender, mutateF) => { 
       val newstate = mutateF(state)
       listeners.foreach(_ ! newstate)
       
       state = newstate.asInstanceOf[StateType]
       saveToStorage()    
     }
-    case Inquire(id, listener) => {
-      listener ! state
+    case Inquire(id, sender) => {
+      sender ! state
     }
-    case Subscribe(id, listener) => 
-      listeners = listener :: listeners // set
-    case Unsubscribe(id, listener) => 
-      listeners = listeners.filter(_!=listener) // set
+    case Subscribe(id, sender) => 
+      listeners = sender :: listeners // set
+    case Unsubscribe(id, sender) => 
+      listeners = listeners.filter(_!=sender) // set
     case PrepareShutdown =>
       saveToStorage()
       self reply OK

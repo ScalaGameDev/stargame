@@ -5,6 +5,7 @@ import http._
 import http.js._
 import http.js.JE._
 import http.js.JsCmds._
+import json.JsonAST._ 
 import http.SHtml._
 
 import net.liftweb.actor._
@@ -26,6 +27,8 @@ class StarGameComet extends CometActor with Loggable {
   var playerOpt: Option[Player] = None
   def state = stateOpt.get
   def player = playerOpt.get
+  
+  override def autoIncludeJsonCode = true
   
   override def defaultPrefix = Full("comet")
   
@@ -59,6 +62,15 @@ class StarGameComet extends CometActor with Loggable {
       logger.error("StarGameComet unknown message: %s".format(x.toString))
   }
   
+  override def receiveJson = {
+    case JObject(List(JField("command", JString("research-alloc-save")), 
+                      JField("params", allocs))) => {
+      val allocation = allocs.values.asInstanceOf[List[Double]]
+      sg ! Actions.ResearchAllocation(stateId, this, player, allocation)
+      Noop
+    }
+  } 
+  
   def viewPlayer =
     setTitle("Player view") & setHtmlPlayersList & setHtmlResearch &
       showPanes(List("playersList", "research"))
@@ -71,8 +83,7 @@ class StarGameComet extends CometActor with Loggable {
     setTitle("Join game") & setHtmlPlayersList & setHtmlJoin &
       showPanes(List("playersList", "join"))
   
-  def render = {
-    logger.info("Call to render")
+  def render = { 
     stateOpt match {
       case None => {
         <p>Loading state...</p>
@@ -89,39 +100,59 @@ class StarGameComet extends CometActor with Loggable {
   
   def showPanes(panes: List[String]) = {
     val cmd = "$('.pane').hide();" :: panes.map("$('#" + _ + "').show();") 
-    JsRaw(cmd.mkString("\n"))
+    OnLoad(JsRaw(cmd.mkString("\n")))
   }
   
   def showPane(pane: String) = showPanes(List(pane))
   
-  def setTitle(title: String) = SetHtml("title", <h1>{title}</h1>)
+  def setTitle(title: String) = OnLoad(SetHtml("title", <h1>{title}</h1>))
   
-  def setHtmlPlayersList : JsCmd = {
+  def setHtmlPlayersList : JsCmd = {  
+    def startGame() = {
+      sg ! Actions.StartGame(stateId, this)
+      Noop
+    }
+    
     val players = state.players
-    SetHtml("playersList",
+    
+    val existingPlayersHtml : NodeSeq = ( 
       <h2>Existing players</h2>
       <table>
-        {
-          if(players.isEmpty)
-            <tr><td /><td>None</td></tr>
-          else
-            players.map( p => <tr><td></td><td>{p.alias}</td></tr> )
-        }
+        {if(players.isEmpty)
+           <tr><td /><td>None</td></tr>
+         else
+           players.map( p => <tr><td></td><td>{p.alias}</td></tr> )}
       </table>
     )
+    
+    val startGameHtml : NodeSeq = if(openid == state.createdBy)
+        <h2>Start game</h2>
+        <p>
+        {"%d out of %d slots filled".format(
+          state.players.length, state.nPlayers)}
+          <br/>
+          {ajaxButton("Start game filling slots with AI", startGame _)}
+        </p>
+      else <div/>
+      
+    
+    OnLoad(SetHtml("playersList", existingPlayersHtml ++ startGameHtml))
   }
   
   def setHtmlJoin : JsCmd = {
-    var alias : String = 
-      SimRandom.randomNoCollisions(StarGameState.aliases, 
-                                   state.players.map(_.alias))
+    var newPlayer: PlayerSpec = PlayerSpec.randomPlayer(Some(openid), state)
     
-    var traits = Random.shuffle(Trait.values) take 2
+    def setAlias(a: String) =
+      newPlayer = newPlayer.copy(alias=a)
+    
+    def setTrait(index: Int, t: Trait) =
+      newPlayer = newPlayer.copy(traits=newPlayer.traits.updated(index, t))
+      
                                    
     def processJoinForm() = {
-      logger.info("Registered : " + alias)
-      sg ! Actions.RegisterPlayer(stateId, this, Full(openid), alias, traits)
-      JsCmds.Noop
+      logger.info("Registered : " + newPlayer.alias)
+      sg ! Actions.RegisterPlayer(stateId, this, newPlayer)
+      Noop
     }
 
     val joinHtml = if(state.players.length < state.nPlayers)
@@ -129,15 +160,16 @@ class StarGameComet extends CometActor with Loggable {
       ajaxForm(
         <table>
         <tr>
-        <td>Your player alias:</td><td>{text(alias, alias = _)}</td>
+        <td>Your player alias:</td>
+        <td>{text(newPlayer.alias, a => setAlias _)}</td>
         </tr>
         <tr>
         <td>Trait 1: </td>
         <td>
         {
           selectObj[Trait](Trait.values zip Trait.values.map(_.name),
-                           Full(traits(0)), 
-                           t => traits = List(t, traits(1)))
+                           Full(newPlayer.traits(0)), 
+                           t => setTrait(0, t))
         }
         </td>
         </tr>
@@ -146,8 +178,8 @@ class StarGameComet extends CometActor with Loggable {
         <td>
         {
           selectObj[Trait](Trait.values zip Trait.values.map(_.name),
-                           Full(traits(1)), 
-                           t => traits = List(traits(0), t))
+                           Full(newPlayer.traits(1)), 
+                           t => setTrait(1, t))
         }
         </td>
         </tr>
@@ -166,31 +198,50 @@ class StarGameComet extends CometActor with Loggable {
     else
       <p>Sorry, this game is full. Join another or make a new one!</p>
     
-    SetHtml("join", joinHtml)
+    OnLoad(SetHtml("join", joinHtml))
   }
   
   def setHtmlResearch : JsCmd = {
-    def adjustAlloc(allocationIndex: Int, newAllocation: String) = {
-      println("New allocation %s - %s".format(allocationIndex, newAllocation))
-      JsCmds.Noop
+    def changeResearchChoice(newChoice: Tech) = {
+      println("New choice: " + newChoice.longName)
+      sg ! Actions.ResearchChoice(stateId, this, player, newChoice)
+      Noop
     }
-    
-    SetHtml("research", (<h2>Research</h2> ++
+
+    JsRaw("function techSaveClicked() {" + 
+      jsonSend("research-alloc-save", Call("getSliderVals")).toJsCmd +
+      "}") &
+    OnLoad(SetHtml("research", (<h2>Research</h2> ++
         <table>
         <tr>
         <td>
-        <div id="researched-techs">
-          <h3>Researched technologies</h3>
+        <div id="research-techs">
+          <h3>Technologies</h3>
           <ul>
           {
-            (TechCategory.values zip player.organizedTechs).map {
-              case(category, techs) => 
+            val techTuple = List(TechCategory.values, player.organizedTechs,
+                                 player.canResearchTechs,
+                                 player.researchChoices).transpose
+            
+            (techTuple.map {
+              case List(category: TechCategory, 
+                        techs: List[Tech], 
+                        choices: List[Tech], 
+                        currentChoice: Tech) => 
                 <li>{category}
                   <ul>
-                  {techs.map(t => <li>{t}</li>)}
+                  {techs.map(t => 
+                    <li><span class="tech-complete">{t}</span></li>
+                  )}
+                  <li>Research choice:
+                  {val choices3 = choices.take(3)
+                    ajaxSelectObj[Tech](choices3 zip choices3.map(_.longName),
+                                        Full(currentChoice), 
+                                        changeResearchChoice _)}
+                  </li>
                   </ul>
                 </li>
-            }
+            })
           }
           </ul>
         </div>
@@ -213,13 +264,10 @@ class StarGameComet extends CometActor with Loggable {
         </table>
         <button onclick="techSaveClicked()">Save</button>
     )) & 
-    JsRaw("function techSaveClicked() {" + 
-        jsonSend("research-alloc-save", Call("getSliderVals")).toJsCmd +
-        "}") &
     (
       Call("setupSliders") &
       Call("setSliderVals", JsArray(player.researchAlloc.map(Num(_)) : _*))
-    )
+    ))
     
   }
 }

@@ -20,35 +20,27 @@ case class StarGameState( _id: String, createdBy: String, name: String,
                           availableStartStarIds: List[Int])
   extends State with MongoDocument[StarGameState] {
   
-  // copy constructor
-  def copy( src: StarGameState, 
-            replacePlayers: Option[List[Player]] = None,
-            replaceAvailableStartStarIds: Option[List[Int]] = None,
-            replaceFleets: Option[List[Fleet]] = None,
-            replaceColonies: Option[List[Colony]] = None) = 
-  {
+  def addedPlayer(pSpec: PlayerSpec) = {
+    val newPlayerId = players.length // same as array index
+    val homeStarId = availableStartStarIds.head
     
-    val players = replacePlayers getOrElse src.players
-    val availableStartStarIds = 
-      replaceAvailableStartStarIds getOrElse src.availableStartStarIds
-    val fleets = replaceFleets getOrElse src.fleets
-    val colonies = replaceColonies getOrElse src.colonies
-              
-    StarGameState(  _id = src._id,
-                    createdBy = src.createdBy,
-                    name = src.name,
-                    mapSize = src.mapSize,
-                    started = src.started,
-                    gameYear = src.gameYear,
-                    timeMultiplier = src.timeMultiplier,
-                    realStartTime = src.realStartTime,
-                    nPlayers = src.nPlayers,
-                    stars = src.stars,
-                    players = players,
-                    fleets = fleets,
-                    colonies = colonies,
-                    availableStartStarIds = availableStartStarIds )
+    val newPlayers = 
+      players :+ Player.startingPlayer(newPlayerId, pSpec, homeStarId)
+    
+    val newColonies = 
+      colonies :+ Colony.startingColony(stars(homeStarId))
+    
+    val newFleets =
+      fleets :+ Fleet.startingFleet(newPlayerId, homeStarId)
+    
+    println("addedPlayer")
+      
+    this.copy(availableStartStarIds = availableStartStarIds.tail,
+              players = newPlayers, colonies = newColonies, fleets=newFleets)
   }
+  
+  def updatedPlayer(p: Player) =
+    this.copy(players=players.updated(p.id, p))
     
   def meta = StarGameState
   
@@ -78,23 +70,6 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   val sizesNames    = List("Small", "Medium", "Large", "Huge")
   val sizesSqLength = sizesAreas.map(A => math.sqrt(A))
   val sizesIndices  = List(0,1,2,3)  
-  
-                     //http://www.rinkworks.com/namegen/ - Japanese
-  val aliases = List("Hoshisaka", "Akisa", "Zenchi", "Uesaki", "Sawa", "Ohira",
-                     "Taku", "Ruyu", "Woyu", "Tsuya", "Rumata", "Munen",
-                     // Chinese (modified a bit)
-                     "Zhao", "Hou", "HianLao", "Shia", "Qao", "ShouWiann", "Mao", "Xian", "Chan", "Chao", "LiBai",
-                     // Greek!
-                     "Athoios", "Ildeos", "Osuos", "Rilytia", "Phacios",
-                     "Queyos", "Gariatia", "Atetia", "Honatia", "Nikios",
-                     // Pokemon
-                     "Awertle", "Kelortle", "Pinizard", "Wadochu", "Skullezard",
-                     // Fantasy - vowels
-                     "Iri", "Airalsti", "Yana", "Haisri", "Aedue", "Raerithp",
-                     // Other fantasy
-                     "Taing", "Hatmor", "Irum", "Perdis", "Roob", "Rildan",
-                     "Kesale", "Droshin", "Syd", "Ispertai", "Beper", "Osack"
-                     )
   
   // size: 0=Small, 1=Medium, etc.
   // returns: newly created state
@@ -134,31 +109,6 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   }
 }
 
-case class Player( id: Int, openid: Option[String], alias: String,
-                   traits: List[Trait],
-                   exploredStarIds: List[Int],
-                   designs: List[Design],
-                   gold: Double,
-                   techs: List[Tech], 
-                   researchAlloc: List[Double],
-                   researchChoices: List[Tech],
-                   canResearchTechs: List[List[Tech]])
-{
-  lazy val organizedTechs = TechCategory.organizeTechs(techs)
-}
 
-object Player {
-  def startingPlayer( id: Int, openid: Option[String], alias: String,
-                      traits: List[Trait], startingStarId: Int) = {
-    val canResearchTechs = Tech.generateCanResearchTechs()
-    Player(id, openid, alias, traits, 
-           exploredStarIds = List(startingStarId),
-           gold = 0, designs = Design.startingDesigns, 
-           techs = Tech.startingTechs, 
-           researchAlloc=TechCategory.defaultAllocation,
-           researchChoices=canResearchTechs.map(_.head),
-           canResearchTechs=canResearchTechs)
-  }
-}
 
 
