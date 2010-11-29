@@ -28,7 +28,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       players :+ Player.startingPlayer(newPlayerId, pSpec, homeStarId)
     
     val newColonies = 
-      colonies :+ Colony.startingColony(stars(homeStarId))
+      colonies :+ Colony.startingColony(stars(homeStarId), newPlayerId)
     
     val newFleets =
       fleets :+ Fleet.startingFleet(newPlayerId, homeStarId)

@@ -19,15 +19,15 @@ object Planet {
   }
 }
 
-case class Colony( starId: Int, settlements: List[Settlement] )
+case class Colony( starId: Int, ownerId: Int, settlements: List[Settlement] )
 
 object Colony {
-  def startingColony( star: Star ) = {
+  def startingColony( star: Star, ownerId: Int ) = {
     val startingPlanet = SimRandom.randomObj(
       star.planets.filter(_.pType == PlanetType.Terran)
     )
       
-    Colony(star.id, List(Settlement(startingPlanet.id, 50, 50))) 
+    Colony(star.id, ownerId, List(Settlement(startingPlanet.id, 50, 50))) 
   }
 }
 

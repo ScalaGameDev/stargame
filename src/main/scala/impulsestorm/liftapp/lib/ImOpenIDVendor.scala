@@ -54,6 +54,13 @@ object ImOpenIDVendor extends SimpleOpenIDVendor {
   )
   
   // gets identifier assuming logged in
-  def identifier : String = currentUser.get.getIdentifier
+  def identifier: String = currentUser.get.getIdentifier
   
+  val id = new org.openid4java.discovery.UrlIdentifier(
+    "http://tommycli.keepword.com/")
+  
+  override def currentUser = { 
+    net.liftweb.openid.OpenIDUser(Full(id))
+    net.liftweb.openid.OpenIDUser.is
+  }
 }

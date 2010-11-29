@@ -1,16 +1,16 @@
 package impulsestorm.liftapp.model.stargame
 
 // if not moving, will just use the fromStarId attr and the others are undef
-// ships: DesignId->Number
+// ships: [# of Design1, # of Design 2 etc.] 
 case class Fleet( playerId: Int,
-                  ships: Map[Int, Int], moving: Boolean, 
+                  ships: List[Int], moving: Boolean, 
                   fromStarId: Int, toStarId: Int,
                   departClock: Double, arriveClock: Double )
 
 object Fleet {
   def startingFleet(playerId: Int, homeStarId: Int) = {
     Fleet(playerId,
-          Map(3->0, 1->1), false,
+          List(3, 1), false,
           homeStarId, 0,
           0, 0)
   }

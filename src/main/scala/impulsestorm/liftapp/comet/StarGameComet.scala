@@ -5,7 +5,10 @@ import http._
 import http.js._
 import http.js.JE._
 import http.js.JsCmds._
+import json.JsonAST
+import json.Printer._
 import json.JsonAST._ 
+import json.Extraction
 import http.SHtml._
 
 import net.liftweb.actor._
@@ -27,6 +30,8 @@ class StarGameComet extends CometActor with Loggable {
   var playerOpt: Option[Player] = None
   def state = stateOpt.get
   def player = playerOpt.get
+  
+  implicit val formats = EnumSerializer.formats
   
   override def autoIncludeJsonCode = true
   
@@ -54,9 +59,9 @@ class StarGameComet extends CometActor with Loggable {
     }
     case Actions.ActionError(s) =>
       this.error(s)
-    case NoSuchGame =>
-    {
+    case NoSuchGame => {
       this.error("No such game")
+      reRender
     }
     case x => 
       logger.error("StarGameComet unknown message: %s".format(x.toString))
@@ -71,9 +76,9 @@ class StarGameComet extends CometActor with Loggable {
     }
   } 
   
-  def viewPlayer =
-    setTitle("Player view") & setHtmlPlayersList & setHtmlResearch &
-      showPanes(List("playersList", "research"))
+  def viewPlayer = (setTitle("Player view") & setHtmlPlayersList & 
+    setHtmlResearch & showPanes(List("playersList", "research", "map")) &
+    setMyPlayer & setMapView)
   
   def viewObserver =
     setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
@@ -84,6 +89,7 @@ class StarGameComet extends CometActor with Loggable {
       showPanes(List("playersList", "join"))
   
   def render = { 
+    println("Render call")
     stateOpt match {
       case None => {
         <p>Loading state...</p>
@@ -107,6 +113,14 @@ class StarGameComet extends CometActor with Loggable {
   
   def setTitle(title: String) = OnLoad(SetHtml("title", <h1>{title}</h1>))
   
+  private def jsonFuncCmd(functionName: String, obj: Any) =
+    OnLoad(Call(
+      functionName, Str(compact(JsonAST.render(Extraction.decompose(obj))))))
+  
+  def setMyPlayer: JsCmd = jsonFuncCmd("setMyPlayer", player)
+  
+  def setMapView: JsCmd = jsonFuncCmd("setMapView", MapView.from(state, player))
+  
   def setHtmlPlayersList : JsCmd = {  
     def startGame() = {
       sg ! Actions.StartGame(stateId, this)
@@ -125,7 +139,8 @@ class StarGameComet extends CometActor with Loggable {
       </table>
     )
     
-    val startGameHtml : NodeSeq = if(openid == state.createdBy)
+    val startGameHtml : NodeSeq = 
+      if(!state.started && openid == state.createdBy)
         <h2>Start game</h2>
         <p>
         {"%d out of %d slots filled".format(

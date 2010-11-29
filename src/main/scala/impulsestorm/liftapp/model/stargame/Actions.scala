@@ -7,17 +7,18 @@ import impulsestorm.liftapp.lib._
 object Actions {
   def StartGame(stateId: String,
                 sender: SimpleActor[Any])
-    = Mutate( stateId, sender, (s: StarGameState) => {
+    = Mutate( stateId, sender, (s: StarGameState) => if(!s.started) {
       // Fill rest of slots with AI
       def fillEmptySlotsWithAI(newState: StarGameState) : StarGameState =
         if(newState.players.length < newState.nPlayers)
-          fillEmptySlotsWithAI(s.addedPlayer(PlayerSpec.randomAIPlayer(s)))
+          fillEmptySlotsWithAI(
+            newState.addedPlayer(PlayerSpec.randomAIPlayer(newState)))
         else newState
       
       val filledPlayersState = fillEmptySlotsWithAI(s)
       filledPlayersState.copy(started = true, 
                               realStartTime = new java.util.Date)
-    })
+    } else s)
                   
   
   // Puts a new player into existence, be it AI or human
