@@ -70,7 +70,10 @@ class StarGameComet extends CometActor with Loggable {
   override def receiveJson = {
     case JObject(List(JField("command", JString("research-alloc-save")), 
                       JField("params", allocs))) => {
-      val allocation = allocs.values.asInstanceOf[List[Double]]
+      val allocation = allocs.values.asInstanceOf[List[Any]].map( _ match {
+        case x: Double => x
+        case x: BigInt => x.toDouble
+      })
       sg ! Actions.ResearchAllocation(stateId, this, player, allocation)
       Noop
     }
@@ -88,8 +91,7 @@ class StarGameComet extends CometActor with Loggable {
     setTitle("Join game") & setHtmlPlayersList & setHtmlJoin &
       showPanes(List("playersList", "join"))
   
-  def render = { 
-    println("Render call")
+  def render = {
     stateOpt match {
       case None => {
         <p>Loading state...</p>
@@ -223,7 +225,7 @@ class StarGameComet extends CometActor with Loggable {
       Noop
     }
 
-    JsRaw("function techSaveClicked() {" + 
+    JsRaw("function allocSave() {" + 
       jsonSend("research-alloc-save", Call("getSliderVals")).toJsCmd +
       "}") &
     OnLoad(SetHtml("research", (<h2>Research</h2> ++
@@ -277,10 +279,9 @@ class StarGameComet extends CometActor with Loggable {
         </td>
         </tr>
         </table>
-        <button onclick="techSaveClicked()">Save</button>
     )) & 
     (
-      Call("setupSliders") &
+      Call("setupSliders", JsVar("allocSave")) &
       Call("setSliderVals", JsArray(player.researchAlloc.map(Num(_)) : _*))
     ))
     

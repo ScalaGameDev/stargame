@@ -19,7 +19,9 @@ object Planet {
   }
 }
 
-case class Colony( starId: Int, ownerId: Int, settlements: List[Settlement] )
+case class Colony( starId: Int, ownerId: Int, settlements: List[Settlement],
+  x: Double, y: Double)
+  extends hasPosition
 
 object Colony {
   def startingColony( star: Star, ownerId: Int ) = {
@@ -27,7 +29,8 @@ object Colony {
       star.planets.filter(_.pType == PlanetType.Terran)
     )
       
-    Colony(star.id, ownerId, List(Settlement(startingPlanet.id, 50, 50))) 
+    Colony(star.id, ownerId, List(Settlement(startingPlanet.id, 50, 50)),
+           star.x, star.y) 
   }
 }
 

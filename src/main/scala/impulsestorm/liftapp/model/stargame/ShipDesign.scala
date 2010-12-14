@@ -3,17 +3,23 @@ package impulsestorm.liftapp.model.stargame
 // if not moving, will just use the fromStarId attr and the others are undef
 // ships: [# of Design1, # of Design 2 etc.] 
 case class Fleet( playerId: Int,
-                  ships: List[Int], moving: Boolean, 
-                  fromStarId: Int, toStarId: Int,
-                  departClock: Double, arriveClock: Double )
+                  ships: List[Int], bulk: Int, moving: Boolean, 
+                  fromStarId: Int, toStarId: Option[Int],
+                  departClock: Option[Double], arriveClock: Option[Double],
+                  x: Double, y: Double) 
+  extends hasPosition
 
 object Fleet {
-  def startingFleet(playerId: Int, homeStarId: Int) = {
+  def startingFleet(playerId: Int, homeStar: Star) = {
+    val shipCounts = List(3, 1) 
     Fleet(playerId,
-          List(3, 1), false,
-          homeStarId, 0,
-          0, 0)
+          shipCounts, calculateBulk(Design.startingDesigns, shipCounts), false,
+          homeStar.id, None,
+          None, None, homeStar.x, homeStar.y)
   }
+  
+  def calculateBulk(designs: List[Design], shipCounts: List[Int]) =
+    (designs zip shipCounts).map{ case (d, n) => d.size.space*n }.sum
 }
 
 case class Design( id: Int,
@@ -41,7 +47,7 @@ object Design {
 }
 
 
-case class ShipSize(name: String, space: Double) extends hasName
+case class ShipSize(name: String, space: Int) extends hasName
 
 object ShipSize extends Enumerator[ShipSize] {
   val Fighter       = Value("Fighter", 40)
@@ -50,7 +56,7 @@ object ShipSize extends Enumerator[ShipSize] {
   val Capital       = Value("Capital", 5000)
   
   val eclass = classOf[ShipSize]
-  private def Value(name: String, space: Double) =
+  private def Value(name: String, space: Int) =
     addToMap(ShipSize(name, space))
 }
 

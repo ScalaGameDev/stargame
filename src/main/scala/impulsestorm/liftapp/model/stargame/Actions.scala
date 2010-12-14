@@ -43,9 +43,12 @@ object Actions {
                          sender: SimpleActor[Any],
                          player: Player,
                          allocation: List[Double]) 
-    = Mutate( stateId, sender, (s : StarGameState) =>
-        s.updatedPlayer(player.copy(researchAlloc=allocation))
-      )
+    = Mutate( stateId, sender, (s : StarGameState) => {
+        val positiveAlloc = allocation.map(a => math.max(0, a))
+        val posSum = positiveAlloc.sum
+        val normalizedAlloc = positiveAlloc.map(_/posSum)
+        s.updatedPlayer(player.copy(researchAlloc=normalizedAlloc))  
+      })
       
   def ResearchChoice(stateId: String,
                      sender: SimpleActor[Any],
@@ -55,7 +58,6 @@ object Actions {
         val choices = player.researchChoices.updated(
           TechCategory.values.indexOf(newChoice.category),
           newChoice)
-          
         s.updatedPlayer(player.copy(researchChoices=choices))
       })
   

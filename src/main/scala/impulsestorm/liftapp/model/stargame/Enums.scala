@@ -258,7 +258,7 @@ object Tech extends Enumerator[Tech] {
   val ECM6     = Value("ECM6", "ECM Zeta", Sensors,
                        28, "+6 evade missiles")
   val Scanner4 = Value("Scanner4", "Subspace scanner", Sensors,
-                       30, "Colonies can detect ships 10 ly away")
+                       30, "Colonies can detect ships 11 ly away")
   
   //---------------------------------------------------------------------
   // Civil - new planet types, max population, infrastructure cost, maintainence

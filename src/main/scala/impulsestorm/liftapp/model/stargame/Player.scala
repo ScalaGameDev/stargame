@@ -18,6 +18,20 @@ case class Player( id: Int, openid: Option[String], alias: String,
                    canResearchTechs: List[List[Tech]])
 {
   lazy val organizedTechs = TechCategory.organizeTechs(techs)
+  
+  lazy val sensorRange : Int = {
+    val sensorTechs = organizedTechs(3)
+    if(sensorTechs.contains(Tech.Scanner4))
+      11
+    else if(sensorTechs.contains(Tech.Scanner3))
+      7
+    else if(sensorTechs.contains(Tech.Scanner2))
+      5
+    else if(sensorTechs.contains(Tech.Scanner1))
+      3
+    else
+      1
+  }
 }
 
 object Player {

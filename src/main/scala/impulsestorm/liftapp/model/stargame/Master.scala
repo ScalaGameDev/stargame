@@ -22,3 +22,14 @@ object StarGameMaster {
     else
       None
 }
+
+trait hasPosition {
+  val x: Double
+  val y: Double
+  
+  import math._
+  
+  def distanceTo(other: hasPosition) = {
+    sqrt(pow(other.x-x,2)+pow(other.y-y,2))
+  }
+}

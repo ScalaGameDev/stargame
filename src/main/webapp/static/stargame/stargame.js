@@ -1,61 +1,48 @@
-function setupSliders() {
-  var nSliders = $('.research-slider').length;
-  
-  $('.research-slider').slider({
-    range: "min",
-    min: 0,
-    max: 1000,
-    slide: function(event, ui) {
-      var oldValue = $(event.target).slider("option", "value");
-      var newValue = ui.value;
-      
-      var delta = newValue-oldValue;
-      
-      $('.research-slider').each(function(i, elem) {
-        if(elem != ui.handle) {
-          var elemOldValue = $(elem).slider("option", "value");
-          $(elem).slider("option", "value", elemOldValue - delta/(nSliders-1));
-        }
-      });
-    }
-  });
-};
-
-function getSliderVals() {
-  return $.map($('.research-slider'), function(elem) { 
-    return $(elem).slider("option", "value")/1000.0; 
-  });
-};
-
-function setSliderVals(allocs) {
-  var i = 0;
-  var sliders = $('.research-slider');
-  for(i = 0; i < sliders.length; i++) {
-    $(sliders[i]).slider("option", "value", allocs[i]*1000.0);
-  }
-}
-
 var playerInfo = null;
 function setMyPlayer(playerInfoStr) {
   playerInfo = JSON.parse(playerInfoStr);
 }
 
-var mapView = null; 
+var mapView = null; // all the visible entities
 function setMapView(mapViewStr) {
   mapView = JSON.parse(mapViewStr);
   drawMap();
 }
 
-var mapViewPort = null;
-function getMapViewPort() {
-  if(mapViewPort == null) {
-    mapViewPort = new Object();
+var mapPort = null; // map view settings
+function initMapPort() {
+  if(mapPort === null) {
+    mapPort = {};
+    var canvas = $('#map-canvas')[0];
+    
     var homeStar = mapView.starViews[playerInfo.exploredStarIds[0]];
-    mapViewPort.x = homeStar.x;
-    mapViewPort.y = homeStar.y;
-    mapViewPort.PixelsPerLy = 20.0;
+    
+    mapPort.PixelsPerLy = 30.0;
+    
+    mapPort.x = homeStar.x - canvas.width/2/mapPort.PixelsPerLy;
+    mapPort.y = homeStar.y - canvas.height/2/mapPort.PixelsPerLy;
+    
+    selectEntity({ type: 'sv', obj: homeStar });
+    
+    mapPort.selectedEntity = function() {
+      return mapPort.entities.filter(function(ent) { 
+        return ent.obj === mapPort.selectedObj;
+      })[0];
+    };
+    
+    mapPort.entites = []; // all displayed entities
   }
-  return mapViewPort;
+  return mapPort;
+}
+
+function pixelToSpace(px, py) {
+  return [mapPort.x + px/mapPort.PixelsPerLy, 
+          mapPort.y + py/mapPort.PixelsPerLy];
+}
+
+function spaceToPixel(x, y) {
+  return [(x-mapPort.x)*mapPort.PixelsPerLy, 
+          (y-mapPort.y)*mapPort.PixelsPerLy];
 }
 
 var classToFillStyle = {
@@ -67,7 +54,7 @@ var classToFillStyle = {
   "K": "rgb(255, 163, 81)",
   "M": "rgb(255, 97, 81)",
   "Compact": "rgb(202, 215, 255)"
-}
+};
 
 var playerIdToColor = {
   0: '#ff0000',
@@ -76,46 +63,166 @@ var playerIdToColor = {
   3: '#ffff00',
   4: '#00ffff',
   5: '#ff00ff'
+};
+
+function curPos(e, selector) {
+  var offsets = selector.offset();
+  var px = parseInt(e.pageX - offsets.left, 10);
+  var py = parseInt(e.pageY - offsets.top, 10);
+  return [px,py];
+}
+
+function setDragAction(selector, action, startAction, finishAction) {
+  
+  function myCurPos(e) { return curPos(e, selector); }
+  
+  selector.movehandle = function(e) { return action.apply(this, myCurPos(e)); };
+  
+  selector.mousedown(function(e) {
+    if(startAction !== undefined) { startAction.apply(this, myCurPos(e)); }
+    
+    selector.bind('mousemove', selector.movehandle);
+    
+    $(document).bind('mouseup', function () {
+      selector.unbind('mousemove');
+      $(document).unbind('mouseup');
+      
+      if(finishAction !== undefined) { finishAction.apply(this, myCurPos(e)); }
+    });
+    
+    // faux move on start.
+    selector.movehandle(e);
+  });
 }
 
 function drawMap() {
-  var port = getMapViewPort();
+  initMapPort();
   var canvas = $('#map-canvas')[0];
   var h = canvas.height;
   var w = canvas.width;
   var ctx = canvas.getContext('2d');
   ctx.font ='bold 12px Arial serif';
   
+  // clear map entites
+  mapPort.entities = [];
+  
   // draw background
   ctx.fillStyle = 'rgb(0,0,0)';
   ctx.fillRect(0,0,w,h);
   
-  function inViewPort(sv) {
-    return Math.abs(port.x-sv.x)*port.PixelsPerLy < canvas.width/2 &&
-           Math.abs(port.y-sv.y)*port.PixelsPerLy < canvas.height/2
+  function inViewPort(itemWithPosition) {
+    var [px,py] = spaceToPixel(itemWithPosition.x, itemWithPosition.y);
+    return px < canvas.width && px > 0 &&
+           py < canvas.height && py > 0;
   }
   
   function drawStarView(sv) {
-    var pix_x = (sv.x - port.x)*port.PixelsPerLy + canvas.width/2
-    var pix_y = (sv.y - port.y)*port.PixelsPerLy + canvas.height/2
+    var [px,py] = spaceToPixel(sv.x, sv.y);
     
     ctx.beginPath();
     ctx.fillStyle = classToFillStyle[sv.sClass];
-    ctx.arc(pix_x, pix_y, 3.0, 0, 2*Math.PI, true);
+    ctx.arc(px, py, 4.0, 0, 2*Math.PI, true);
     ctx.fill();
     
     if(sv.name) {
       var textC = null;
-      if(sv.knownColonyOwnerId != undefined) {
+      if(sv.knownColonyOwnerId !== undefined) {
         textC = playerIdToColor[sv.knownColonyOwnerId];
       } else {
         textC = '#ffffff';
       }
       ctx.fillStyle = textC;
-      ctx.fillText(sv.name, pix_x-10, pix_y+15);
+      ctx.fillText(sv.name, px-10, py+15);
     }
+    
+    var tol = 10;
+    mapPort.entities.push({
+     plft: px-tol, 
+     prht: px+tol,
+     ptop: py-tol, 
+     pbot: py+tol,
+     type: 'sv',
+     obj: sv
+    });
   }
   
   // draw all qualifying stars
   mapView.starViews.filter(inViewPort).map(drawStarView);
+  
+  // draw selected box  
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  var e = mapPort.selectedEntity();
+  if(e !== undefined) {
+    ctx.fillRect(e.plft, e.ptop, e.prht-e.plft, e.pbot-e.ptop);
+  }
 }
+
+function selectEntity(e) {
+  mapPort.selectedObj = e.obj;
+  
+  if(e.type === "sv") {
+    if(e.obj.name !== undefined) {
+      $('#star-name').html(e.obj.name);
+    } else {
+      $('#star-name').html("Unexplored star");
+    }
+    
+    $('#star-class').html(e.obj.sClass);
+  }
+}
+
+$(document).ready(function() {
+  var dragStartX = 0, dragStartY = 0;
+  setDragAction($('#map-canvas'), function(px,py) {
+    mapPort.x = mapPort.x + (dragStartX-px)/mapPort.PixelsPerLy;
+    mapPort.y = mapPort.y + (dragStartY-py)/mapPort.PixelsPerLy;
+    
+    drawMap();
+    
+    dragStartX = px;
+    dragStartY = py;
+    return false;
+  },
+  function(px,py) {
+    dragStartX = px;
+    dragStartY = py;
+    return false;
+  }, function(px,py) {return false;});
+  
+  $('#map-canvas').wheel(function(e, d) {
+    var multiplier = 1.0;
+    if(d > 0) { 
+      multiplier = 1.2;
+    } else {
+      multiplier = 1/1.2;
+    }
+    
+    // make sure that mouse point does not move on zoom...
+    var mouseCoord = pixelToSpace.apply(this, curPos(e, $('#map-canvas')));
+    
+    mapPort.PixelsPerLy *= multiplier;
+    mapPort.x = mouseCoord[0] - (mouseCoord[0]-mapPort.x)/multiplier;
+    mapPort.y = mouseCoord[1] - (mouseCoord[1]-mapPort.y)/multiplier;
+    
+    drawMap();
+    return false;
+  });
+  
+  $('#map-canvas').click(function(event,d) {
+    var [px,py] = curPos(event, $('#map-canvas'));
+    
+    function clicked(e) {
+      return px > e.plft && px < e.prht && 
+             py > e.ptop && py < e.pbot;
+    }
+    
+    var clickedEntities = mapPort.entities.filter(clicked);
+    
+    if(clickedEntities.length > 0) {
+      selectEntity(clickedEntities[0]);
+    }
+    
+    drawMap();
+    return false;
+  });
+});
