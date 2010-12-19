@@ -68,21 +68,34 @@ class StarGameComet extends CometActor with Loggable {
   }
   
   override def receiveJson = {
-    case JObject(List(JField("command", JString("research-alloc-save")), 
+    case x if {println("Got Json: "+x); false} => Noop 
+    case JObject(List(JField("command", JString("researchAllocSave")), 
                       JField("params", allocs))) => {
       val allocation = allocs.values.asInstanceOf[List[Any]].map( _ match {
         case x: Double => x
         case x: BigInt => x.toDouble
       })
-      sg ! Actions.ResearchAllocation(stateId, this, player, allocation)
+      sg ! Actions.ResearchAllocation(this, allocation)
+      Noop
+    }
+    case JObject(List(JField("command", JString("dispatchFleet")), 
+                      JField("params", JArray(List(
+                        JString(fleetUuid), quantities, JInt(toStarId) 
+                      ))))) => {
+      val quantitiesValues = 
+        quantities.values.asInstanceOf[List[BigInt]].map(_.toInt)      
+      
+      sg ! Actions.DispatchFleet(this, fleetUuid, quantitiesValues, 
+                                 toStarId.intValue)
       Noop
     }
   } 
   
   def viewPlayer = (setTitle("Player view") & setHtmlPlayersList & 
-    setHtmlResearch & showPanes(List("playersList", "research", "map")) &
+    setHtmlResearch & setHtmlMapCmds & 
+    showPanes(List("playersList", "research", "map")) &
     setMyPlayer & setMapView)
-  
+    
   def viewObserver =
     setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
       showPane("playerList")
@@ -119,13 +132,13 @@ class StarGameComet extends CometActor with Loggable {
     OnLoad(Call(
       functionName, Str(compact(JsonAST.render(Extraction.decompose(obj))))))
   
-  def setMyPlayer: JsCmd = jsonFuncCmd("setMyPlayer", player)
+  def setMyPlayer: JsCmd = jsonFuncCmd("setMyPlayer", PlayerInfo.from(player))
   
   def setMapView: JsCmd = jsonFuncCmd("setMapView", MapView.from(state, player))
   
   def setHtmlPlayersList : JsCmd = {  
     def startGame() = {
-      sg ! Actions.StartGame(stateId, this)
+      sg ! Actions.StartGame(this)
       Noop
     }
     
@@ -168,7 +181,7 @@ class StarGameComet extends CometActor with Loggable {
                                    
     def processJoinForm() = {
       logger.info("Registered : " + newPlayer.alias)
-      sg ! Actions.RegisterPlayer(stateId, this, newPlayer)
+      sg ! Actions.RegisterPlayer(this, newPlayer)
       Noop
     }
 
@@ -221,12 +234,12 @@ class StarGameComet extends CometActor with Loggable {
   def setHtmlResearch : JsCmd = {
     def changeResearchChoice(newChoice: Tech) = {
       println("New choice: " + newChoice.longName)
-      sg ! Actions.ResearchChoice(stateId, this, player, newChoice)
+      sg ! Actions.ResearchChoice(this, newChoice)
       Noop
     }
 
-    JsRaw("function allocSave() {" + 
-      jsonSend("research-alloc-save", Call("getSliderVals")).toJsCmd +
+    JsRaw("function jsonResearchAllocSave() {" + 
+      jsonSend("researchAllocSave", Call("getSliderVals")).toJsCmd +
       "}") &
     OnLoad(SetHtml("research", (<h2>Research</h2> ++
         <table>
@@ -281,9 +294,16 @@ class StarGameComet extends CometActor with Loggable {
         </table>
     )) & 
     (
-      Call("setupSliders", JsVar("allocSave")) &
+      Call("setupSliders", JsVar("jsonResearchAllocSave")) &
       Call("setSliderVals", JsArray(player.researchAlloc.map(Num(_)) : _*))
     ))
     
+  }
+  
+  def setHtmlMapCmds = {
+    JsRaw("function jsonDispatchFleet(fleetUuid, quantities, toStarId) {" + 
+      jsonSend("dispatchFleet", 
+        JsRaw("[fleetUuid, quantities, toStarId]")).toJsCmd +
+    "}")
   }
 }

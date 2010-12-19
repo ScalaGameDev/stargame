@@ -2,29 +2,52 @@ package impulsestorm.liftapp.model.stargame
 
 // if not moving, will just use the fromStarId attr and the others are undef
 // ships: [# of Design1, # of Design 2 etc.] 
-case class Fleet( playerId: Int,
-                  ships: List[Int], bulk: Int, moving: Boolean, 
+case class Fleet( uuid: String, playerId: Int,
+                  ships: List[Int], 
+                  moving: Boolean, 
                   fromStarId: Int, toStarId: Option[Int],
-                  departClock: Option[Double], arriveClock: Option[Double],
-                  x: Double, y: Double) 
-  extends hasPosition
-
-object Fleet {
-  def startingFleet(playerId: Int, homeStar: Star) = {
-    val shipCounts = List(3, 1) 
-    Fleet(playerId,
-          shipCounts, calculateBulk(Design.startingDesigns, shipCounts), false,
-          homeStar.id, None,
-          None, None, homeStar.x, homeStar.y)
+                  departYear: Option[Double], arriveYear: Option[Double]) 
+extends hasPosition {
+  def bulk(s: StarGameState) =
+    (s.players(playerId).designs zip ships).map{ 
+      case (d, n) => d.size.space*n }.sum
+      
+  def speed(s: StarGameState) : Double = {
+    (ships zip s.players(playerId).designs).flatMap {
+      case(n, d) => if(n>0) List(d.engine.speed) else Nil
+    }.min
+  }
+    
+  def position(s: StarGameState) = {
+    def coords(star: Star) = (star.x, star.y)
+    
+    if(moving) {
+      // linear interpolation
+      val alpha = 1-(s.gameYear-departYear.get)/(arriveYear.get-departYear.get)
+      val (xFrom, yFrom) = coords(s.stars(fromStarId))
+      val (xTo, yTo)     = coords(s.stars(toStarId.get))
+      
+      (alpha*xFrom+(1-alpha)*xTo, alpha*yFrom+(1-alpha)*yTo)
+    } else coords(s.stars(fromStarId))
   }
   
-  def calculateBulk(designs: List[Design], shipCounts: List[Int]) =
-    (designs zip shipCounts).map{ case (d, n) => d.size.space*n }.sum
+  def newUUID = copy(uuid=java.util.UUID.randomUUID().toString())
+}
+
+object Fleet {
+  val emptyQuantity = List(0,0,0,0,0,0)
+  
+  def startingFleet(playerId: Int, homeStar: Star) = {
+    val shipCounts = List(3, 1, 0, 0, 0, 0) 
+    Fleet("", playerId,
+          shipCounts, false,
+          homeStar.id, None,
+          None, None).newUUID
+  }
 }
 
 case class Design( id: Int,
                    name: String,
-                   active: Boolean,
                    size: ShipSize,
                    engine: Engine, 
                    sensor: Option[Sensor], 
@@ -33,12 +56,12 @@ case class Design( id: Int,
 object Design {
   val startingDesigns = 
     List(
-      Design(0, "Scout", true,
+      Design(0, "Scout",
              ShipSize.Fighter,
              Engine.Chemical, 
              None,
              List(ShipModule.ReserveTanks)),
-      Design(1, "Colony Ship", true,
+      Design(1, "Colony Ship",
              ShipSize.Capital,
              Engine.Chemical,
              None,
@@ -61,18 +84,18 @@ object ShipSize extends Enumerator[ShipSize] {
 }
 
 case class Engine(name: String,
-                  speed: Int) extends hasName
+                  speed: Double) extends hasName
 
 object Engine extends Enumerator[Engine] {
-  val Chemical   = Value("Chemical", 1)
-  val Ion        = Value("Ion", 2)
-  val Nuclear    = Value("Nuclear", 3)
-  val Fusion     = Value("Fusion", 4)
-  val Antimatter = Value("Antimatter", 5)
-  val Subspace   = Value("Subspace", 6)
+  val Chemical   = Value("Chemical", 1.0)
+  val Ion        = Value("Ion", 1.5)
+  val Nuclear    = Value("Nuclear", 2.0)
+  val Fusion     = Value("Fusion", 2.5)
+  val Antimatter = Value("Antimatter", 3.0)
+  val Subspace   = Value("Subspace", 4.0)
   
   val eclass = classOf[Engine]
-  private def Value(name: String, speed: Int) =
+  private def Value(name: String, speed: Double) =
     addToMap(Engine(name, speed))
 }
 

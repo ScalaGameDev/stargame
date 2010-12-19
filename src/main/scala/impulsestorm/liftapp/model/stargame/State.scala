@@ -12,9 +12,15 @@ import java.util.Date
 import _root_.net.liftweb.mongodb._
 
 case class StarGameState( _id: String, createdBy: String, name: String, 
-                          mapSize: String, started: Boolean = false,
-                          gameYear: Double = 0 , timeMultiplier: Double,
-                          realStartTime: Date, nPlayers: Int,
+                          mapSize: String, nPlayers: Int,
+                          
+                          started: Boolean = false,
+                          realStartTime: Date,
+                          
+                          gameYear: Double = 0,
+                          
+                          yearsPerDay: Double,
+                          
                           stars: List[Star], players: List[Player],
                           fleets: List[Fleet], colonies: List[Colony],
                           availableStartStarIds: List[Int])
@@ -44,15 +50,6 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     
   def meta = StarGameState
   
-  // what game year it should be given the current real time
-  def shouldBeGameYear = {
-    val secondsOld = 
-      ( (new java.util.Date).getTime - realStartTime.getTime ) / 1000.0
-    val daysOld = secondsOld/86400.0
-      
-    val newGameYear = gameYear + daysOld*timeMultiplier 
-  }
-  
   def isOneOfThePlayers(openid: String) = 
     players.exists(_.openid == Some(openid))
 
@@ -77,7 +74,7 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
                nPlayers: Int = 3) : StarGameState = {
     
     val id = (new ObjectId).toString
-    val timeMultiplier = 24 // one year per real world hour
+    val yearsPerDay = 1.0
     
     val numStars = sizesNStars(size)
     val mapSizeL = sizesSqLength(size)
@@ -95,7 +92,7 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
     if (starIdsWithTerran.length >= nPlayers) {
       // currently does no filtering to ensure players start far from each other
       StarGameState(id, createdBy, name, sizesNames(size), 
-                    timeMultiplier=timeMultiplier,
+                    yearsPerDay=yearsPerDay,
                     realStartTime=new Date, nPlayers=nPlayers, stars=stars,
                     players=Nil, fleets=Nil, colonies=Nil,
                     availableStartStarIds = starIdsWithTerran)

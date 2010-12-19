@@ -6,6 +6,7 @@ import scala.util.Random
 
 case class Star( id: Int, name: String, sClass: StarClass, 
                  x: Double, y: Double, planets: List[Planet])
+extends hasPositionSimple
                  
 object Star {
   

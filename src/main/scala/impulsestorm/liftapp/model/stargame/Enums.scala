@@ -104,36 +104,36 @@ object Tech extends Enumerator[Tech] {
   
   val Engines1      = Value("Engines1", "Chemical engines", Propulsion,
                             1, "Equipped ships move at warp speed 1")
-  val Range4        = Value("Range4", "Hydrogen fuel cells", Propulsion,
-                            2, "Ships have a range of 4")
-  val Range5        = Value("Range5", "Deuterium fuel cells", Propulsion,
-                            5, "Ships have a range of 5")
+  val Range1        = Value("Range4", "Hydrogen fuel cells", Propulsion,
+                            2, "Ships have a range of 6")
+  val Range2        = Value("Range5", "Deuterium fuel cells", Propulsion,
+                            5, "Ships have a range of 7")
   val Engines2      = Value("Engines2", "Ion engines", Propulsion,
                             6, "Ships move at warp speed 2")
-  val Range6        = Value("Range6", "Tritium fuel cells", Propulsion,
-                            9, "Ships have a range of 6")
+  val Range3        = Value("Range6", "Tritium fuel cells", Propulsion,
+                            9, "Ships have a range of 8")
   val ModManuver2   = Value("ModManuver2", "Vectored thrust", Propulsion,
                             10, "Add-on: Fighters/corvettes +2 evade")
   val Engines3      = Value("Engines3", "Nuclear engines", Propulsion,
                             12, "Equipped ships move at warp speed 3")
-  val Range7        = Value("Range7", "Irridium fuel cells", Propulsion,
-                            14, "Ships have a range of 7")
+  val Range4        = Value("Range7", "Irridium fuel cells", Propulsion,
+                            14, "Ships have a range of 9")
   val FCManuver2    = Value("FCManuver2", "Burst power", Propulsion,
                             16, "All fighters and corvettes: +2 evade")
   val Engines4      = Value("Engines4", "Fusion engines", Propulsion,
                             18, "Equipped ships mave at warp speed 4")
-  val Range8        = Value("Range8", "Uridium fuel cells", Propulsion,
-                            19, "Ships have a range of 8")
+  val Range5        = Value("Range8", "Uridium fuel cells", Propulsion,
+                            19, "Ships have a range of 10")
   val ModFrigManuv2 = Value("ModFrigManuv2", "Inertial dampener", Propulsion,
                             20, "Add-on: Frigates/capitals: +2 evade")
-  val Range9        = Value("Range9", "Reajax II fuel cells", Propulsion,
-                            23, "Ships have a range of 9")
+  val Range6        = Value("Range9", "Reajax II fuel cells", Propulsion,
+                            23, "Ships have a range of 11")
   val Engines5      = Value("Engines5", "Antimatter engines", Propulsion,
                             24, "Equipped ships move at warp speed 5")
   val FrigManuv2    = Value("FrigManuv2", "Captial manuvering", Propulsion,
                             27, "All frigates and capitals: +2 evade")
-  val Range10       = Value("Range10", "Antimatter fuel cells", Propulsion,
-                            29, "Ships have a range of 10")
+  val Range7       = Value("Range10", "Antimatter fuel cells", Propulsion,
+                            29, "Ships have a range of 12")
   val Engines6      = Value("Engines6", "Subspace engines", Propulsion,
                             30, "Eqipped ships move at warp speed 6")
                                 
@@ -251,8 +251,6 @@ object Tech extends Enumerator[Tech] {
                        22, "+5 evade missiles")
   val Sensors5 = Value("Sensors5", "Combat sensors Epsilon", Sensors,
                        25, "+5 to hit (excluding missiles)")
-  val SubComm  = Value("SubComm", "Subspace communications", Sensors,
-                       26, "Ships can be redirected in warp")
   val Sensors6 = Value("Sensors6", "Combat sensors Zeta", Sensors,
                        28, "+6 to hit (excluding missiles)")
   val ECM6     = Value("ECM6", "ECM Zeta", Sensors,

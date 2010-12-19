@@ -21,7 +21,7 @@ object Planet {
 
 case class Colony( starId: Int, ownerId: Int, settlements: List[Settlement],
   x: Double, y: Double)
-  extends hasPosition
+  extends hasPositionSimple
 
 object Colony {
   def startingColony( star: Star, ownerId: Int ) = {

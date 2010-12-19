@@ -32,6 +32,26 @@ case class Player( id: Int, openid: Option[String], alias: String,
     else
       1
   }
+  
+  lazy val shipRange : Int = {
+    val pTechs = organizedTechs(0)
+    if(pTechs.contains(Tech.Range7))
+      12
+    else if(pTechs.contains(Tech.Range6))
+      11
+    else if(pTechs.contains(Tech.Range5))
+      10
+    else if(pTechs.contains(Tech.Range4))
+      9
+    else if(pTechs.contains(Tech.Range3))
+      8
+    else if(pTechs.contains(Tech.Range2))
+      7
+    else if(pTechs.contains(Tech.Range1))
+      6
+    else
+      5
+  }
 }
 
 object Player {

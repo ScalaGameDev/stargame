@@ -8,7 +8,7 @@ import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import net.liftweb.common.Logger
 
-import impulsestorm.liftapp.lib._
+import _root_.impulsestorm.liftapp.lib._
 
 import scala.util.Random
 

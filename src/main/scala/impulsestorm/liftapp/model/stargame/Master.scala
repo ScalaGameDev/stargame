@@ -24,12 +24,19 @@ object StarGameMaster {
 }
 
 trait hasPosition {
-  val x: Double
-  val y: Double
+  def position(s:StarGameState) : (Double, Double)
   
   import math._
   
-  def distanceTo(other: hasPosition) = {
-    sqrt(pow(other.x-x,2)+pow(other.y-y,2))
+  def distanceTo(s:StarGameState)(other: hasPosition) = {
+    val (x1, y1) = this.position(s)
+    val (x2, y2) = other.position(s)
+    sqrt(pow(x2-x1,2)+pow(y2-y1,2))
   }
+}
+
+trait hasPositionSimple extends hasPosition {
+  val x: Double
+  val y: Double
+  def position(s:StarGameState) = (x,y)
 }
