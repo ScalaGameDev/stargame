@@ -28,6 +28,9 @@ class StarGameComet extends CometActor with Loggable {
   
   var stateOpt: Option[StarGameState] = None
   var playerOpt: Option[Player] = None
+  
+  var hintOpt: Option[Hint] = None
+  
   def state = stateOpt.get
   def player = playerOpt.get
   
@@ -55,6 +58,17 @@ class StarGameComet extends CometActor with Loggable {
     case state: StarGameState => {
       logger.info("StarGameComet gets unhinted state")
       acceptNewState(state)
+      reRender
+    }
+    case (state: StarGameState, None) => {
+      logger.info("StarGameComet gets unhinted state")
+      acceptNewState(state)
+      reRender
+    }
+    case (state: StarGameState, hint: Hint) => {
+      logger.info("StarGameComet gets hinted state")
+      acceptNewState(state)
+      hintOpt = Some(hint)
       reRender
     }
     case Actions.ActionError(s) =>
@@ -91,10 +105,18 @@ class StarGameComet extends CometActor with Loggable {
     }
   } 
   
+  def sendHint() = hintOpt match {
+    case Some(hint) => {
+      hintOpt = None
+      OnLoad(Call("takeHint", hint.selectedUuid ))
+    }
+    case _ => Noop    
+  }
+  
   def viewPlayer = (setTitle("Player view") & setHtmlPlayersList & 
     setHtmlResearch & setHtmlMapCmds & 
     showPanes(List("playersList", "research", "map")) &
-    setMyPlayer & setMapView)
+    setMyPlayer & setMapView & sendHint())
     
   def viewObserver =
     setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &

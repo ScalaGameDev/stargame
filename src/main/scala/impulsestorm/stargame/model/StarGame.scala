@@ -1,7 +1,5 @@
 package impulsestorm.stargame.model
 
-import impulsestorm.stargame.model._
-
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
@@ -19,7 +17,7 @@ object StarGame {
     Actor.actorOf(new StateSupervisor(StarGameMaster.spawn _)).start
 }
 
-object StarView {
+object StarGameMenu {
   import impulsestorm.stargame.lib.ImOpenIDVendor.loginFirst
                       
   val root = Menu("Stargame") / "stargame" / "index" submenus (

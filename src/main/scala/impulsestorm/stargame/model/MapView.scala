@@ -1,10 +1,11 @@
 package impulsestorm.stargame.model
 
-case class StarView(id: Int, name: Option[String], sClass: StarClass,
-                    x: Double, y: Double, planets: Option[List[Planet]],
-                    knownColonyOwnerId: Option[Int])
+case class StarView( euid: String,
+                     id: Int, name: Option[String], sClass: StarClass,
+                     x: Double, y: Double, planets: Option[List[Planet]],
+                     knownColonyOwnerId: Option[Int])
 
-case class FleetView( uuid: String,
+case class FleetView( euid: String, uuid: String,
                       playerId: Int, ships: Option[List[Int]], bulk: Int,
                       moving: Boolean,
                       fromStarId: Int, toStarId: Option[Int],
@@ -28,7 +29,7 @@ object FleetView {
     
     val (x,y) = f.position(s)
     
-    FleetView(f.uuid, f.playerId, ships, f.bulk(s), f.moving, 
+    FleetView("fv-"+f.uuid, f.uuid, f.playerId, ships, f.bulk(s), f.moving, 
               f.fromStarId, f.toStarId, f.arriveYear, x, y)
   }
 }
@@ -45,7 +46,7 @@ object MapBounds {
 }
 
 case class MapView(starViews: List[StarView], fleetViews: List[FleetView],
-                   mapBounds: MapBounds)
+                   mapBounds: MapBounds, designRanges: List[Double])
 
 object MapView {
   def from(s: StarGameState, player: Player) = {
@@ -64,12 +65,13 @@ object MapView {
         if(player.exploredStarIds.contains(star.id)) 
           Some(star.planets) else None
                     
-      StarView(star.id, name, star.sClass, star.x, star.y, planets,
+      StarView("sv-"+star.id,
+               star.id, name, star.sClass, star.x, star.y, planets,
                knownColonyOwnerId)
     })
     
     val fleetViews = FleetView.calculateAll(s, player)
     
-    MapView(starViews, fleetViews, MapBounds(s))
+    MapView(starViews, fleetViews, MapBounds(s), Design.calculateRanges(player))
   }
 }

@@ -12,8 +12,8 @@ import sitemap._
 import Loc._
 import mapper._
 
-import impulsestorm.liftapp.lib.ImOpenIDVendor
-import impulsestorm.liftapp.model.{StarView}
+import impulsestorm.stargame.lib.ImOpenIDVendor
+import impulsestorm.stargame.model.{StarGameMenu}
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -23,10 +23,10 @@ class Boot {
   def boot {
     // mongo db definiton
     MongoDB.defineDb(DefaultMongoIdentifier, 
-      MongoAddress(MongoHost("localhost", 27017), "impulsestormGames"))
+      MongoAddress(MongoHost("localhost", 27017), "stargame"))
 
     // where to search snippet
-    LiftRules.addToPackages("impulsestorm.liftapp")
+    LiftRules.addToPackages("impulsestorm.stargame")
     
     // Build SiteMap
     val entries = List(
@@ -35,13 +35,13 @@ class Boot {
       // more complex because this menu allows anything in the
       // /static path to be visible
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
-	       "Static Content"))) ::: StarView.menus
+	       "Static Content"))) ::: StarGameMenu.menus
 	  
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
     LiftRules.setSiteMap(SiteMap(entries:_*))
 
-    LiftRules.statelessRewrite.prepend(StarView.rewrites)
+    LiftRules.statelessRewrite.prepend(StarGameMenu.rewrites)
     
     LiftRules.dispatch.append(ImOpenIDVendor.dispatchPF)
     

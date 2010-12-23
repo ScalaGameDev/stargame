@@ -1,6 +1,10 @@
 var nDesignsInFleet = 0;
-var fleetDispatchQuantities = [0,0,0,0,0,0];
 function showFleetSidebar(fv) {
+  // clear existing shit
+  for(var i = 0; i < 6; i++) {
+    $("#fleetContent-"+i.toString()).html("");
+  }
+  
   if(fv.moving) {
     var sv = mapView.starViews[fv.toStarId];
     $('#fleet-name').html("Fleet in transit to " + starViewName(sv));
@@ -26,7 +30,8 @@ function showFleetSidebar(fv) {
         function adjustSlider(currentFleetQId, currentI) {
           return function(event, ui) {
             $('#'+currentFleetQId+'Num').html(ui.value.toString());
-            fleetDispatchQuantities[currentI] = ui.value; 
+            fleetDispatchQuantities[currentI] = ui.value;
+            drawMap();
           };
         }
         
@@ -94,6 +99,15 @@ function clickEntities(entities) {
   return false;
 }
 
+function takeHint(euid) {
+  mapPort.selectedEuid = euid;
+  var entity = mapPort.selectedEntity();
+  if(entity !== undefined) {
+    selectEntities([entity]);
+  }
+  drawMap();
+}
+
 $(document).ready(function() {
   var dragStartX = 0, dragStartY = 0;
   setDragAction($('#map-canvas'), function(px,py) {
@@ -135,16 +149,18 @@ $(document).ready(function() {
   });
   
   $('#map-canvas').wheel(function(e, d) {
-    // make sure that mouse point does not move on zoom...
-    var zoomToSpacePt = pixelToSpace.apply(this, curPos(e, $('#map-canvas')));
+    var zoomToSpacePt;
+    var entity = mapPort.selectedEntity();
+    if(entity !== undefined) {
+      zoomToSpacePt = [entity.obj.x, entity.obj.y]; 
+    } else {
+      // make sure that mouse point does not move on zoom...
+      zoomToSpacePt = pixelToSpace.apply(this, curPos(e, $('#map-canvas')));
+    }
     
     mapPort.doNormalizedZoom(d>0, zoomToSpacePt[0], zoomToSpacePt[1]);
     drawMap();
     return false;
-  });
-  
-  $('#map-canvas').click(function(event,d) {
-
   });
   
 });

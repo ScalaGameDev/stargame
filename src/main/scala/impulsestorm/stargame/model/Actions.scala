@@ -11,10 +11,15 @@ object ActionUtils {
     sender ! Actions.ActionError(msg)
     s
   }
+  
+  def errorH(s: StarGameState, sender: StarGameComet, msg: String) = {
+    sender ! Actions.ActionError(msg)
+    (s, None)
+  }
 }
 
 object Actions {
-  import ActionUtils.error
+  import ActionUtils._
   
   def StartGame(sender: StarGameComet)
     = Mutate( sender.stateId, sender, (s: StarGameState) => if(!s.started) {
@@ -67,19 +72,16 @@ object Actions {
                     fleetUuid: String,
                     quantities: List[Int],
                     toStarId: Int) 
-    = Mutate(sender.stateId, sender, (s: StarGameState) => {
+    = MutateHinted(sender.stateId, sender, (s: StarGameState) => {
       s.fleets.find(_.uuid == fleetUuid) match {
         case Some(oldF) => {
           // test whether player owns fleet
           if(oldF.playerId != sender.player.id) 
-            error(s, sender, "You do not own that fleet")
+            errorH(s, sender, "You do not own that fleet")
           else if(oldF.moving)
-            error(s, sender, "Fleet already moving")
+            errorH(s, sender, "Fleet already moving")
           else if(oldF.fromStarId == toStarId)
-            error(s, sender, "Already stationed at star")
-          else if(oldF.distanceTo(s)(s.stars(toStarId)) >      
-                  sender.player.shipRange)
-            error(s, sender, "Destination star out of range")
+            errorH(s, sender, "Already stationed at star")
           else {
             // take the minimum between requested and actually existing
             val (takenQs, leftBehindQs) = (oldF.ships zip quantities).map {
@@ -91,32 +93,42 @@ object Actions {
             
             // must take finite amount
             if(takenQs == Fleet.emptyQuantity)
-              error(s, sender, "Cannot dispatch a fleet with 0 ships")
+              errorH(s, sender, "Cannot dispatch a fleet with 0 ships")
             else {
-            
-              val fleetSpeed : Double = 
-                oldF.copy(ships=takenQs).speed(s)
+              val takenFleetStationary = oldF.copy(ships=takenQs) 
+              val fleetSpeed : Double = takenFleetStationary.speed(s)
               
-              val departYear = Some(s.gameYear)
-              val arriveYear = 
-                Some(s.gameYear+oldF.distanceTo(s)
-                  (s.stars(toStarId))/fleetSpeed)
+              if(oldF.distanceTo(s)(s.stars(toStarId)) >
+                 takenFleetStationary.range(sender.player, s))
+                errorH(s, sender, "Destination star out of range")
+              else {
               
-              val dispatchedFleet = oldF.copy(ships=takenQs, moving=true,
-                                              toStarId=Some(toStarId),
-                                              departYear=departYear, 
-                                              arriveYear=arriveYear).newUUID
-              
-              val leftBehindFleet = if(leftBehindQs == Fleet.emptyQuantity) None
-                else Some(oldF.copy(ships=leftBehindQs).newUUID)
+                val departYear = Some(s.gameYear)
+                val arriveYear = 
+                  Some(s.gameYear+oldF.distanceTo(s)
+                    (s.stars(toStarId))/fleetSpeed)
                 
-              val newFleets = dispatchedFleet :: leftBehindFleet.toList
-              
-              s.copy(fleets=s.fleets.filter(_.uuid != oldF.uuid) ::: newFleets)
+                val dispatchedFleet = oldF.copy(ships=takenQs, moving=true,
+                                                toStarId=Some(toStarId),
+                                                departYear=departYear, 
+                                                arriveYear=arriveYear).newUUID
+                
+                val leftBehindFleet = 
+                  if(leftBehindQs == Fleet.emptyQuantity) None
+                  else Some(oldF.copy(ships=leftBehindQs).newUUID)
+                  
+                val newFleets = dispatchedFleet :: leftBehindFleet.toList
+                
+                val newState = 
+                  s.copy(fleets=s.fleets.filter(_.uuid != oldF.uuid) :::
+                    newFleets)
+                
+                (newState, Hint(dispatchedFleet))
+              }
             }
           }
         }
-        case None => error(s, sender, "No fleet found with that UUID")
+        case None => errorH(s, sender, "No fleet found with that UUID")
       }
         
       })

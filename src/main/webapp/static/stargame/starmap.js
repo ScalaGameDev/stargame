@@ -9,6 +9,8 @@ function setMapView(mapViewStr) {
   drawMap();
 }
 
+var fleetDispatchQuantities = [0,0,0,0,0,0];
+
 var mapPort = null; // map view settings
 function initMapPort() {
   if(mapPort === null) {
@@ -16,7 +18,7 @@ function initMapPort() {
     var homeStar = mapView.starViews[playerInfo.player.exploredStarIds[0]];
     
     var bounds = mapView.mapBounds;
-    var bTol = 3.0;
+    var bTolPix = 60.0;
     
     var startPply = 25.0;
     
@@ -41,6 +43,7 @@ function initMapPort() {
         var b = bounds;
         var c = canvas;
         var pply = this.PixelsPerLy;
+        var bTol = bTolPix/pply;
         if( c.width/pply > b.xRight-b.xLeft + 2*bTol ) {
           // if zoomed out enough so that both left/r b
           // can be violated, just center the map to prevent thrashing
@@ -61,6 +64,7 @@ function initMapPort() {
       },
       doNormalizedZoom: function(zoomIn, zoomToX, zoomToY) {
         var multiplier = 1.0;
+        var bTol = bTolPix/this.PixelsPerLy;
         if(zoomIn) { 
           // prevent zooming in past a threshhold
           if(this.PixelsPerLy > 60.0) { return; } else { multiplier = 1.2; }
@@ -222,9 +226,9 @@ function drawMap() {
            py < canvas.height && py > 0;
   }
   
-  function makeEntity(euid, px, py, xtol, ytol, type, obj) {
+  function makeEntity(px, py, xtol, ytol, type, obj) {
     return {
-      euid: euid,
+      euid: obj.euid,
       plft: px-xtol, 
       prht: px+xtol,
       ptop: py-ytol, 
@@ -254,7 +258,7 @@ function drawMap() {
     }
     
     mapPort.entities.push(
-      makeEntity("sv-"+sv.id.toString(), px, py, 14, 14, 'sv', sv));
+      makeEntity(px, py, 14, 14, 'sv', sv));
   }
   
   function drawFleetView(fv) {
@@ -280,7 +284,7 @@ function drawMap() {
     }
     
     mapPort.entities.push(
-      makeEntity("fv-"+fv.uuid, px, py, 12, 8, 'fv', fv));
+      makeEntity(px, py, 12, 8, 'fv', fv));
   }
   
   // draw all qualifying stars and fleets
@@ -298,8 +302,17 @@ function drawMap() {
     
     // if stationary fleet selected, draw possible paths
     if(e.type == 'fv' && !e.obj.moving) {
+      var ranges = [];
+      for(var i=0; i < 6; i++) {
+        if(fleetDispatchQuantities[i] > 0) {
+          ranges.push(mapView.designRanges[i]);
+        }
+      }
+      
+      var minRange = Math.min.apply(this, ranges);
+      
       var inRangeStarViews = visibleStarViews.filter(function(sv) { 
-        return dist(e.obj, sv) < playerInfo.shipRange; });
+        return dist(e.obj, sv) < minRange; });
       
       inRangeStarViews.map(function(sv) {
         drawLineInSpace(ctx, "rgba(255,255,255, 0.2)", e.obj, sv);

@@ -8,16 +8,22 @@ case class Fleet( uuid: String, playerId: Int,
                   fromStarId: Int, toStarId: Option[Int],
                   departYear: Option[Double], arriveYear: Option[Double]) 
 extends hasPosition {
-  def bulk(s: StarGameState) =
-    (s.players(playerId).designs zip ships).map{ 
-      case (d, n) => d.size.space*n }.sum
-      
-  def speed(s: StarGameState) : Double = {
-    (ships zip s.players(playerId).designs).flatMap {
-      case(n, d) => if(n>0) List(d.engine.speed) else Nil
-    }.min
+  private def listAttributes[T](s: StarGameState, f: (Design, Int) => T) = {
+    (s.players(playerId).designs zip ships).flatMap { 
+      case (d, n) if(n>0) => if(d.empty) Nil else List(f(d, n))
+      case _ => Nil
+    }
   }
-    
+  
+  def bulk(s: StarGameState) : Int = 
+    listAttributes(s, (d, n) => d.size.space*n).sum
+      
+  def speed(s: StarGameState) : Double =
+    listAttributes(s, (d, n) => d.engine.speed).min
+
+  def range(p: Player, s: StarGameState) : Double =
+    listAttributes(s, (d, n) => d.range(p)).min 
+  
   def position(s: StarGameState) = {
     def coords(star: Star) = (star.x, star.y)
     
@@ -46,26 +52,41 @@ object Fleet {
   }
 }
 
-case class Design( id: Int,
+case class Design( empty: Boolean, 
                    name: String,
                    size: ShipSize,
-                   engine: Engine, 
+                   engine: Engine,
                    sensor: Option[Sensor], 
-                   modules: List[ShipModule] )
+                   modules: List[ShipModule] ) {
+  def range(p: Player) = 
+    p.shipRange * (if(modules.contains(ShipModule.ReserveTanks)) 2.0 else 1.0)
+}
 
 object Design {
+  def calculateRanges(p: Player) = p.designs.map {
+    d => if(d.empty) -1.0 else d.range(p)
+  }
+  
+  // would definitely use Option, but serialization of List[Option[Design]]
+  // is problematic
+  val emptyDesign = 
+    Design(true, "", ShipSize.Fighter, Engine.Chemical, None, Nil)
+  
   val startingDesigns = 
     List(
-      Design(0, "Scout",
+      Design(false,
+             "Scout",
              ShipSize.Fighter,
              Engine.Chemical, 
              None,
              List(ShipModule.ReserveTanks)),
-      Design(1, "Colony Ship",
+      Design(false,
+             "Colony Ship",
              ShipSize.Capital,
              Engine.Chemical,
              None,
-             List(ShipModule.ColonyKit))
+             List(ShipModule.ColonyKit)),
+      emptyDesign, emptyDesign, emptyDesign, emptyDesign
       )
 }
 

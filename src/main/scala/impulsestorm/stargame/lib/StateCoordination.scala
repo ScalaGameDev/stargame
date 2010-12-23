@@ -86,6 +86,10 @@ case class Mutate[StateType](stateId: String, sender: SimpleActor[Any],
                   mutateF: StateType => StateType)
   extends FwdedMsg
 
+case class MutateHinted[StateType](stateId: String, sender: SimpleActor[Any],
+                  mutateHintedF: StateType => (StateType, Any))
+  extends FwdedMsg
+
 object NoSuchGame
   
 object PrepareShutdown
@@ -104,6 +108,13 @@ trait StateMaster[StateType <: State] extends Actor {
       
       state = newstate.asInstanceOf[StateType]
       saveToStorage()    
+    }
+    case MutateHinted(stateId, sender, mutateHintedF) => {
+      val (newstate, hint) = mutateHintedF(state)
+      listeners.foreach(_ ! (newstate, hint))
+      
+      state = newstate.asInstanceOf[StateType]
+      saveToStorage()
     }
     case Inquire(id, sender) => {
       sender ! state
