@@ -1,4 +1,4 @@
-package impulsestorm.liftapp.model.stargame
+package impulsestorm.stargame.model.stargame
 
 // if not moving, will just use the fromStarId attr and the others are undef
 // ships: [# of Design1, # of Design 2 etc.] 

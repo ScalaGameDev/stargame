@@ -1,4 +1,4 @@
-package impulsestorm.liftapp {
+package impulsestorm.stargame {
 
 package snippet {
 
@@ -8,9 +8,9 @@ import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.common._
 import _root_.net.liftweb.http._
 
-import impulsestorm.liftapp.model.StarGame
-import impulsestorm.liftapp.model.stargame.StarGameState
-import impulsestorm.liftapp.lib.ImOpenIDVendor
+import impulsestorm.stargame.model.StarGame
+import impulsestorm.stargame.model.stargame.StarGameState
+import impulsestorm.stargame.lib.ImOpenIDVendor
 
 class StarGameSnip {
   

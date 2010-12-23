@@ -1,6 +1,6 @@
-package impulsestorm.liftapp.model.stargame
+package impulsestorm.stargame.model.stargame
 
-import impulsestorm.liftapp.lib._
+import impulsestorm.stargame.lib._
 
 import scala.util.Random
 

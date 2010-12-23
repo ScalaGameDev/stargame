@@ -1,4 +1,4 @@
-package impulsestorm.liftapp {
+package impulsestorm.stargame {
 
 package snippet {
 

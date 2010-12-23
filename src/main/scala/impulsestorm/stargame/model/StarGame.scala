@@ -1,6 +1,6 @@
-package impulsestorm.liftapp.model
+package impulsestorm.stargame.model
 
-import impulsestorm.liftapp.model.stargame._
+import impulsestorm.stargame.model.stargame._
 
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
@@ -8,7 +8,7 @@ import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import net.liftweb.common.Logger
 
-import _root_.impulsestorm.liftapp.lib._
+import _root_.impulsestorm.stargame.lib._
 
 import scala.util.Random
 
@@ -20,7 +20,7 @@ object StarGame {
 }
 
 object StarView {
-  import impulsestorm.liftapp.lib.ImOpenIDVendor.loginFirst
+  import impulsestorm.stargame.lib.ImOpenIDVendor.loginFirst
                       
   val root = Menu("Stargame") / "stargame" / "index" submenus (
     Menu("New Stargame") / "stargame" / "new" >> loginFirst >> Hidden,

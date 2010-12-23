@@ -1,5 +1,5 @@
-package impulsestorm.liftapp.model.stargame
-import impulsestorm.liftapp.lib._
+package impulsestorm.stargame.model.stargame
+import impulsestorm.stargame.lib._
 
 import se.scalablesolutions.akka.actor.{Actor}
 

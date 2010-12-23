@@ -1,10 +1,10 @@
-package impulsestorm.liftapp.model.stargame
+package impulsestorm.stargame.model.stargame
 
-import impulsestorm.liftapp.comet.StarGameComet
+import impulsestorm.stargame.comet.StarGameComet
 
 import net.liftweb.common.SimpleActor
 
-import impulsestorm.liftapp.lib._
+import impulsestorm.stargame.lib._
 
 object ActionUtils {
   def error(s: StarGameState, sender: StarGameComet, msg: String) = {
@@ -73,6 +73,10 @@ object Actions {
           // test whether player owns fleet
           if(oldF.playerId != sender.player.id) 
             error(s, sender, "You do not own that fleet")
+          else if(oldF.moving)
+            error(s, sender, "Fleet already moving")
+          else if(oldF.fromStarId == toStarId)
+            error(s, sender, "Already stationed at star")
           else if(oldF.distanceTo(s)(s.stars(toStarId)) >      
                   sender.player.shipRange)
             error(s, sender, "Destination star out of range")

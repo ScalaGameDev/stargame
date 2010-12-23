@@ -1,4 +1,4 @@
-package impulsestorm.liftapp.model.stargame
+package impulsestorm.stargame.model.stargame
 
 case class PlayerInfo(player: Player, shipRange: Int)
 

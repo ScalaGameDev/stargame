@@ -1,4 +1,4 @@
-package impulsestorm.liftapp.comet
+package impulsestorm.stargame.comet
 
 import net.liftweb._
 import http._
@@ -17,12 +17,12 @@ import net.liftweb.common.{Box, Full, Loggable}
 import scala.xml._
 import scala.util.Random
 
-import impulsestorm.liftapp.model._
-import impulsestorm.liftapp.model.stargame._
-import impulsestorm.liftapp.lib._
+import impulsestorm.stargame.model._
+import impulsestorm.stargame.model.stargame._
+import impulsestorm.stargame.lib._
 
 class StarGameComet extends CometActor with Loggable {
-  import impulsestorm.liftapp.model.StarGame.{supervisor => sg}
+  import impulsestorm.stargame.model.StarGame.{supervisor => sg}
   val openid = ImOpenIDVendor.identifier
   val stateId = S.param("gameId").get 
   

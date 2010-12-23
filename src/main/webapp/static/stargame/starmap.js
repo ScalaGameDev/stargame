@@ -25,10 +25,10 @@ function initMapPort() {
       x: homeStar.x - canvas.width/2/startPply,
       y: homeStar.y - canvas.height/2/startPply,
       entities: [], // all displayed entities
-      selectedObj: undefined,
+      selectedEuid: undefined,
       selectedEntity: function() {
-        return this.entities.filter(function(e) { 
-          return e.obj === mapPort.selectedObj; 
+        return this.entities.filter(function(ent) { 
+          return ent.euid === mapPort.selectedEuid; 
         })[0]; 
       },
       xRight: function() { 
@@ -152,22 +152,37 @@ function setDragAction(selector, action, startAction, finishAction) {
   
   function myCurPos(e) { return curPos(e, selector); }
   
-  selector.movehandle = function(e) { return action.apply(this, myCurPos(e)); };
-  
   selector.mousedown(function(e) {
-    if(startAction !== undefined) { startAction.apply(this, myCurPos(e)); }
+    var [startPx, startPy] = myCurPos(e);
     
-    selector.bind('mousemove', selector.movehandle);
+    if(startAction !== undefined) { 
+      startAction(startPx, startPy); 
+    }
     
-    $(document).bind('mouseup', function () {
+    var dragged = false;
+    
+    var moveHandle = function(moveEvent) {
+      var [px, py] = myCurPos(moveEvent);
+      if(!dragged && Math.abs(px-startPx)+Math.abs(py-startPy) > 4) {
+        dragged = true;
+      }
+      return action(px, py); 
+    };
+    
+    selector.bind('mousemove', moveHandle);
+    
+    $(document).bind('mouseup', function (upEvent) {
       selector.unbind('mousemove');
       $(document).unbind('mouseup');
       
-      if(finishAction !== undefined) { finishAction.apply(this, myCurPos(e)); }
+      if(finishAction !== undefined) { 
+        var [endPx, endPy] = myCurPos(upEvent);
+        finishAction(endPx, endPy, dragged); 
+      }
     });
     
     // faux move on start.
-    selector.movehandle(e);
+    moveHandle(e);
   });
 }
 
@@ -207,8 +222,9 @@ function drawMap() {
            py < canvas.height && py > 0;
   }
   
-  function makeEntity(px, py, xtol, ytol, type, obj) {
+  function makeEntity(euid, px, py, xtol, ytol, type, obj) {
     return {
+      euid: euid,
       plft: px-xtol, 
       prht: px+xtol,
       ptop: py-ytol, 
@@ -237,7 +253,8 @@ function drawMap() {
       ctx.fillText(sv.name, px-10, py+25);
     }
     
-    mapPort.entities.push(makeEntity(px, py, 14, 14, 'sv', sv));
+    mapPort.entities.push(
+      makeEntity("sv-"+sv.id.toString(), px, py, 14, 14, 'sv', sv));
   }
   
   function drawFleetView(fv) {
@@ -262,7 +279,8 @@ function drawMap() {
       drawLineInSpace(ctx, 'rgba(255,255,255,0.8)', fv, toStarView);
     }
     
-    mapPort.entities.push(makeEntity(px, py, 12, 8, 'fv', fv));
+    mapPort.entities.push(
+      makeEntity("fv-"+fv.uuid, px, py, 12, 8, 'fv', fv));
   }
   
   // draw all qualifying stars and fleets

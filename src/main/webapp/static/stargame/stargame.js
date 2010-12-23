@@ -47,7 +47,7 @@ function showFleetSidebar(fv) {
   selectSidebar("fleetinfo");
 }
 
-function clickEntities(entities) {
+function selectEntities(entities) {
   var entityIndex = $.inArray(mapPort.selectedEntity(), entities);
   
   // if already selecting stuff, choose next item
@@ -58,7 +58,7 @@ function clickEntities(entities) {
   }
   
   var e = entities[clickIndex];
-  mapPort.selectedObj = e.obj;
+  mapPort.selectedEuid = e.euid;
   
   if(e.type === "sv") {
     $('#star-name').html(starViewName(e.obj));
@@ -70,19 +70,29 @@ function clickEntities(entities) {
   return false;
 }
 
-function rClickEntities(entities) {
-  var e = entities[0];
+function clickEntities(entities) {
   var selected = mapPort.selectedEntity();
   
-  if(selected.type === 'fv') {
-    if(e.type === 'sv') {
-      jsonDispatchFleet(selected.obj.uuid, fleetDispatchQuantities, e.obj.id);
+  if(selected !== undefined && selected.type === 'fv' && !selected.obj.moving) {
+    var clickedStars = entities.filter(function(e) { 
+      return e.type === 'sv'; 
+    });
+    
+    if(clickedStars.length > 0) {
+      var clickedStarId = clickedStars[0].obj.id;
+      jsonDispatchFleet(selected.obj.uuid, fleetDispatchQuantities, 
+        clickedStarId);
+    } else {
+      // chose something else than a star
+      selectEntities(entities);
     }
+  } else {
+    // no fleet currently selected
+    selectEntities(entities);
   }
   
   return false;
 }
-
 
 $(document).ready(function() {
   var dragStartX = 0, dragStartY = 0;
@@ -103,7 +113,26 @@ $(document).ready(function() {
     dragStartX = px;
     dragStartY = py;
     return false;
-  }, function(px,py) {return false;});
+  }, 
+  function(px,py, dragged) {
+    if(!dragged) {
+      function clicked(ent) {
+        return px > ent.plft && px < ent.prht && 
+               py > ent.ptop && py < ent.pbot;
+      }
+      
+      var clickedEntities = mapPort.entities.filter(clicked);
+      
+      if(clickedEntities.length > 0) {
+        clickEntities(clickedEntities);
+      } else {
+        delete mapPort.selectedEuid;
+      }
+      
+      drawMap();
+    }
+    return false;
+  });
   
   $('#map-canvas').wheel(function(e, d) {
     // make sure that mouse point does not move on zoom...
@@ -114,25 +143,8 @@ $(document).ready(function() {
     return false;
   });
   
-  $('#map-canvas').mousedown(function(event,d) {
-    var [px,py] = curPos(event, $('#map-canvas'));
-    
-    function clicked(e) {
-      return px > e.plft && px < e.prht && 
-             py > e.ptop && py < e.pbot;
-    }
-    
-    var clickedEntities = mapPort.entities.filter(clicked);
-    
-    if(clickedEntities.length > 0) {
-      if(event.which === 1) {
-        clickEntities(clickedEntities);
-      } else {
-        rClickEntities(clickedEntities);
-      }
-    }
-    
-    drawMap();
-    return false;
+  $('#map-canvas').click(function(event,d) {
+
   });
+  
 });

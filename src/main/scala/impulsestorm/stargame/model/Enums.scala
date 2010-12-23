@@ -1,7 +1,7 @@
-package impulsestorm.liftapp.model.stargame
+package impulsestorm.stargame.model.stargame
 
 import scala.util.Random
-import impulsestorm.liftapp.lib.SimRandom._
+import impulsestorm.stargame.lib.SimRandom._
 
 import net.liftweb.json._
 import net.liftweb.json.JsonAST._
