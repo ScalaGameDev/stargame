@@ -309,9 +309,13 @@ function drawMap() {
         }
       }
       
-      var minRange = Math.min.apply(this, ranges);
+      if(ranges.length > 0) {
+        var minRange = Math.min.apply(this, ranges);
+      } else {
+        var minRange = 0;
+      }
       
-      var inRangeStarViews = visibleStarViews.filter(function(sv) { 
+      var inRangeStarViews = mapView.starViews.filter(function(sv) { 
         return dist(e.obj, sv) < minRange; });
       
       inRangeStarViews.map(function(sv) {
