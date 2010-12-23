@@ -1,4 +1,4 @@
-package impulsestorm.stargame.model.stargame
+package impulsestorm.stargame.model
 
 case class StarView(id: Int, name: Option[String], sClass: StarClass,
                     x: Double, y: Double, planets: Option[List[Planet]],

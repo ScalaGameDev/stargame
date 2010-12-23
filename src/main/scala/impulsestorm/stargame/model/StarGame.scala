@@ -1,6 +1,6 @@
 package impulsestorm.stargame.model
 
-import impulsestorm.stargame.model.stargame._
+import impulsestorm.stargame.model._
 
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._

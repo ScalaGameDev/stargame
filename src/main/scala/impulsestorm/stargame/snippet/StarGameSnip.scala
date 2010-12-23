@@ -9,7 +9,7 @@ import _root_.net.liftweb.common._
 import _root_.net.liftweb.http._
 
 import impulsestorm.stargame.model.StarGame
-import impulsestorm.stargame.model.stargame.StarGameState
+import impulsestorm.stargame.model.StarGameState
 import impulsestorm.stargame.lib.ImOpenIDVendor
 
 class StarGameSnip {

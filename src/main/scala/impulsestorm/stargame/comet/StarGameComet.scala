@@ -18,7 +18,7 @@ import scala.xml._
 import scala.util.Random
 
 import impulsestorm.stargame.model._
-import impulsestorm.stargame.model.stargame._
+import impulsestorm.stargame.model._
 import impulsestorm.stargame.lib._
 
 class StarGameComet extends CometActor with Loggable {

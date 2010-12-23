@@ -1,4 +1,4 @@
-package impulsestorm.stargame.model.stargame
+package impulsestorm.stargame.model
 
 import scala.util.Random
 import impulsestorm.stargame.lib.SimRandom._
