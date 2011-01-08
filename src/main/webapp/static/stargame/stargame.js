@@ -1,10 +1,6 @@
-var nDesignsInFleet = 0;
+var fleetDispatchQuantity = 0;
+
 function showFleetSidebar(fv) {
-  // clear existing shit
-  for(var i = 0; i < 6; i++) {
-    $("#fleetContent-"+i.toString()).html("");
-  }
-  
   if(fv.moving) {
     var sv = mapView.starViews[fv.toStarId];
     $('#fleet-name').html("Fleet in transit to " + starViewName(sv));
@@ -12,42 +8,25 @@ function showFleetSidebar(fv) {
     var sv = mapView.starViews[fv.fromStarId];
     $('#fleet-name').html("Fleet at " + starViewName(sv));
   }
-  
-  var designs = playerInfo.player.designs;
-  
-  // i = design number
-  nDesignsInFleet = 0;
-  for(var i = 0; i < fv.ships.length; i++) {
-    if(fv.ships[i] > 0) {
-      var fleetQId = "fleetQuantity-"+i.toString(); 
-      $('#fleetContent-'+nDesignsInFleet.toString()).html(
-        "<strong>"+ designs[i].name +"</strong><br/>"+
-        "<span id='"+fleetQId+"Num'>"+ fv.ships[i].toString() +"</span>" +
-        "<div id='"+fleetQId+"' class='fleet-slider' />");
       
-      if(!fv.moving) {
-        // necessary to defeat closures + shitty scoping
-        function adjustSlider(currentFleetQId, currentI) {
-          return function(event, ui) {
-            $('#'+currentFleetQId+'Num').html(ui.value.toString());
-            fleetDispatchQuantities[currentI] = ui.value;
-            drawMap();
-          };
-        }
-        
-        $('#'+fleetQId).slider({
-          range: "min",
-          min: 0,
-          max: fv.ships[i],
-          slide: adjustSlider(fleetQId, i),
-          value: fv.ships[i]
-        });
-      }
-      nDesignsInFleet += 1;
-    }
-  }
+  $('#fleetContent').html(
+    "Ship count<br/>" +
+    "<span id='fleetNum'>"+ fv.ships.toString() +"</span>" +
+    "<div id='fleetSlider' class='fleet-slider' />");
   
-  fleetDispatchQuantities = fv.ships;
+  if(!fv.moving) {
+    $('#fleetSlider').slider({
+      range: "min",
+      min: 0,
+      max: fv.ships,
+      slide: function(event, ui) {
+        $('#fleetNum').html(ui.value.toString());
+        fleetDispatchQuantity = ui.value;
+        drawMap();
+      },
+      value: fv.ships
+    });
+  }
   
   selectSidebar("fleetinfo");
 }
@@ -85,7 +64,7 @@ function clickEntities(entities) {
     
     if(clickedStars.length > 0) {
       var clickedStarId = clickedStars[0].obj.id;
-      jsonDispatchFleet(selected.obj.uuid, fleetDispatchQuantities, 
+      jsonDispatchShips(selected.obj.uuid, fleetDispatchQuantity, 
         clickedStarId);
     } else {
       // chose something else than a star

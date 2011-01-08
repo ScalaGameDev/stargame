@@ -10,11 +10,8 @@ case class Player( id: Int, openid: Option[String], alias: String,
                    traits: List[Trait],
                    exploredStarIds: List[Int],
                    metPlayerIds: List[Int],
-                   designs: List[Design],
                    gold: Double,
                    techs: List[Tech], 
-                   researchAlloc: List[Double],
-                   researchChoices: List[Tech],
                    canResearchTechs: List[List[Tech]])
 {
   lazy val organizedTechs = TechCategory.organizeTechs(techs)
@@ -33,24 +30,40 @@ case class Player( id: Int, openid: Option[String], alias: String,
       1
   }
   
-  lazy val shipRange : Int = {
+  lazy val range : Int = {
     val pTechs = organizedTechs(0)
     if(pTechs.contains(Tech.Range7))
-      12
+      13
     else if(pTechs.contains(Tech.Range6))
-      11
+      12
     else if(pTechs.contains(Tech.Range5))
-      10
+      11
     else if(pTechs.contains(Tech.Range4))
-      9
+      10
     else if(pTechs.contains(Tech.Range3))
-      8
+      9
     else if(pTechs.contains(Tech.Range2))
-      7
+      8
     else if(pTechs.contains(Tech.Range1))
-      6
+      7
     else
-      5
+      6
+  }
+  
+  lazy val speed : Double = {
+    val pTechs = organizedTechs(0)
+    if(pTechs.contains(Tech.Engines6))
+      2.5
+    else if(pTechs.contains(Tech.Engines5))
+      2.2
+    else if(pTechs.contains(Tech.Engines4))
+      1.9
+    else if(pTechs.contains(Tech.Engines3))
+      1.6
+    else if(pTechs.contains(Tech.Engines2))
+      1.3
+    else
+      1
   }
 }
 
@@ -77,10 +90,8 @@ object Player {
     Player(id, pSpec.openid, pSpec.alias, pSpec.traits, 
            exploredStarIds = List(startingStarId),
            metPlayerIds = List(id),
-           gold = 0, designs = Design.startingDesigns, 
+           gold = 0,
            techs = Tech.startingTechs, 
-           researchAlloc=TechCategory.defaultAllocation,
-           researchChoices=canResearchTechs.map(_.head),
            canResearchTechs=canResearchTechs)
   }
 }

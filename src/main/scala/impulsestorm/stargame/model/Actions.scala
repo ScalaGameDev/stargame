@@ -50,27 +50,16 @@ object Actions {
         s.addedPlayer(pSpec)
       )
   
-  def ResearchAllocation(sender: StarGameComet,
-                         allocation: List[Double]) 
-    = Mutate( sender.stateId, sender, (s : StarGameState) => {
-        val positiveAlloc = allocation.map(a => math.max(0, a))
-        val posSum = positiveAlloc.sum
-        val normalizedAlloc = positiveAlloc.map(_/posSum)
-        s.updatedPlayer(sender.player.copy(researchAlloc=normalizedAlloc))  
-      })
+  def BuyTech(sender: StarGameComet, tech: Tech) =
+    Mutate( sender.stateId, sender, (s: StarGameState) => {
+      val p = s.players(sender.player.id) 
+      s.updatedPlayer(p.copy(techs=tech::p.techs, gold=p.gold-tech.cost,
+        canResearchTechs=p.canResearchTechs.map(_.filter(_!=tech))))
+    })
       
-  def ResearchChoice(sender: StarGameComet,
-                     newChoice: Tech) 
-    = Mutate( sender.stateId, sender, (s : StarGameState) => {
-        val choices = sender.player.researchChoices.updated(
-          TechCategory.values.indexOf(newChoice.category),
-          newChoice)
-        s.updatedPlayer(sender.player.copy(researchChoices=choices))
-      })
-  
-  def DispatchFleet(sender: StarGameComet,
+  def DispatchShips(sender: StarGameComet,
                     fleetUuid: String,
-                    quantities: List[Int],
+                    quantity: Int,
                     toStarId: Int) 
     = MutateHinted(sender.stateId, sender, (s: StarGameState) => {
       s.fleets.find(_.uuid == fleetUuid) match {
@@ -84,29 +73,25 @@ object Actions {
             errorH(s, sender, "Already stationed at star")
           else {
             // take the minimum between requested and actually existing
-            val (takenQs, leftBehindQs) = (oldF.ships zip quantities).map {
-              case (available, requested) => { 
-                val taken = math.max(0, math.min(available, requested))
-                (taken, available-taken)
-              }
-            }.unzip
+            val (takenQs, leftBehindQs) = {
+              val taken = math.max(0, math.min(oldF.ships, quantity))
+              (taken, oldF.ships-taken)
+            }
             
             // must take finite amount
-            if(takenQs == Fleet.emptyQuantity)
+            if(takenQs == 0)
               errorH(s, sender, "Cannot dispatch a fleet with 0 ships")
             else {
-              val takenFleetStationary = oldF.copy(ships=takenQs) 
-              val fleetSpeed : Double = takenFleetStationary.speed(s)
+              val takenFleetStationary = oldF.copy(ships=takenQs)
               
-              if(oldF.distanceTo(s)(s.stars(toStarId)) >
-                 takenFleetStationary.range(sender.player, s))
+              if(oldF.distanceTo(s)(s.stars(toStarId)) > sender.player.range)
                 errorH(s, sender, "Destination star out of range")
               else {
               
                 val departYear = Some(s.gameYear)
                 val arriveYear = 
                   Some(s.gameYear+oldF.distanceTo(s)
-                    (s.stars(toStarId))/fleetSpeed)
+                    (s.stars(toStarId))/sender.player.speed)
                 
                 val dispatchedFleet = oldF.copy(ships=takenQs, moving=true,
                                                 toStarId=Some(toStarId),
@@ -114,7 +99,7 @@ object Actions {
                                                 arriveYear=arriveYear).newUUID
                 
                 val leftBehindFleet = 
-                  if(leftBehindQs == Fleet.emptyQuantity) None
+                  if(leftBehindQs == 0) None
                   else Some(oldF.copy(ships=leftBehindQs).newUUID)
                   
                 val newFleets = dispatchedFleet :: leftBehindFleet.toList

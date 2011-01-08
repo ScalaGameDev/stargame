@@ -54,11 +54,7 @@ object EnumSerializer {
          Trait, 
          StarClass, 
          PlanetZone, 
-         PlanetType, 
-         ShipSize,
-         Engine,
-         Sensor,
-         ShipModule).map(new EnumSerializer(_))
+         PlanetType).map(new EnumSerializer(_))
   
   val formats : Formats = li.foldLeft(Serialization.formats(NoTypeHints))(_+_)
 }
@@ -97,6 +93,9 @@ case class Tech(name: String, longName: String, category: TechCategory,
   extends hasName
 {
   override def toString = longName
+  
+  lazy val cost = (10 * math.exp(0.1*level)).toInt * 10
+  
 }
 
 object Tech extends Enumerator[Tech] {

@@ -1,9 +1,9 @@
 package impulsestorm.stargame.model
 
-case class PlayerInfo(player: Player, shipRange: Int)
+case class PlayerInfo(player: Player, range: Int, speed: Double)
 
 object PlayerInfo {
   def from(p: Player) = {
-    PlayerInfo(p, p.shipRange)
+    PlayerInfo(p, p.range, p.speed)
   }
 }

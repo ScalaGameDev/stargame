@@ -31,6 +31,9 @@ class StarGameComet extends CometActor with Loggable {
   
   var hintOpt: Option[Hint] = None
   
+  // Tech and Category index
+  var openResearchTech: Option[(Tech, Int)] = None
+  
   def state = stateOpt.get
   def player = playerOpt.get
   
@@ -82,24 +85,12 @@ class StarGameComet extends CometActor with Loggable {
   }
   
   override def receiveJson = {
-    case x if {println("Got Json: "+x); false} => Noop 
-    case JObject(List(JField("command", JString("researchAllocSave")), 
-                      JField("params", allocs))) => {
-      val allocation = allocs.values.asInstanceOf[List[Any]].map( _ match {
-        case x: Double => x
-        case x: BigInt => x.toDouble
-      })
-      sg ! Actions.ResearchAllocation(this, allocation)
-      Noop
-    }
-    case JObject(List(JField("command", JString("dispatchFleet")), 
+    case x if {println("Got Json: "+x); false} => Noop
+    case JObject(List(JField("command", JString("dispatchShips")), 
                       JField("params", JArray(List(
-                        JString(fleetUuid), quantities, JInt(toStarId) 
+                        JString(fleetUuid), JInt(quantity), JInt(toStarId) 
                       ))))) => {
-      val quantitiesValues = 
-        quantities.values.asInstanceOf[List[BigInt]].map(_.toInt)      
-      
-      sg ! Actions.DispatchFleet(this, fleetUuid, quantitiesValues, 
+      sg ! Actions.DispatchShips(this, fleetUuid, quantity.intValue, 
                                  toStarId.intValue)
       Noop
     }
@@ -254,78 +245,87 @@ class StarGameComet extends CometActor with Loggable {
   }
   
   def setHtmlResearch : JsCmd = {
-    def changeResearchChoice(newChoice: Tech) = {
-      println("New choice: " + newChoice.longName)
-      sg ! Actions.ResearchChoice(this, newChoice)
+    def buyTech(tech: Tech) : JsCmd= {
+      openResearchTech = 
+        Some((tech, TechCategory.values.indexOf(tech.category)))
+      sg ! Actions.BuyTech(this, tech)
       Noop
     }
+    
+    def techPaneContents(tech: Tech) = 
+      <div>
+        <h4>{tech.toString}</h4>
+        <p>{tech.description}</p>
+        <p>{
+          if(player.techs.contains(tech)) "Already Researched" 
+          else ajaxButton("Buy - " + tech.cost + "RU", () => buyTech(tech))
+        }</p>
+      </div>
+    
+    def showTechPane(tech: Tech) = {
+      SetHtml("research-tech-info", techPaneContents(tech))
+    }
+    
+    def styleTech(tech: Tech) = {
+      if(player.techs.contains(tech)) {
+        <span>{tech.toString} - Done</span>
+      } else {
+        <span>{tech.toString} - {tech.cost}RU</span>
+      }
+    }
 
-    JsRaw("function jsonResearchAllocSave() {" + 
-      jsonSend("researchAllocSave", Call("getSliderVals")).toJsCmd +
-      "}") &
     OnLoad(SetHtml("research", (<h2>Research</h2> ++
         <table>
         <tr>
-        <td>
-        <div id="research-techs">
+        <td width="50%">
           <h3>Technologies</h3>
-          <ul>
+          <div id="research-accordian">
           {
-            val techTuple = List(TechCategory.values, player.organizedTechs,
-                                 player.canResearchTechs,
-                                 player.researchChoices).transpose
-            
-            (techTuple.map {
+            List( TechCategory.values, 
+                  player.organizedTechs, 
+                  player.canResearchTechs
+            ).transpose map { 
               case List(category: TechCategory, 
-                        techs: List[Tech], 
-                        choices: List[Tech], 
-                        currentChoice: Tech) => 
-                <li>{category}
+                        techs: List[Tech], choices: List[Tech]) =>
+                <h4 style="padding-left: 30px;">{category}</h4> ++
+                <div>
                   <ul>
-                  {techs.map(t => 
-                    <li><span class="tech-complete">{t}</span></li>
-                  )}
-                  <li>Research choice:
-                  {val choices3 = choices.take(3)
-                    ajaxSelectObj[Tech](choices3 zip choices3.map(_.longName),
-                                        Full(currentChoice), 
-                                        changeResearchChoice _)}
-                  </li>
+                  {
+                    (techs ++ choices.take(3)).map(t =>
+                      <li>{a(styleTech(t), showTechPane(t))}</li>
+                    )
+                  }
                   </ul>
-                </li>
-            })
+                </div>
+            }
           }
-          </ul>
-        </div>
+          </div>
         </td>
         <td>
-        <div id="research-allocation">
+        <div id="research-tech-info">
         {
-          (0 until TechCategory.values.length).map(i => {
-            <p>{TechCategory.values(i)}
-              <br/>
-              <div id={"research-slider-"+i.toString} 
-                class="research-slider" />
-            </p>
-          })
+          openResearchTech match {
+            case Some((tech, _)) => techPaneContents(tech)
+            case None => <div/>
+          }
         }
-        
         </div>
         </td>
         </tr>
         </table>
-    )) & 
-    (
-      Call("setupSliders", JsVar("jsonResearchAllocSave")) &
-      Call("setSliderVals", JsArray(player.researchAlloc.map(Num(_)) : _*))
-    ))
+    )) & JsRaw(openResearchTech match {
+      case Some((_, categoryIndex)) => """$('#research-accordian').accordion({
+        active: %d
+      });""".format(categoryIndex)
+      case None => "$('#research-accordian').accordion();"
+    }))
     
   }
   
   def setHtmlMapCmds = {
-    JsRaw("function jsonDispatchFleet(fleetUuid, quantities, toStarId) {" + 
-      jsonSend("dispatchFleet", 
-        JsRaw("[fleetUuid, quantities, toStarId]")).toJsCmd +
+    JsRaw("function jsonDispatchShips(fleetUuid, quantity, toStarId) {" + 
+      jsonSend("dispatchShips", 
+        JsRaw("[fleetUuid, quantity, toStarId]")).toJsCmd +
     "}")
   }
 }

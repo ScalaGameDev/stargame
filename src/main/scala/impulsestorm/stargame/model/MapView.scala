@@ -6,7 +6,7 @@ case class StarView( euid: String,
                      knownColonyOwnerId: Option[Int])
 
 case class FleetView( euid: String, uuid: String,
-                      playerId: Int, ships: Option[List[Int]], bulk: Int,
+                      playerId: Int, ships: Int, troops: Int,
                       moving: Boolean,
                       fromStarId: Int, toStarId: Option[Int],
                       arriveYear: Option[Double], x: Double, y: Double )
@@ -25,11 +25,9 @@ object FleetView {
   }
   
   def fromFleet(s: StarGameState, f: Fleet, playerId: Int) = {
-    val ships = if(f.playerId == playerId) Some(f.ships) else None
-    
     val (x,y) = f.position(s)
     
-    FleetView("fv-"+f.uuid, f.uuid, f.playerId, ships, f.bulk(s), f.moving, 
+    FleetView("fv-"+f.uuid, f.uuid, f.playerId, f.ships, f.troops, f.moving, 
               f.fromStarId, f.toStarId, f.arriveYear, x, y)
   }
 }
@@ -46,7 +44,7 @@ object MapBounds {
 }
 
 case class MapView(starViews: List[StarView], fleetViews: List[FleetView],
-                   mapBounds: MapBounds, designRanges: List[Double])
+                   mapBounds: MapBounds)
 
 object MapView {
   def from(s: StarGameState, player: Player) = {
@@ -72,6 +70,6 @@ object MapView {
     
     val fleetViews = FleetView.calculateAll(s, player)
     
-    MapView(starViews, fleetViews, MapBounds(s), Design.calculateRanges(player))
+    MapView(starViews, fleetViews, MapBounds(s))
   }
 }

@@ -9,8 +9,6 @@ function setMapView(mapViewStr) {
   drawMap();
 }
 
-var fleetDispatchQuantities = [0,0,0,0,0,0];
-
 var mapPort = null; // map view settings
 function initMapPort() {
   if(mapPort === null) {
@@ -302,21 +300,8 @@ function drawMap() {
     
     // if stationary fleet selected, draw possible paths
     if(e.type == 'fv' && !e.obj.moving) {
-      var ranges = [];
-      for(var i=0; i < 6; i++) {
-        if(fleetDispatchQuantities[i] > 0) {
-          ranges.push(mapView.designRanges[i]);
-        }
-      }
-      
-      if(ranges.length > 0) {
-        var minRange = Math.min.apply(this, ranges);
-      } else {
-        var minRange = 0;
-      }
-      
       var inRangeStarViews = mapView.starViews.filter(function(sv) { 
-        return dist(e.obj, sv) < minRange; });
+        return dist(e.obj, sv) < playerInfo.range; });
       
       inRangeStarViews.map(function(sv) {
         drawLineInSpace(ctx, "rgba(255,255,255, 0.2)", e.obj, sv);
