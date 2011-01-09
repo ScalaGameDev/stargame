@@ -7,6 +7,8 @@ import org.bson.types.ObjectId
 
 import scala.util.Random
 
+import scala.annotation.tailrec
+
 import java.util.Date
 
 import _root_.net.liftweb.mongodb._
@@ -22,9 +24,9 @@ case class StarGameState( _id: String, createdBy: String, name: String,
                           yearsPerDay: Double,
                           
                           stars: List[Star], players: List[Player],
-                          fleets: List[Fleet], colonies: List[Colony],
+                          fleets: Set[Fleet], colonies: Set[Colony],
                           availableStartStarIds: List[Int])
-  extends State with MongoDocument[StarGameState] {
+  extends State[StarGameState] with MongoDocument[StarGameState] {
   
   def addedPlayer(pSpec: PlayerSpec) = {
     val newPlayerId = players.length // same as array index
@@ -34,10 +36,10 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       players :+ Player.startingPlayer(newPlayerId, pSpec, homeStarId)
     
     val newColonies = 
-      colonies :+ Colony.startingColony(stars(homeStarId), newPlayerId)
+      colonies + Colony.startingColony(stars(homeStarId), newPlayerId)
     
     val newFleets =
-      fleets :+ Fleet.startingFleet(newPlayerId, stars(homeStarId))
+      fleets + Fleet.startingFleet(newPlayerId, stars(homeStarId))
     
     println("addedPlayer")
       
@@ -47,6 +49,60 @@ case class StarGameState( _id: String, createdBy: String, name: String,
   
   def updatedPlayer(p: Player) =
     this.copy(players=players.updated(p.id, p))
+  
+  def supposedToBeYear = {
+    val msSinceStart = (new Date()).getTime - realStartTime.getTime
+    val daysSinceStart = msSinceStart/86400.0/1000.0
+    daysSinceStart*yearsPerDay
+  }
+  
+  def advancedOneTick() = {
+    val curYear = gameYear+StarGameState.tickSizeYears
+    
+    // process fleet arrivals and merging of stationary fleets of the same team
+    val fleetsArrived = fleets.map( _.updateIfArrived(curYear) )
+    val fleetsArrivedAndMerged = Fleet.mergeStationaryFleets( fleetsArrived )
+    
+    // TODO: resolve battles and colony ownership transfers here 
+    
+    // exploredStarIds and income
+    val newPlayers = players.map( p => {
+      val stationaryOwnedFleets = 
+        fleetsArrivedAndMerged.filter(f => f.playerId == p.id && !f.moving)
+      
+      val sensors = // our fleets and our colonies are our sensors
+        stationaryOwnedFleets ++ colonies.filter(_.ownerId == p.id) 
+      
+      // detect stars with sensors
+      val detectedStarIds = 
+        FleetView.inRangeItems(this, p.sensorRange, sensors,
+          stars.toSet).map(_.id)
+      
+      // detect colonies and subsequently, players
+      val detectedColonies = colonies.filter(c => 
+        detectedStarIds.contains(c.starId))
+      
+      val detectedPlayers = detectedColonies.map(_.ownerId).toSet
+      
+      // meet players
+      val newMetPlayers = p.metPlayerIds union detectedPlayers
+      
+      // colonies of met players
+      val metPlayersColonyStarIds = colonies.filter(c => 
+        newMetPlayers.contains(c.ownerId)).map(_.starId)
+      
+      val newExploredStarIds = // union of all three 
+        p.exploredStarIds | detectedStarIds.toSet | metPlayersColonyStarIds
+      
+      p.copy(exploredStarIds=newExploredStarIds, metPlayerIds=newMetPlayers)
+    })
+    
+    copy(gameYear=curYear, fleets=fleetsArrivedAndMerged, players=newPlayers )
+  }
+  
+  def updated() : StarGameState = {
+    StarGameState.updated(this)
+  }
     
   def meta = StarGameState
   
@@ -68,13 +124,15 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   val sizesSqLength = sizesAreas.map(A => math.sqrt(A))
   val sizesIndices  = List(0,1,2,3)  
   
+  val tickSizeYears = 0.1 // how long a tick should be (in year terms) 6 minutes
+  
   // size: 0=Small, 1=Medium, etc.
   // returns: newly created state
   def newState(createdBy: String, name: String = "Untitled Game", size: Int = 1,
                nPlayers: Int = 3) : StarGameState = {
     
     val id = (new ObjectId).toString
-    val yearsPerDay = 1.0
+    val yearsPerDay = 8000.0
     
     val numStars = sizesNStars(size)
     val mapSizeL = sizesSqLength(size)
@@ -94,7 +152,7 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       StarGameState(id, createdBy, name, sizesNames(size), 
                     yearsPerDay=yearsPerDay,
                     realStartTime=new Date, nPlayers=nPlayers, stars=stars,
-                    players=Nil, fleets=Nil, colonies=Nil,
+                    players=Nil, fleets=Set(), colonies=Set(),
                     availableStartStarIds = starIdsWithTerran)
     } else {
       info("Insufficient # of available starting planets: " + 
@@ -104,6 +162,11 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       newState(createdBy, name, size, nPlayers)
     }
   }
+  
+  @tailrec def updated(s: StarGameState) : StarGameState =
+    if(s.gameYear + tickSizeYears > s.supposedToBeYear) s else {
+      updated(s.advancedOneTick())
+    }
 }
 
 

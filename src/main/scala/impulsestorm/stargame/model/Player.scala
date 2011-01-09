@@ -7,9 +7,9 @@ import scala.util.Random
 import org.bson.types.ObjectId
 
 case class Player( id: Int, openid: Option[String], alias: String,
-                   traits: List[Trait],
-                   exploredStarIds: List[Int],
-                   metPlayerIds: List[Int],
+                   traits: Set[Trait],
+                   exploredStarIds: Set[Int],
+                   metPlayerIds: Set[Int],
                    gold: Double,
                    techs: List[Tech], 
                    canResearchTechs: List[List[Tech]])
@@ -87,9 +87,9 @@ object Player {
   
   def startingPlayer( id: Int, pSpec: PlayerSpec, startingStarId: Int) = {
     val canResearchTechs = Tech.generateCanResearchTechs()
-    Player(id, pSpec.openid, pSpec.alias, pSpec.traits, 
-           exploredStarIds = List(startingStarId),
-           metPlayerIds = List(id),
+    Player(id, pSpec.openid, pSpec.alias, pSpec.traits.toSet, 
+           exploredStarIds = Set(startingStarId),
+           metPlayerIds = Set(id),
            gold = 0,
            techs = Tech.startingTechs, 
            canResearchTechs=canResearchTechs)

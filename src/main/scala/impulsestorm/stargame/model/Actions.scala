@@ -64,8 +64,10 @@ object Actions {
     = MutateHinted(sender.stateId, sender, (s: StarGameState) => {
       s.fleets.find(_.uuid == fleetUuid) match {
         case Some(oldF) => {
+          val p = s.players(sender.player.id)
+          
           // test whether player owns fleet
-          if(oldF.playerId != sender.player.id) 
+          if(oldF.playerId != p.id) 
             errorH(s, sender, "You do not own that fleet")
           else if(oldF.moving)
             errorH(s, sender, "Fleet already moving")
@@ -84,14 +86,14 @@ object Actions {
             else {
               val takenFleetStationary = oldF.copy(ships=takenQs)
               
-              if(oldF.distanceTo(s)(s.stars(toStarId)) > sender.player.range)
+              if(oldF.distanceTo(s)(s.stars(toStarId)) > p.range)
                 errorH(s, sender, "Destination star out of range")
               else {
               
                 val departYear = Some(s.gameYear)
                 val arriveYear = 
                   Some(s.gameYear+oldF.distanceTo(s)
-                    (s.stars(toStarId))/sender.player.speed)
+                    (s.stars(toStarId))/p.speed)
                 
                 val dispatchedFleet = oldF.copy(ships=takenQs, moving=true,
                                                 toStarId=Some(toStarId),
@@ -102,10 +104,11 @@ object Actions {
                   if(leftBehindQs == 0) None
                   else Some(oldF.copy(ships=leftBehindQs).newUUID)
                   
-                val newFleets = dispatchedFleet :: leftBehindFleet.toList
+                val newFleets = 
+                  (dispatchedFleet :: leftBehindFleet.toList).toSet
                 
                 val newState = 
-                  s.copy(fleets=s.fleets.filter(_.uuid != oldF.uuid) :::
+                  s.copy(fleets=s.fleets.filter(_.uuid != oldF.uuid) union
                     newFleets)
                 
                 (newState, Hint(dispatchedFleet))

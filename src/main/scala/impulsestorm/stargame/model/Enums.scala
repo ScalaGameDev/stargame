@@ -77,7 +77,7 @@ object TechCategory extends Enumerator[TechCategory] {
   val Policy     = Value("Policy")
 
   def organizeTechs(techs: List[Tech]) = values.map { cat =>  
-      techs.filter(_.category==cat).sortBy(_.level)
+    techs.filter(_.category==cat).sortBy(_.level)
   }
   
   val eclass = classOf[TechCategory]
@@ -94,7 +94,7 @@ case class Tech(name: String, longName: String, category: TechCategory,
 {
   override def toString = longName
   
-  lazy val cost = (10 * math.exp(0.1*level)).toInt * 10
+  lazy val cost = (8 * math.exp(0.15*level)).toInt * 10
   
 }
 

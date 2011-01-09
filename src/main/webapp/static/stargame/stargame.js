@@ -1,20 +1,20 @@
 var fleetDispatchQuantity = 0;
+var fleetDispatchToStarId = null;
 
 function showFleetSidebar(fv) {
+  $('#fleetContent').html(
+    "Ship count<br/>" +
+    "<span id='fleetNum'>"+ fleetDispatchQuantity.toString() +"</span>" +
+    "<div id='fleetSlider' class='fleet-slider' />");
+  
   if(fv.moving) {
     var sv = mapView.starViews[fv.toStarId];
     $('#fleet-name').html("Fleet in transit to " + starViewName(sv));
+    $('#fleetDispatch').html("ETA: " + etaHrs(fv, sv) + "hrs");
   } else {
     var sv = mapView.starViews[fv.fromStarId];
     $('#fleet-name').html("Fleet at " + starViewName(sv));
-  }
-      
-  $('#fleetContent').html(
-    "Ship count<br/>" +
-    "<span id='fleetNum'>"+ fv.ships.toString() +"</span>" +
-    "<div id='fleetSlider' class='fleet-slider' />");
-  
-  if(!fv.moving) {
+    
     $('#fleetSlider').slider({
       range: "min",
       min: 0,
@@ -24,14 +24,42 @@ function showFleetSidebar(fv) {
         fleetDispatchQuantity = ui.value;
         drawMap();
       },
-      value: fv.ships
+      value: fleetDispatchQuantity
     });
+    
+    if(fleetDispatchToStarId !== null) {
+      var toStar = mapView.starViews[fleetDispatchToStarId];
+      
+      var header = "Dispatch to " + starViewName(toStar) + "<br/>" +
+        "Distance: " + dist(fv, toStar).toFixed(2) + "<br/>";
+      
+      if(!inRange(fv, toStar)) {
+        $('#fleetDispatch').html(header +
+          "Destination out of range. Research longer range.");
+      } else {
+        $('#fleetDispatch').html(header +
+          "ETA: " + etaHrs(fv, toStar) + "hrs" + 
+          "<br/>" + 
+          "<button id='doDispatchBtn'>Dispatch</button>"
+        );
+        
+        $("#doDispatchBtn").button().click(function() {
+           jsonDispatchShips(fv.uuid, fleetDispatchQuantity, 
+             fleetDispatchToStarId);
+        });
+      }
+    } else {
+      $('#fleetDispatch').html("");
+    }
   }
   
   selectSidebar("fleetinfo");
 }
 
 function selectEntities(entities) {
+  // on select new entity, erase toStarId
+  fleetDispatchToStarId = null;
+  
   var entityIndex = $.inArray(mapPort.selectedEntity(), entities);
   
   // if already selecting stuff, choose next item
@@ -49,6 +77,9 @@ function selectEntities(entities) {
     $('#star-class').html(e.obj.sClass);
     selectSidebar("starinfo");
   } else if(e.type === "fv") {
+    
+    // select fleet again: reset ship count to max
+    fleetDispatchQuantity = e.obj.ships;
     showFleetSidebar(e.obj);
   }
   return false;
@@ -63,9 +94,13 @@ function clickEntities(entities) {
     });
     
     if(clickedStars.length > 0) {
-      var clickedStarId = clickedStars[0].obj.id;
-      jsonDispatchShips(selected.obj.uuid, fleetDispatchQuantity, 
-        clickedStarId);
+      fleetDispatchToStarId = clickedStars[0].obj.id;
+      
+      if(fleetDispatchToStarId === selected.obj.fromStarId) {
+        selectEntities(entities);
+      } else {
+        showFleetSidebar(selected.obj);
+      }
     } else {
       // chose something else than a star
       selectEntities(entities);

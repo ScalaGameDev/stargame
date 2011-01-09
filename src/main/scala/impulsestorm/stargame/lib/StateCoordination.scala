@@ -96,28 +96,30 @@ object PrepareShutdown
 object OK
 
 // Coordinates mutation, persistence, and notification of ONE state
-trait StateMaster[StateType <: State] extends Actor {
+trait StateMaster[StateType <: State[StateType]] extends Actor {
       
   var state: StateType
   var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
     case Mutate(stateId, sender, mutateF) => { 
-      val newstate = mutateF(state)
+      val newstate = mutateF(state.updated())
       listeners.foreach(_ ! newstate)
       
       state = newstate.asInstanceOf[StateType]
       saveToStorage()    
     }
-    case MutateHinted(stateId, sender, mutateHintedF) => {
-      val (newstate, hint) = mutateHintedF(state)
+    case MutateHinted(stateId, sender, mutateHintedF)   => {
+      val (newstate, hint) = mutateHintedF(state.updated())
       listeners.foreach(_ ! (newstate, hint))
       
       state = newstate.asInstanceOf[StateType]
       saveToStorage()
     }
     case Inquire(id, sender) => {
+      state = state.updated().asInstanceOf[StateType]
       sender ! state
+      saveToStorage()
     }
     case Subscribe(id, sender) => 
       listeners = sender :: listeners // set
@@ -132,6 +134,7 @@ trait StateMaster[StateType <: State] extends Actor {
   def saveToStorage() 
 }
 
-trait State {
+trait State[T] {
+  def updated() : T
 }
 

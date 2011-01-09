@@ -1,7 +1,17 @@
 <lift:surround with="base-default" at="content">
-  <script src="/static/stargame/research.js" />
   <script src="/static/stargame/starmap.js" />
   <script src="/static/stargame/stargame.js" />
+  
+  <style>
+  div.fleetinfo {
+    height: 100%;
+  }
+  
+  td.dashboard {
+    width: 20%;
+  }
+  </style>
+  
   <lift:StarGameSnip.play />
   <div id="title" />
   <div id="playersList" class="pane" />
@@ -10,43 +20,46 @@
   <div id="map" class="pane">
     <table>
       <tr>
-      <td>
-        <canvas id="map-canvas" width="600" height="600" />
-      </td>
-      <td>
-        <div id="starinfo" class="sidebar">
-          <table>
-          <tr>
-          <td>
-            <strong><span id="star-name"></span></strong><br/>
-            Class <span id="star-class"></span>
-          </td>
-          </tr>
-          <tr>
-          <td>
-          <span id="planets"></span>
-          </td>
-          </tr>
-          </table>
-        </div>
-        <div id="fleetinfo" class="sidebar">
-          <table>
-          <tr>
-          <td>
-            <strong><span id="fleet-name"></span></strong>
-          </td>
-          </tr>
-          
-          <tr>
-          <td id='fleetContent' />
-          </tr>
-          
-          </table>
-        </div>
-      </td>
+        <td id="playerInfoDashboard" width="600"></td>
+        <td rowspan="2" style="vertical-align: top;">
+          <div id="starinfo" class="sidebar">
+            <table>
+            <tr>
+            <td>
+              <strong><span id="star-name"></span></strong><br/>
+              Class <span id="star-class"></span>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <span id="planets"></span>
+            </td>
+            </tr>
+            </table>
+          </div>
+          <div id="fleetinfo" class="sidebar">
+            <table>
+            <tr>
+            <td>
+              <strong><span id="fleet-name"></span></strong>
+            </td>
+            </tr>
+            
+            <tr>
+            <td id='fleetContent' />
+            </tr>
+            <tr>
+            <td id='fleetDispatch' />
+            </tr>
+            
+            </table>
+          </div>
+        </td>
       </tr>
       <tr>
-      
+        <td width="600">
+          <canvas id="map-canvas" width="600" height="600" />
+        </td>
       </tr>
     </table>
   </div>

@@ -6,20 +6,29 @@ case class StarView( euid: String,
                      knownColonyOwnerId: Option[Int])
 
 case class FleetView( euid: String, uuid: String,
-                      playerId: Int, ships: Int, troops: Int,
+                      playerId: Int, ships: Int,
                       moving: Boolean,
                       fromStarId: Int, toStarId: Option[Int],
                       arriveYear: Option[Double], x: Double, y: Double )
 
 object FleetView {
   import math._
+  
+  def inRangeItems[T <: hasPosition](state: StarGameState, sensorRange: Int, 
+                                     sensors: Iterable[hasPosition], 
+                                     objectsToDetect: Set[T]) : Set[T] = {
+    
+    objectsToDetect.filter( obj =>
+      sensors.exists( _.distanceTo(state)(obj) < sensorRange ))
+  }
+  
   def calculateAll(s:StarGameState, player: Player) = {
     val playerColonies = s.colonies.filter(_.ownerId == player.id)
     
     val (playerFs, otherFs) = s.fleets.partition(_.playerId == player.id)
     
-    val inRangeOtherFs = otherFs.filter( fleet =>
-      playerColonies.exists( _.distanceTo(s)(fleet) <= player.sensorRange))
+    val inRangeOtherFs = 
+      inRangeItems(s, player.sensorRange, playerColonies, otherFs)
     
     (playerFs union inRangeOtherFs).map(f => fromFleet(s, f, player.id))
   }
@@ -27,7 +36,7 @@ object FleetView {
   def fromFleet(s: StarGameState, f: Fleet, playerId: Int) = {
     val (x,y) = f.position(s)
     
-    FleetView("fv-"+f.uuid, f.uuid, f.playerId, f.ships, f.troops, f.moving, 
+    FleetView("fv-"+f.uuid, f.uuid, f.playerId, f.ships, f.moving, 
               f.fromStarId, f.toStarId, f.arriveYear, x, y)
   }
 }
@@ -43,8 +52,9 @@ object MapBounds {
   }
 }
 
-case class MapView(starViews: List[StarView], fleetViews: List[FleetView],
-                   mapBounds: MapBounds)
+case class MapView(starViews: List[StarView], fleetViews: Set[FleetView],
+                   mapBounds: MapBounds, yearsPerDay: Double, 
+                   playerInfo: PlayerInfo, gameYear: Double)
 
 object MapView {
   def from(s: StarGameState, player: Player) = {
@@ -70,6 +80,7 @@ object MapView {
     
     val fleetViews = FleetView.calculateAll(s, player)
     
-    MapView(starViews, fleetViews, MapBounds(s))
+    MapView(starViews, fleetViews, MapBounds(s), s.yearsPerDay, 
+            PlayerInfo.from(player), s.gameYear)
   }
 }

@@ -1,11 +1,17 @@
-var playerInfo = null;
-function setMyPlayer(playerInfoStr) {
-  playerInfo = JSON.parse(playerInfoStr);
-}
-
 var mapView = null; // all the visible entities
-function setMapView(mapViewStr) {
+function setMapView(mapViewStr) {  
   mapView = JSON.parse(mapViewStr);
+  
+  // update player dashboard
+  $('#playerInfoDashboard').html(
+    "<table><tr>" +
+    "<td class='dashboard'>RU: " + mapView.playerInfo.player.gold + "</td>" +
+    "<td class='dashboard'>Attack: " + 100 + "</td>" +
+    "<td class='dashboard'>Speed: "  + mapView.playerInfo.speed + "</td>" +
+    "<td class='dashboard'>Range: "  + mapView.playerInfo.range + "</td>" +
+    "<td class='dashboard'>Year: "   + mapView.gameYear.toFixed(2) + "</td>" +
+    "</tr></table>");
+  
   drawMap();
 }
 
@@ -13,7 +19,8 @@ var mapPort = null; // map view settings
 function initMapPort() {
   if(mapPort === null) {
     var canvas = $('#map-canvas')[0];
-    var homeStar = mapView.starViews[playerInfo.player.exploredStarIds[0]];
+    var homeStar =
+      mapView.starViews[mapView.playerInfo.player.exploredStarIds[0]];
     
     var bounds = mapView.mapBounds;
     var bTolPix = 60.0;
@@ -122,6 +129,14 @@ function dist(a, b) {
   return Math.sqrt(Math.pow(a.x-b.x, 2) + Math.pow(a.y-b.y,2)); 
 }
 
+function inRange(a,b) {
+  return dist(a,b) < mapView.playerInfo.range;
+}
+
+function etaHrs(a, b) {
+  return (dist(a, b)/mapView.playerInfo.speed*
+    (24.0/mapView.yearsPerDay)).toFixed(1);
+}
 
 var classToFillStyle = {
   "Giant": "rgb(255, 97, 81)",
@@ -203,13 +218,23 @@ function drawLineInSpace(ctx, style, fromObj, toObj) {
   ctx.stroke();
 }
 
+function drawLineFromEntityToObj(ctx, style, fromEnt, toObj) {
+  ctx.strokeStyle = style;
+  
+  ctx.beginPath();
+  ctx.moveTo(fromEnt.px, fromEnt.py);
+  ctx.lineTo.apply(ctx, spaceToPixel(toObj.x, toObj.y));
+  ctx.closePath();
+  ctx.stroke();
+}
+
 function drawMap() {
   initMapPort();
   var canvas = $('#map-canvas')[0];
   var h = canvas.height;
   var w = canvas.width;
   var ctx = canvas.getContext('2d');
-  ctx.font ='bold 12px Arial serif';
+  ctx.font ='bold 12px Arial';
   
   // clear map entites
   mapPort.entities = [];
@@ -231,6 +256,8 @@ function drawMap() {
       prht: px+xtol,
       ptop: py-ytol, 
       pbot: py+ytol,
+      px: px,
+      py: py,
       type: type,
       obj: obj
     };
@@ -249,7 +276,7 @@ function drawMap() {
       if(sv.knownColonyOwnerId !== undefined) {
         textC = playerIdToColor[sv.knownColonyOwnerId];
       } else {
-        textC = '#ffffff';
+        textC = '#888888';
       }
       ctx.fillStyle = textC;
       ctx.fillText(sv.name, px-10, py+25);
@@ -262,22 +289,38 @@ function drawMap() {
   function drawFleetView(fv) {
     var [px,py] = spaceToPixel(fv.x, fv.y);
     
+    ctx.save();
+    
+    ctx.translate(px, py);
+    
     if(!fv.moving) {
       px+=20;
       py-=15;
+      ctx.translate(20, -15);
+    } else {
+      
+      var toStarView = mapView.starViews[fv.toStarId];
+      var fromStarView = mapView.starViews[fv.fromStarId];
+      
+      // moving, rotate ship accordingly...
+      if(toStarView.x < fromStarView.x) {
+        ctx.rotate(Math.PI);
+      }
     }
     
     ctx.beginPath();
     ctx.fillStyle = playerIdToColor[fv.playerId];
-    ctx.moveTo(px-6, py-6);
-    ctx.lineTo(px+10, py);
-    ctx.lineTo(px-6, py+6);
-    ctx.lineTo(px-3, py);
-    ctx.lineTo(px-6, py-6);
+    ctx.moveTo(-6, -6);
+    ctx.lineTo(10, 0);
+    ctx.lineTo(-6, 6);
+    ctx.lineTo(-3, 0);
+    ctx.lineTo(-6, -6);
+    ctx.closePath();
     ctx.fill();
     
+    ctx.restore();
+    
     if(fv.moving) {
-      var toStarView = mapView.starViews[fv.toStarId];
       drawLineInSpace(ctx, 'rgba(255,255,255,0.8)', fv, toStarView);
     }
     
@@ -298,14 +341,34 @@ function drawMap() {
     ctx.strokeStyle = "rgba(255,255,255,1.0)";
     ctx.strokeRect(e.plft, e.ptop, e.prht-e.plft, e.pbot-e.ptop);
     
-    // if stationary fleet selected, draw possible paths
-    if(e.type == 'fv' && !e.obj.moving) {
-      var inRangeStarViews = mapView.starViews.filter(function(sv) { 
-        return dist(e.obj, sv) < playerInfo.range; });
+    if(e.type == 'fv') {
+      var greenStyle = "rgba(128,255,64, 0.8)";
+      var redStyle   = "rgba(255,64,0, 0.8)";
       
-      inRangeStarViews.map(function(sv) {
-        drawLineInSpace(ctx, "rgba(255,255,255, 0.2)", e.obj, sv);
-      });
+      // if stationary fleet selected, draw possible paths
+      if(!e.obj.moving) {
+        var inRangeStarViews = mapView.starViews.filter(function(sv) { 
+          return inRange(e.obj, sv); });
+        
+        inRangeStarViews.map(function(sv) {
+          drawLineInSpace(ctx, "rgba(128,255,64, 0.2)", e.obj, sv);
+        });
+        
+        if(fleetDispatchToStarId !== null) {
+          var toStar = mapView.starViews[fleetDispatchToStarId];
+          if(inRange(e.obj, toStar)) {
+            var lineStyle = greenStyle;
+          } else {
+            var lineStyle = redStyle;
+          }
+          
+          drawLineFromEntityToObj(ctx, lineStyle, e, toStar); 
+        }
+      } else {
+        // for a moving selected fleet, make path green
+        var toStar = mapView.starViews[e.obj.toStarId];
+        drawLineFromEntityToObj(ctx, greenStyle, e, toStar);
+      }
     }
   }
 }

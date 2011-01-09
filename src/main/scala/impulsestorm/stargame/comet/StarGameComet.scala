@@ -107,7 +107,7 @@ class StarGameComet extends CometActor with Loggable {
   def viewPlayer = (setTitle("Player view") & setHtmlPlayersList & 
     setHtmlResearch & setHtmlMapCmds & 
     showPanes(List("playersList", "research", "map")) &
-    setMyPlayer & setMapView & sendHint())
+    setMapView & sendHint())
     
   def viewObserver =
     setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
@@ -145,9 +145,8 @@ class StarGameComet extends CometActor with Loggable {
     OnLoad(Call(
       functionName, Str(compact(JsonAST.render(Extraction.decompose(obj))))))
   
-  def setMyPlayer: JsCmd = jsonFuncCmd("setMyPlayer", PlayerInfo.from(player))
-  
-  def setMapView: JsCmd = jsonFuncCmd("setMapView", MapView.from(state, player))
+  def setMapView: JsCmd = // includes player info 
+    jsonFuncCmd("setMapView", MapView.from(state, player))
   
   def setHtmlPlayersList : JsCmd = {  
     def startGame() = {
