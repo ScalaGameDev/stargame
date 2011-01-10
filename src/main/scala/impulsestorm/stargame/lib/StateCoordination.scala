@@ -75,19 +75,10 @@ trait FwdedMsg {
   val stateId: String
   val sender: SimpleActor[Any]
 }
-case class Inquire(stateId: String, sender: SimpleActor[Any]) 
-  extends FwdedMsg
+
 case class Subscribe(stateId: String, sender: SimpleActor[Any])
   extends FwdedMsg
 case class Unsubscribe(stateId: String, sender: SimpleActor[Any])
-  extends FwdedMsg
-
-case class Mutate[StateType](stateId: String, sender: SimpleActor[Any],
-                  mutateF: StateType => StateType)
-  extends FwdedMsg
-
-case class MutateHinted[StateType](stateId: String, sender: SimpleActor[Any],
-                  mutateHintedF: StateType => (StateType, Any))
   extends FwdedMsg
 
 object NoSuchGame
@@ -102,25 +93,6 @@ trait StateMaster[StateType <: State[StateType]] extends Actor {
   var listeners: List[SimpleActor[Any]] = Nil
   
   def receive = {
-    case Mutate(stateId, sender, mutateF) => { 
-      val newstate = mutateF(state.updated())
-      listeners.foreach(_ ! newstate)
-      
-      state = newstate.asInstanceOf[StateType]
-      saveToStorage()    
-    }
-    case MutateHinted(stateId, sender, mutateHintedF)   => {
-      val (newstate, hint) = mutateHintedF(state.updated())
-      listeners.foreach(_ ! (newstate, hint))
-      
-      state = newstate.asInstanceOf[StateType]
-      saveToStorage()
-    }
-    case Inquire(id, sender) => {
-      state = state.updated().asInstanceOf[StateType]
-      sender ! state
-      saveToStorage()
-    }
     case Subscribe(id, sender) => 
       listeners = sender :: listeners // set
     case Unsubscribe(id, sender) => 

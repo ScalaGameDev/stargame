@@ -11,6 +11,8 @@ import json.JsonAST._
 import json.Extraction
 import http.SHtml._
 
+import java.util.TimerTask
+
 import net.liftweb.actor._
 import net.liftweb.common.{Box, Full, Loggable}
 
@@ -31,6 +33,8 @@ class StarGameComet extends CometActor with Loggable {
   
   var hintOpt: Option[Hint] = None
   
+  var intervalTask: Option[TimerTask] = None
+  
   // Tech and Category index
   var openResearchTech: Option[(Tech, Int)] = None
   
@@ -43,9 +47,19 @@ class StarGameComet extends CometActor with Loggable {
   
   override def defaultPrefix = Full("comet")
   
-  def acceptNewState(state: StarGameState) {
+  def acceptNewState(state: StarGameState) = {
     stateOpt  = Some(state)
     playerOpt = state.players.find(_.openid == Some(openid))
+    
+    // schedule task to poll as often as the tick length
+    if(intervalTask.isEmpty) {
+      def taskF() = sg ! InquireMapUpdates(stateId, this)
+      val interval = math.max(
+        (StarGameState.tickSizeYears/state.yearsPerDay*86400*1000).toLong,
+        1000)
+        
+      intervalTask = Some(ImTimer.addTask(taskF, interval, interval))
+    }
   }
   
   override def localSetup() = {
@@ -55,6 +69,12 @@ class StarGameComet extends CometActor with Loggable {
   
   override def localShutdown() = {
     sg ! Unsubscribe(stateId, this)
+    
+    // cancel timed task
+    intervalTask match {
+      case Some(t) => t.cancel
+      case _ => Unit
+    }
   }
   
   override def lowPriority = {
@@ -70,9 +90,12 @@ class StarGameComet extends CometActor with Loggable {
     }
     case (state: StarGameState, hint: Hint) => {
       logger.info("StarGameComet gets hinted state")
-      acceptNewState(state)
       hintOpt = Some(hint)
-      reRender
+      acceptNewState(state)
+      if(hint.mapInfoChangeOnly)
+        partialUpdate(sendHint() & setMapView)
+      else
+        reRender
     }
     case Actions.ActionError(s) =>
       this.error(s)
@@ -97,7 +120,7 @@ class StarGameComet extends CometActor with Loggable {
   } 
   
   def sendHint() = hintOpt match {
-    case Some(hint) => {
+    case Some(hint) if !hint.selectedUuid.isEmpty => {
       hintOpt = None
       OnLoad(Call("takeHint", hint.selectedUuid ))
     }
@@ -120,7 +143,7 @@ class StarGameComet extends CometActor with Loggable {
   def render = {
     stateOpt match {
       case None => {
-        <p>Loading state...</p>
+        SetHtml("title", <p>Loading state...</p>)
       }
       case Some(state) => if(state.isOneOfThePlayers(openid)) {
         viewPlayer

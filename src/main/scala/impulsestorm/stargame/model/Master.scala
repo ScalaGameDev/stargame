@@ -1,10 +1,52 @@
 package impulsestorm.stargame.model
 import impulsestorm.stargame.lib._
 
+import net.liftweb.common.{SimpleActor, Logger}
 import se.scalablesolutions.akka.actor.{Actor}
+
+case class Inquire(stateId: String, sender: SimpleActor[Any]) 
+  extends FwdedMsg
+case class InquireMapUpdates(stateId: String, sender: SimpleActor[Any]) 
+  extends FwdedMsg
+
+case class Mutate(stateId: String, sender: SimpleActor[Any],
+                  mutateF: StarGameState => StarGameState)
+  extends FwdedMsg
+
+case class MutateHinted[StateType](stateId: String, sender: SimpleActor[Any],
+                  mutateHintedF: StarGameState => (StarGameState, Hint))
+  extends FwdedMsg
 
 class StarGameMaster(var state: StarGameState)
   extends StateMaster[StarGameState] {
+  
+  def myReceive: PartialFunction[Any, Unit] = {
+    case Mutate(stateId, sender, mutateF) => { 
+      state = mutateF(state.updated())
+      listeners.foreach(_ ! state)
+      
+      saveToStorage()    
+    }
+    case MutateHinted(stateId, sender, mutateHintedF) => {
+      val (newstate, hint) = mutateHintedF(state.updated())
+      listeners.foreach(_ ! (newstate, hint))
+      
+      state = newstate
+      saveToStorage()
+    }
+    case Inquire(id, sender) => {
+      state = state.updated()
+      sender ! state
+      saveToStorage()
+    }
+    case InquireMapUpdates(id, sender) => {
+      state = state.updated()
+      sender ! (state, Hint(true))
+    }
+  }
+    
+  override def receive = myReceive orElse super.receive
+  
   def saveToStorage() = 
     state.save
   

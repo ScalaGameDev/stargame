@@ -14,7 +14,7 @@ object ActionUtils {
   
   def errorH(s: StarGameState, sender: StarGameComet, msg: String) = {
     sender ! Actions.ActionError(msg)
-    (s, None)
+    (s, Hint(false))
   }
 }
 
@@ -111,7 +111,7 @@ object Actions {
                   s.copy(fleets=s.fleets.filter(_.uuid != oldF.uuid) union
                     newFleets)
                 
-                (newState, Hint(dispatchedFleet))
+                (newState, Hint(true).selected(dispatchedFleet))
               }
             }
           }
