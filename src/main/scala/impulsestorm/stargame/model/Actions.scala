@@ -58,19 +58,17 @@ object Actions {
     })
       
   def DispatchShips(sender: StarGameComet,
-                    fleetUuid: String,
+                    fromStarId: Int,
                     quantity: Int,
                     toStarId: Int) 
     = MutateHinted(sender.stateId, sender, (s: StarGameState) => {
-      s.fleets.find(_.uuid == fleetUuid) match {
+      s.stars(fromStarId).garrison match {
         case Some(oldF) => {
           val p = s.players(sender.player.id)
           
           // test whether player owns fleet
           if(oldF.playerId != p.id) 
             errorH(s, sender, "You do not own that fleet")
-          else if(oldF.moving)
-            errorH(s, sender, "Fleet already moving")
           else if(oldF.fromStarId == toStarId)
             errorH(s, sender, "Already stationed at star")
           else {
@@ -84,39 +82,39 @@ object Actions {
             if(takenQs == 0)
               errorH(s, sender, "Cannot dispatch a fleet with 0 ships")
             else {
-              val takenFleetStationary = oldF.copy(ships=takenQs)
+              val fromStar = s.stars(fromStarId)
+              val toStar   = s.stars(toStarId)
               
-              if(oldF.distanceTo(s)(s.stars(toStarId)) > p.range)
+              if(fromStar.distanceTo(s)(s.stars(toStarId)) > p.range)
                 errorH(s, sender, "Destination star out of range")
               else {
               
-                val departYear = Some(s.gameYear)
+                val departYear = s.gameYear
                 val arriveYear = 
-                  Some(s.gameYear+oldF.distanceTo(s)
-                    (s.stars(toStarId))/p.speed)
+                  s.gameYear+(fromStar.distanceTo(s)(toStar)/p.speed)
                 
-                val dispatchedFleet = oldF.copy(ships=takenQs, moving=true,
-                                                toStarId=Some(toStarId),
-                                                departYear=departYear, 
-                                                arriveYear=arriveYear).newUUID
+                val dispatchedFleet = 
+                  oldF.copyMoving(ships=takenQs, toStarId=toStarId,
+                                  departYear=departYear,                                                arriveYear=arriveYear).newUUID()
                 
                 val leftBehindFleet = 
                   if(leftBehindQs == 0) None
-                  else Some(oldF.copy(ships=leftBehindQs).newUUID)
+                  else Some(oldF.copy(ships=leftBehindQs).newUUID())
                   
-                val newFleets = 
-                  (dispatchedFleet :: leftBehindFleet.toList).toSet
+                val newMovingFleets = s.movingFleets + dispatchedFleet
+                
+                val newStars = s.stars.updated(fromStarId,
+                  fromStar.copy(garrison=leftBehindFleet)) 
                 
                 val newState = 
-                  s.copy(fleets=s.fleets.filter(_.uuid != oldF.uuid) union
-                    newFleets)
+                  s.copy(movingFleets=newMovingFleets, stars=newStars)
                 
                 (newState, Hint(true).selected(dispatchedFleet))
               }
             }
           }
         }
-        case None => errorH(s, sender, "No fleet found with that UUID")
+        case None => errorH(s, sender, "No fleet found at that star.")
       }
         
       })

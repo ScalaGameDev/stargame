@@ -3,13 +3,15 @@ package impulsestorm.stargame.model
 case class StarView( euid: String,
                      id: Int, name: Option[String], sClass: StarClass,
                      x: Double, y: Double, planets: Option[List[Planet]],
-                     knownColonyOwnerId: Option[Int])
-
+                     knownOwnerId: Option[Int], queuedProduction: Option[Int],
+                     visibleGarrison: Option[FleetView])
+                     
 case class FleetView( euid: String, uuid: String,
                       playerId: Int, ships: Int,
-                      moving: Boolean,
-                      fromStarId: Int, toStarId: Option[Int],
-                      arriveYear: Option[Double], x: Double, y: Double )
+                      fromStarId: Option[Int] = None, 
+                      toStarId: Option[Int] = None,
+                      arriveYear: Option[Double] = None, 
+                      x: Double, y: Double )
 
 object FleetView {
   import math._
@@ -22,22 +24,28 @@ object FleetView {
       sensors.exists( _.distanceTo(state)(obj) < sensorRange ))
   }
   
-  def calculateAll(s:StarGameState, player: Player) = {
-    val playerColonies = s.colonies.filter(_.ownerId == player.id)
+  def visibleMovingFvs(s:StarGameState, player: Player) = {
+    val playerStars = s.stars.filter(_.ownerIdOpt == Some(player.id))
     
-    val (playerFs, otherFs) = s.fleets.partition(_.playerId == player.id)
+    val (playerMovingFs, otherMovingFs) = 
+      s.movingFleets.partition(_.playerId == player.id)
     
     val inRangeOtherFs = 
-      inRangeItems(s, player.sensorRange, playerColonies, otherFs)
+      inRangeItems(s, player.sensorRange, playerStars, otherMovingFs)
     
-    (playerFs union inRangeOtherFs).map(f => fromFleet(s, f, player.id))
+    (playerMovingFs | inRangeOtherFs).map(f => fromFleet(s, f))
   }
   
-  def fromFleet(s: StarGameState, f: Fleet, playerId: Int) = {
+  def fromFleet(s: StarGameState, f: StationaryFleet) = {
     val (x,y) = f.position(s)
-    
-    FleetView("fv-"+f.uuid, f.uuid, f.playerId, f.ships, f.moving, 
-              f.fromStarId, f.toStarId, f.arriveYear, x, y)
+    FleetView(f.euid, f.uuid, f.playerId, f.ships, None, None, None, x, y)
+  }
+  
+  def fromFleet(s: StarGameState, f: MovingFleet) = {
+    val (x,y) = f.position(s)
+    FleetView(f.euid, f.uuid, f.playerId, f.ships, 
+              Some(f.fromStarId), Some(f.toStarId), 
+              Some(f.arriveYear), x, y)
   }
 }
                       
@@ -52,35 +60,41 @@ object MapBounds {
   }
 }
 
-case class MapView(starViews: List[StarView], fleetViews: Set[FleetView],
+case class MapView(starViews: List[StarView], movingFleetViews: Set[FleetView],
                    mapBounds: MapBounds, yearsPerDay: Double, 
                    playerInfo: PlayerInfo, gameYear: Double)
 
 object MapView {
   def from(s: StarGameState, player: Player) = {
     val starViews = s.stars.map( star => {
-      val knownColonyOwnerId = s.colonies.find(_.starId == star.id) match {
-        case Some(c) =>
-          // if we've met the owner (including ourselves)
-          if(player.metPlayerIds.contains(c.ownerId)) Some(c.ownerId) else None 
-        case None => None
+      def onlyIfExplored[T](arg: T) = 
+        if(player.exploredStarIds.contains(star.id)) Some(arg) else None
+      def onlyIfOwned[T](arg: T) = 
+        if(star.ownerIdOpt == Some(player.id)) Some(arg) else None
+      
+      val knownOwnerId = star.ownerIdOpt match {
+        case Some(ownerId) => onlyIfExplored(ownerId)
+        case _ => None
       }
       
-      val name = if(player.exploredStarIds.contains(star.id) ||
-                    knownColonyOwnerId.isDefined) Some(star.name) else None
+      val knownGarrison = 
+        if(star.garrison.isDefined && star.ownerIdOpt == Some(player.id))
+          Some(FleetView.fromFleet(s, star.garrison.get))
+        else None
       
-      val planets = 
-        if(player.exploredStarIds.contains(star.id)) 
-          Some(star.planets) else None
-                    
       StarView("sv-"+star.id,
-               star.id, name, star.sClass, star.x, star.y, planets,
-               knownColonyOwnerId)
+               star.id, 
+               onlyIfExplored(star.name), 
+               star.sClass, star.x, star.y, 
+               onlyIfExplored(star.planets),
+               knownOwnerId,
+               onlyIfOwned(star.queuedProduction),
+               knownGarrison)
     })
     
-    val fleetViews = FleetView.calculateAll(s, player)
+    val movingFleetViews = FleetView.visibleMovingFvs(s, player)
     
-    MapView(starViews, fleetViews, MapBounds(s), s.yearsPerDay, 
+    MapView(starViews, movingFleetViews, MapBounds(s), s.yearsPerDay, 
             PlayerInfo.from(player), s.gameYear)
   }
 }

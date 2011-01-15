@@ -111,9 +111,9 @@ class StarGameComet extends CometActor with Loggable {
     case x if {println("Got Json: "+x); false} => Noop
     case JObject(List(JField("command", JString("dispatchShips")), 
                       JField("params", JArray(List(
-                        JString(fleetUuid), JInt(quantity), JInt(toStarId) 
+                        JInt(fromStarId), JInt(quantity), JInt(toStarId) 
                       ))))) => {
-      sg ! Actions.DispatchShips(this, fleetUuid, quantity.intValue, 
+      sg ! Actions.DispatchShips(this, fromStarId.intValue, quantity.intValue, 
                                  toStarId.intValue)
       Noop
     }
@@ -345,9 +345,9 @@ class StarGameComet extends CometActor with Loggable {
   }
   
   def setHtmlMapCmds = {
-    JsRaw("function jsonDispatchShips(fleetUuid, quantity, toStarId) {" + 
+    JsRaw("function jsonDispatchShips(fromStarId, quantity, toStarId) {" + 
       jsonSend("dispatchShips", 
-        JsRaw("[fleetUuid, quantity, toStarId]")).toJsCmd +
+        JsRaw("[fromStarId, quantity, toStarId]")).toJsCmd +
     "}")
   }
 }

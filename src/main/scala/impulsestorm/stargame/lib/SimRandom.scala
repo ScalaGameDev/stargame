@@ -31,6 +31,10 @@ object SimRandom {
       randomNoCollisions(li, existing)
   }
   
+  // ex. rounds 21.4 to 21 60% of the time and 22 40% of the time
+  def fairRound(doub: Double) : Int =
+    doub.toInt + ( if(Random.nextDouble() < doub%1) 1 else 0 )
+  
   // random integer between a and b 
   def random(a: Int, b: Int) =
     a + Random.nextInt(b-a+1)

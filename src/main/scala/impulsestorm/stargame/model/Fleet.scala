@@ -1,72 +1,94 @@
 package impulsestorm.stargame.model
 
-// if not moving, will just use the fromStarId attr and the others are undef
-// ships: [# of Design1, # of Design 2 etc.] 
-case class Fleet( uuid: String, playerId: Int,
-                  ships: Int, 
-                  moving: Boolean, 
-                  fromStarId: Int, toStarId: Option[Int],
-                  departYear: Option[Double], arriveYear: Option[Double]) 
-extends hasPosition {
+trait Fleet extends hasPosition { 
+  val uuid: String
+  val playerId: Int
+  val ships: Int
+  val fromStarId: Int
+  
+  def euid = "fv-" + uuid
+  
+  def coords(star: Star) = (star.x, star.y)
+}
+
+case class StationaryFleet( uuid: String, playerId: Int, 
+                            ships: Int, fromStarId: Int )
+extends Fleet
+{
+  def position(s: StarGameState) = coords(s.stars(fromStarId))
+  
+  def copyMoving(ships: Int, toStarId: Int, 
+                 departYear: Double, arriveYear: Double) =
+    MovingFleet(uuid, playerId, ships, fromStarId, toStarId, 
+                departYear, arriveYear).newUUID()
+  
+  def newUUID() = copy(uuid=java.util.UUID.randomUUID().toString())
+}
+ 
+case class MovingFleet( uuid: String, playerId: Int,
+                        ships: Int, 
+                        fromStarId: Int, toStarId: Int,
+                        departYear: Double, 
+                        arriveYear: Double)
+extends Fleet {
   
   def position(s: StarGameState) = {
-    def coords(star: Star) = (star.x, star.y)
+    // linear interpolation
+    val alpha = 1-(s.gameYear-departYear)/(arriveYear-departYear)
+    val (xFrom, yFrom) = coords(s.stars(fromStarId))
+    val (xTo, yTo)     = coords(s.stars(toStarId))
     
-    if(moving) {
-      // linear interpolation
-      val alpha = 1-(s.gameYear-departYear.get)/(arriveYear.get-departYear.get)
-      val (xFrom, yFrom) = coords(s.stars(fromStarId))
-      val (xTo, yTo)     = coords(s.stars(toStarId.get))
-      
-      (alpha*xFrom+(1-alpha)*xTo, alpha*yFrom+(1-alpha)*yTo)
-    } else coords(s.stars(fromStarId))
+    (alpha*xFrom+(1-alpha)*xTo, alpha*yFrom+(1-alpha)*yTo)
   }
   
-  def updateIfArrived(year: Double) = 
-    if(moving && year > arriveYear.get)
-      copy(moving=false, fromStarId=toStarId.get, toStarId=None, 
-           departYear=None, arriveYear=None)
-    else this
+  def arrived(year: Double) : Boolean = year > arriveYear
   
-  def playerStarKey = (playerId, fromStarId)
+  def arrive = StationaryFleet(uuid, playerId, ships, fromStarId)
   
   def newUUID() = copy(uuid=java.util.UUID.randomUUID().toString())
 }
 
 object Fleet {
   
-  def startingFleet(playerId: Int, homeStar: Star) = {
-    Fleet("", playerId,
-          40, false,
-          homeStar.id, None,
-          None, None).newUUID
-  }
+  def newFleet(playerId: Int, ships: Int, starId: Int) =
+    StationaryFleet("", playerId, ships, starId).newUUID() 
   
-  def mergeStationaryFleets(fleets: Set[Fleet]) = {
-    // merge stationary fleets of the same team
-    val (movingFleets, stationaryFleets) = fleets.partition(_.moving)
- 
+  def startingFleet(playerId: Int, homeStarId: Int) =
+    newFleet(playerId, 40, homeStarId)
+  
+  def mergeByPlayer(fleets: List[StationaryFleet]) = {
     // Believe a mutable map is the easiest way to do it, (unfortunately)
-    val mergingMap = new collection.mutable.HashMap[(Int, Int), Fleet]
+    val mergingMap = new collection.mutable.HashMap[Int, StationaryFleet]
    
-    stationaryFleets.foreach(f =>
-      if(mergingMap.contains(f.playerStarKey)) {
-        val existingFleet = mergingMap(f.playerStarKey)
-        val combinedFleet = 
+    fleets.foreach(f =>
+      if(mergingMap.contains(f.playerId)) {
+        val existingFleet = mergingMap(f.playerId)
+        val combinedFleet =   
           existingFleet.copy(ships=existingFleet.ships+f.ships)
         
-        mergingMap.update(f.playerStarKey, combinedFleet)
+        mergingMap.update(f.playerId, combinedFleet)
       } else {
-        // add to map, as this is the first fleet of this player/star combo
-        mergingMap.put(f.playerStarKey, f)
+        // add to map, as this is the first fleet of this player
+        mergingMap.put(f.playerId, f)
       }
     )
     
-    val mergedStationaryFleets = mergingMap.values.toSet
-    
-    movingFleets union mergedStationaryFleets
+    mergingMap.values.toSet
   }
   
+  // guaranteed that fleets has length of at least one
+  def doBattle(fleets: Set[StationaryFleet], 
+               players: List[Player]) : Option[StationaryFleet] = 
+  {
+    fleets.length match {
+      case 0 => None
+      case 1 => Some(fleets.head)
+      case _ => {
+        // Now it gets interesting... we do battle now...
+        
+      }
+    }
+  }
 
 }
 

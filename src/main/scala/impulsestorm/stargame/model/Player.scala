@@ -8,6 +8,7 @@ import org.bson.types.ObjectId
 
 case class Player( id: Int, openid: Option[String], alias: String,
                    traits: Set[Trait],
+                   homeStarId: Int,
                    exploredStarIds: Set[Int],
                    metPlayerIds: Set[Int],
                    gold: Double,
@@ -85,10 +86,11 @@ object Player {
                      "Kesale", "Droshin", "Syd", "Ispertai", "Beper", "Osack"
                      )
   
-  def startingPlayer( id: Int, pSpec: PlayerSpec, startingStarId: Int) = {
+  def startingPlayer( id: Int, pSpec: PlayerSpec, homeStarId: Int) = {
     val canResearchTechs = Tech.generateCanResearchTechs()
-    Player(id, pSpec.openid, pSpec.alias, pSpec.traits.toSet, 
-           exploredStarIds = Set(startingStarId),
+    Player(id, pSpec.openid, pSpec.alias, pSpec.traits.toSet,
+           homeStarId = homeStarId,
+           exploredStarIds = Set(homeStarId),
            metPlayerIds = Set(id),
            gold = 0,
            techs = Tech.startingTechs, 

@@ -44,7 +44,7 @@ function showFleetSidebar(fv) {
         );
         
         $("#doDispatchBtn").button().click(function() {
-           jsonDispatchShips(fv.uuid, fleetDispatchQuantity, 
+           jsonDispatchShips(fv.fromStarId, fleetDispatchQuantity, 
              fleetDispatchToStarId);
         });
       }

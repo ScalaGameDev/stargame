@@ -273,8 +273,8 @@ function drawMap() {
     
     if(sv.name) {
       var textC = null;
-      if(sv.knownColonyOwnerId !== undefined) {
-        textC = playerIdToColor[sv.knownColonyOwnerId];
+      if(sv.knownOwnerId !== undefined) {
+        textC = playerIdToColor[sv.knownOwnerId];
       } else {
         textC = '#888888';
       }

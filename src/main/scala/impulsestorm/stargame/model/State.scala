@@ -24,8 +24,9 @@ case class StarGameState( _id: String, createdBy: String, name: String,
                           yearsPerDay: Double,
                           
                           stars: List[Star], players: List[Player],
-                          fleets: Set[Fleet], colonies: Set[Colony],
-                          availableStartStarIds: List[Int])
+                          movingFleets: Set[MovingFleet], 
+                          availableStartStarIds: List[Int],
+                          reports: List[BattleReport] = Nil)
   extends State[StarGameState] with MongoDocument[StarGameState] {
   
   def addedPlayer(pSpec: PlayerSpec) = {
@@ -35,16 +36,21 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     val newPlayers = 
       players :+ Player.startingPlayer(newPlayerId, pSpec, homeStarId)
     
-    val newColonies = 
-      colonies + Colony.startingColony(stars(homeStarId), newPlayerId)
-    
-    val newFleets =
-      fleets + Fleet.startingFleet(newPlayerId, stars(homeStarId))
-    
-    println("addedPlayer")
+    val homeStar = stars(homeStarId)
+    val homePlanet = 
+      SimRandom.randomObj(homeStar.planets.filter(_.pType == PlanetType.Terran))
+      
+    val newPlanets = 
+      homeStar.planets.updated(homePlanet.id, homePlanet.copy(pop = 50))
+      
+    val newHomeStar = 
+      homeStar.copy(ownerIdOpt=Some(newPlayerId), planets=newPlanets,
+                    garrison=Some(Fleet.startingFleet(newPlayerId, homeStarId)))
+      
+    val newStars = stars.updated(homeStar.id, newHomeStar)
       
     this.copy(availableStartStarIds = availableStartStarIds.tail,
-              players = newPlayers, colonies = newColonies, fleets=newFleets)
+              players = newPlayers, stars = newStars)
   }
   
   def updatedPlayer(p: Player) =
@@ -59,45 +65,55 @@ case class StarGameState( _id: String, createdBy: String, name: String,
   def advancedOneTick() = {
     val curYear = gameYear+StarGameState.tickSizeYears
     
-    // process fleet arrivals and merging of stationary fleets of the same team
-    val fleetsArrived = fleets.map( _.updateIfArrived(curYear) )
-    val fleetsArrivedAndMerged = Fleet.mergeStationaryFleets( fleetsArrived )
+    // TODO: star growth and migration
     
-    // TODO: resolve battles and colony ownership transfers here 
+    // newly arrived ships and moving fleets
+    val (newlyArrivedFleets, newMovingFleets) = 
+      movingFleets.partition( _.arrived(curYear) )
+    
+    val newStars = stars.map(s => {
+      // 1. process ship production
+      val s1 = s.producedShips(StarGameState.tickSizeYears)
+      
+      // 2. calculate all the ships here including arrivals and merging
+      val fleetsArrivedHere = 
+        newlyArrivedFleets.filter(_.toStarId == s1.id).map(_.arrive).toList
+      
+      val allFleetsHere = 
+        Fleet.mergeByPlayer(s1.garrison.toList ++ fleetsArrivedHere)
+      
+      // 3. do battle, leaving just one fleet standing
+      val finalGarrison = 
+        
+    })
     
     // exploredStarIds and income
     val newPlayers = players.map( p => {
-      val stationaryOwnedFleets = 
-        fleetsArrivedAndMerged.filter(f => f.playerId == p.id && !f.moving)
       
-      val sensors = // our fleets and our colonies are our sensors
-        stationaryOwnedFleets ++ colonies.filter(_.ownerId == p.id) 
+      val sensors = stars.filter(_.ownerIdOpt == Some(p.id)) 
       
       // detect stars with sensors
-      val detectedStarIds = 
-        FleetView.inRangeItems(this, p.sensorRange, sensors,
-          stars.toSet).map(_.id)
+      val detectedStars = 
+        FleetView.inRangeItems(this, p.sensorRange, sensors, stars.toSet)
+      val detectedColonizedStars = detectedStars.filter(_.ownerIdOpt.isDefined) 
       
-      // detect colonies and subsequently, players
-      val detectedColonies = colonies.filter(c => 
-        detectedStarIds.contains(c.starId))
-      
-      val detectedPlayers = detectedColonies.map(_.ownerId).toSet
+      val detectedPlayers = detectedColonizedStars.map(_.ownerIdOpt.get).toSet
       
       // meet players
       val newMetPlayers = p.metPlayerIds union detectedPlayers
       
       // colonies of met players
-      val metPlayersColonyStarIds = colonies.filter(c => 
-        newMetPlayers.contains(c.ownerId)).map(_.starId)
+      val metPlayersStarIds = stars.filter(s =>
+          s.ownerIdOpt.isDefined && newMetPlayers.contains(s.ownerIdOpt.get)
+        ).map(_.id).toSet
       
       val newExploredStarIds = // union of all three 
-        p.exploredStarIds | detectedStarIds.toSet | metPlayersColonyStarIds
+        p.exploredStarIds | detectedStars.map(_.id).toSet | metPlayersStarIds
       
       p.copy(exploredStarIds=newExploredStarIds, metPlayerIds=newMetPlayers)
     })
     
-    copy(gameYear=curYear, fleets=fleetsArrivedAndMerged, players=newPlayers )
+    copy(gameYear=curYear, fleets=fleetsMerged, players=newPlayers )
   }
   
   def updated() : StarGameState = {
@@ -152,7 +168,7 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       StarGameState(id, createdBy, name, sizesNames(size), 
                     yearsPerDay=yearsPerDay,
                     realStartTime=new Date, nPlayers=nPlayers, stars=stars,
-                    players=Nil, fleets=Set(), colonies=Set(),
+                    players=Nil, fleets=Set(),
                     availableStartStarIds = starIdsWithTerran)
     } else {
       info("Insufficient # of available starting planets: " + 

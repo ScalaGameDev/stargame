@@ -5,8 +5,28 @@ import impulsestorm.stargame.lib._
 import scala.util.Random
 
 case class Star( id: Int, name: String, sClass: StarClass, 
-                 x: Double, y: Double, planets: List[Planet])
-extends hasPositionSimple
+                 x: Double, y: Double, planets: List[Planet],
+                 ownerIdOpt: Option[Int] = None, factories: Int = 0,
+                 queuedProduction: Int = 0, 
+                 garrison: Option[StationaryFleet] = None)
+extends hasPositionSimple {
+  
+  def producedShips(intervalYears: Double) : Star =
+    if(queuedProduction > 0 && factories > 0) {
+      val productionCapacity = SimRandom.fairRound(intervalYears*factories)
+      val shipsMade = math.min(productionCapacity, queuedProduction)
+      
+      copy(queuedProduction=queuedProduction-shipsMade).addShips(shipsMade)
+    } else this
+  
+  def addShips(shipsAdded: Int) = {
+    val newGarrison = garrison match {
+      case Some(oldF) => oldF.copy(ships=oldF.ships+shipsAdded)
+      case None => Fleet.newFleet(ownerIdOpt.get, shipsAdded, id).newUUID() 
+    }
+    copy(garrison=Some(newGarrison))
+  }
+}
                  
 object Star {
   
