@@ -65,15 +65,12 @@ object TechCategory extends Enumerator[TechCategory] {
   // 0 - propulsion. Ship warp speed and manuverability
   val Propulsion = Value("Propulsion") // 4
   // 1 - Weapons - Beam, projectile, missiles
-  val Weapons    = Value("Weapons")   // 3  
-  // 2 - Protection - Shields and armor 
-  val Protection = Value("Protection")
-  
-  // 3 - Battle computers, Ship detection, ECM
+  val Combat     = Value("Combat")
+  // 2 - Battle computers, Ship detection, ECM
   val Sensors    = Value("Sensors")
-  // 4 - Setttling new planet types, max population, infrastructure cost
+  // 3 - Setttling new planet types, max population, infrastructure cost
   val Civil      = Value("Civil")
-  // 5 - Productivity and allegiance
+  // 4 - Productivity and allegiance
   val Policy     = Value("Policy")
 
   def organizeTechs(techs: List[Tech]) = values.map { cat =>  
@@ -99,7 +96,7 @@ case class Tech(name: String, longName: String, category: TechCategory,
 }
 
 object Tech extends Enumerator[Tech] {
-  import TechCategory.{Propulsion, Weapons, Protection, Sensors, Civil, Policy}
+  import TechCategory.{Propulsion, Combat, Sensors, Civil, Policy}
   
   val Engines1      = Value("Engines1", "Chemical engines", Propulsion,
                             1, "Equipped ships move at warp speed 1")
@@ -111,116 +108,33 @@ object Tech extends Enumerator[Tech] {
                             6, "Ships move at warp speed 2")
   val Range3        = Value("Range6", "Tritium fuel cells", Propulsion,
                             9, "Ships have a range of 8")
-  val ModManuver2   = Value("ModManuver2", "Vectored thrust", Propulsion,
-                            10, "Add-on: Fighters/corvettes +2 evade")
   val Engines3      = Value("Engines3", "Nuclear engines", Propulsion,
                             12, "Equipped ships move at warp speed 3")
   val Range4        = Value("Range7", "Irridium fuel cells", Propulsion,
                             14, "Ships have a range of 9")
-  val FCManuver2    = Value("FCManuver2", "Burst power", Propulsion,
-                            16, "All fighters and corvettes: +2 evade")
   val Engines4      = Value("Engines4", "Fusion engines", Propulsion,
                             18, "Equipped ships mave at warp speed 4")
   val Range5        = Value("Range8", "Uridium fuel cells", Propulsion,
                             19, "Ships have a range of 10")
-  val ModFrigManuv2 = Value("ModFrigManuv2", "Inertial dampener", Propulsion,
-                            20, "Add-on: Frigates/capitals: +2 evade")
   val Range6        = Value("Range9", "Reajax II fuel cells", Propulsion,
                             23, "Ships have a range of 11")
   val Engines5      = Value("Engines5", "Antimatter engines", Propulsion,
                             24, "Equipped ships move at warp speed 5")
-  val FrigManuv2    = Value("FrigManuv2", "Captial manuvering", Propulsion,
-                            27, "All frigates and capitals: +2 evade")
-  val Range7       = Value("Range10", "Antimatter fuel cells", Propulsion,
+  val Range7        = Value("Range10", "Antimatter fuel cells", Propulsion,
                             29, "Ships have a range of 12")
   val Engines6      = Value("Engines6", "Subspace engines", Propulsion,
                             30, "Eqipped ships move at warp speed 6")
                                 
   //---------------------------------------------------------------------
-  val Gun1         = Value("Gun1", "Chaingun", Weapons,
-                           1, "2-8 physical damage, -1 to hit")
-  val Beam1        = Value("Beam1", "Laser", Weapons,
-                           2, "1-4 energy damage")
-  val Missile1     = Value("Missile1", "Missiles", Weapons,
-                           2, "4 damage to target, +1 to hit")                               
-  val Bomb1        = Value("Bomb1", "Planetary bombs", Weapons,
-                           3, "3-12 damage to planetary targets only")
-  val Missile2     = Value("Missile2", "Thermite Missiles", Weapons,
-                           4, "6 damage to target, +1 to hit")
-  val BeamMulti1   = Value("BeamMulti1", "Gatling lasers", Weapons,
-                           5, "1-4 energy damage, 4x fire rate")
-  val GunAntiF     = Value("GunAntiF", "Flak cannon", Weapons,
-                           7, "1-4 physical damage, +3 hit fighters/ corvettes")
-  val MissileAntiC = Value("MissileAntiC", "Buster rockets", Weapons,
-                           8, "10 damage, -1 to hit")
-  val Bomb2        = Value("Bomb2", "Fusion bombs", Weapons,
-                           9, "4-16 damage to planetary targets only")
-  val Beam2        = Value("Beam2", "Capacitor laser", Weapons,
-                           10, "3-8 energy damage")
-  val MissileScat1 = Value("MissileScat1", "Scatter pack missiles", Weapons,
-                           11, "Splits into 5 missiles doing 6 damage each")
-  val Gun2         = Value("Gun2", "Coilgun", Weapons,
-                           13, "5-11 physical damage")
-  val Missile3     = Value("Missile3", "Seeker missiles", Weapons,
-                           14, "10 damage, +2 to hit")
-  val Beam3        = Value("Beam3", "Proton beam", Weapons,
-                           15, "4-10 energy damage")
-  val Bomb3        = Value("Bomb3", "Antimatter bombs", Weapons,
-                           16, "5-20 damage to planetary targets only")
-  val Missile4     = Value("Missile4", "Stringer missiles", Weapons,
-                           18, "15 damage, +3 to hit")
-  val GunSlow3     = Value("GunSlow3", "Railgun", Weapons,
-                           19, "15-30 physical damage, 1/2 fire rate")
-  val Beam4        = Value("Beam4", "Neutron beam", Weapons,
-                           21, "4-16 energy damage")
-  val GunAntiF2    = Value("GunAntiF2", "Heavy flak cannon", Weapons,
-                           22, "1-8 physical damage, +3 to hit fighters and corvettes")
-  val Bomb4        = Value("Bomb4", "Omega bomb", Weapons,
-                           23, "10-50 damage to planetary targets only")
-  val Missile5     = Value("Missile5", "Antimatter torpedos", Weapons,
-                           24, "30 damage")
-  val Gun3         = Value("Gun3", "Helical railgun", Weapons,
-                           26, "15-30 physical damage")
-  val Missile6     = Value("Missile6", "Smart missiles", Weapons,
-                           27, "25 damage, +5 to hit")
-  val BeamMulti4   = Value("BeamMulti4", "Autoblaster", Weapons,
-                           29, "4-16 energy damage, 3x fire rate")
-  val Beam5        = Value("Beam5", "Hard beam", Weapons,
-                           30, "6-30 energy damage")
-                                 
-  //---------------------------------------------------------------------
-  val Armor1   = Value("Armor1", "Titanium armor", Protection,
-                       1, "A lightweight material for ship hulls")
-  val Shields1 = Value("Shields1", "Class I shields", Protection,
-                       1, "Reduces energy damage by 1")
-  val Shields2 = Value("Shields2", "Class II shields", Protection,
-                       4, "Reduces energy damage by 2")
-  val Armor2   = Value("Armor2", "Duralloy armor", Protection,
-                       8, "Equipping ships have 150% base HP")
-  val Shields3 = Value("Shields3", "Class III Shields", Protection,
-                       10, "Reduces energy damage by 3, other types by 1")
-  val PShiel5  = Value("PShiel5", "Class V Planetary Shields", Protection,
-                       12, "Reduces damage taken by planetary targets by 5.")
-  val Repair1  = Value("Repair1", "Automated Repair Module", Protection,
-                       14, "Add-on: Repairs 15% of remaining HP per turn.")
-  val Shields4 = Value("Shields4", "Class IV Shields", Protection,
-                       14, "Reduces energy damage by 4, other types by 2")
-  val Armor3   = Value("Armor3", "Neutronium armor", Protection,
-                       17, "Equipping ships have 200% base HP")
-  val Shields5 = Value("Shields5", "Class V Shields", Protection,
-                       20, "Reduces energy damage taken by 5, other types by 2")
-  val PShiel10 = Value("PShiel10", "Class X Planetary Shields", Protection,
-                       22, "Reduces damage taken by planetary targets by 10.")
-  val Shields6 = Value("Shields6", "Class VI Shields", Protection,
-                       22, "Reduces energy damage taken by 6, other types by 3")
-  val Armor4   = Value("Armor4", "Metamaterial armor", Protection,
-                       26, "Equipping ships have 250% base HP")
-  val Shields7 = Value("Shields7", "Class VII Shields", Protection,
-                       27, "Reduces energy damage taken by 7, other types by 4")
-  val MisslShd = Value("MisslShd", "Missile Shield", Protection,
-                       28, "Add-on: 75% chance of destroying incoming missiles, -1% per missile tech level.")
-  val Repair2  = Value("Repair2", "Advanced damage control", Protection,
-                       30, "Add-on: Repairs 30% of remaining HP per turn")
+  val Combat1       = Value("Combat1", "Enhanced weaponry", Combat,
+                            2, "Sets battle rating to 105")
+  val Combat2       = Value("Combat2", "Tempered armor", Combat,
+                            4, "Sets battle rating to 110")
+                            val Combat1       = Value("Combat1", "Enhanced weaponry", Combat,
+                            2, "Sets battle rating to 105")
+  val Combat2       = Value("Combat2", "Tempered armor", Combat,
+                            4, "Sets battle rating to 110")
+                            
   
   //----------------------------------------------------------------------
                                  
