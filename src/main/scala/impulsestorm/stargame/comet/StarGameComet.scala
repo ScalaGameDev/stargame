@@ -52,14 +52,14 @@ class StarGameComet extends CometActor with Loggable {
     playerOpt = state.players.find(_.openid == Some(openid))
     
     // schedule task to poll as often as the tick length
-    if(intervalTask.isEmpty) {
+    /*if(intervalTask.isEmpty) {
       def taskF() = sg ! InquireMapUpdates(stateId, this)
       val interval = math.max(
         (StarGameState.tickSizeYears/state.yearsPerDay*86400*1000).toLong,
         1000)
         
       intervalTask = Some(ImTimer.addTask(taskF, interval, interval))
-    }
+    }*/
   }
   
   override def localSetup() = {

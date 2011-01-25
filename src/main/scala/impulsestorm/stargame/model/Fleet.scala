@@ -1,5 +1,7 @@
 package impulsestorm.stargame.model
 
+import impulsestorm.stargame.lib.SimRandom
+
 trait Fleet extends hasPosition { 
   val uuid: String
   val playerId: Int
@@ -23,6 +25,9 @@ extends Fleet
                 departYear, arriveYear).newUUID()
   
   def newUUID() = copy(uuid=java.util.UUID.randomUUID().toString())
+  
+  def weaken(score: Double, totalScore: Double) = 
+    copy(ships=math.max(((score/totalScore)*ships).toInt, 1))
 }
  
 case class MovingFleet( uuid: String, playerId: Int,
@@ -77,15 +82,28 @@ object Fleet {
   }
   
   // guaranteed that fleets has length of at least one
-  def doBattle(fleets: Set[StationaryFleet], 
+  def doBattle(fleets: List[StationaryFleet], 
                players: List[Player]) : Option[StationaryFleet] = 
   {
     fleets.length match {
       case 0 => None
       case 1 => Some(fleets.head)
       case _ => {
-        // Now it gets interesting... we do battle now...
+        val scoresAndFleets = fleets.map( f => {
+          val player = players(f.playerId)
+          ((f.ships*player.battlePower*SimRandom.random(0.8, 1.2)), f)
+        })
         
+        val totalScore = scoresAndFleets.map(_._1).sum
+        
+        val survivingWeakenedFleets = scoresAndFleets.sortBy(_._1).tail.map {
+          case (score, fleet) => fleet.weaken(score, totalScore)
+        }
+        
+        if(survivingWeakenedFleets.length == 1)
+          Some(survivingWeakenedFleets.head)
+        else
+          doBattle(survivingWeakenedFleets, players)
       }
     }
   }

@@ -18,7 +18,7 @@ case class Player( id: Int, openid: Option[String], alias: String,
   lazy val organizedTechs = TechCategory.organizeTechs(techs)
   
   lazy val sensorRange : Int = {
-    val sensorTechs = organizedTechs(3)
+    val sensorTechs = organizedTechs(2)
     if(sensorTechs.contains(Tech.Scanner4))
       11
     else if(sensorTechs.contains(Tech.Scanner3))
@@ -65,6 +65,28 @@ case class Player( id: Int, openid: Option[String], alias: String,
       1.3
     else
       1
+  }
+  
+  lazy val battlePower : Int = {
+    val cTechs = organizedTechs(1)
+    if(cTechs.contains(Tech.Combat8))
+      360
+    else if(cTechs.contains(Tech.Combat7))
+      300
+    else if(cTechs.contains(Tech.Combat6))
+      250
+    else if(cTechs.contains(Tech.Combat5))
+      200
+    else if(cTechs.contains(Tech.Combat4))
+      170
+    else if(cTechs.contains(Tech.Combat3))
+      150
+    else if(cTechs.contains(Tech.Combat2))
+      125
+    else if(cTechs.contains(Tech.Combat1))
+      110
+    else
+      100
   }
 }
 

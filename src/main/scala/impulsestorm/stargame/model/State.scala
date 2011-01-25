@@ -71,7 +71,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     val (newlyArrivedFleets, newMovingFleets) = 
       movingFleets.partition( _.arrived(curYear) )
     
-    val newStars = stars.map(s => {
+    val (newStars, newReports) = stars.map(s => {
       // 1. process ship production
       val s1 = s.producedShips(StarGameState.tickSizeYears)
       
@@ -83,11 +83,33 @@ case class StarGameState( _id: String, createdBy: String, name: String,
         Fleet.mergeByPlayer(s1.garrison.toList ++ fleetsArrivedHere)
       
       // 3. do battle, leaving just one fleet standing
-      val finalGarrison = 
+      val finalGarrison = Fleet.doBattle(allFleetsHere.toList, players)
+      
+      // 4. generate battle report
+      val reportOpt : Option[BattleReport] = if(allFleetsHere.size > 1) {
+        val victorId = finalGarrison.get.playerId
+        val victorCasualties = 
+          allFleetsHere.find(_.playerId == victorId).get.ships -
+          finalGarrison.get.ships
         
-    })
+        val loserIds = allFleetsHere.map(_.playerId) - victorId
+        
+        Some(BattleReport(victorId, victorCasualties, loserIds, s.id, curYear))
+      } else None
+      
+      // 5. transfer ownership
+      val s5 = finalGarrison match {
+        case Some(g) => s1.copy(ownerIdOpt=Some(g.playerId), 
+                                garrison=finalGarrison)
+        case None => s1.copy(garrison=None)
+      }
+      
+      val finalStar = s5
+      
+      (finalStar, reportOpt)
+    }).unzip
     
-    // exploredStarIds and income
+    // exploredStarIds
     val newPlayers = players.map( p => {
       
       val sensors = stars.filter(_.ownerIdOpt == Some(p.id)) 
@@ -113,7 +135,9 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       p.copy(exploredStarIds=newExploredStarIds, metPlayerIds=newMetPlayers)
     })
     
-    copy(gameYear=curYear, fleets=fleetsMerged, players=newPlayers )
+    copy(gameYear=curYear, movingFleets=newMovingFleets, 
+         players=newPlayers,
+         stars=newStars, reports=reports ++ newReports.flatten)
   }
   
   def updated() : StarGameState = {
@@ -168,7 +192,7 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       StarGameState(id, createdBy, name, sizesNames(size), 
                     yearsPerDay=yearsPerDay,
                     realStartTime=new Date, nPlayers=nPlayers, stars=stars,
-                    players=Nil, fleets=Set(),
+                    players=Nil, movingFleets=Set(),
                     availableStartStarIds = starIdsWithTerran)
     } else {
       info("Insufficient # of available starting planets: " + 

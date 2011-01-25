@@ -1,3 +1,4 @@
 package impulsestorm.stargame.model
 
-case class BattleReport(partyAId: Int, partyBId: Int, victor: Int, text: String)
+case class BattleReport(victorId: Int, victorCasualties: Int, 
+                        loserIds: Set[Int], starId: Int, gameYear: Double)

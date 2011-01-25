@@ -127,13 +127,21 @@ object Tech extends Enumerator[Tech] {
                                 
   //---------------------------------------------------------------------
   val Combat1       = Value("Combat1", "Enhanced weaponry", Combat,
-                            2, "Sets battle rating to 105")
+                            2, "Sets battle rating to 110")
   val Combat2       = Value("Combat2", "Tempered armor", Combat,
-                            4, "Sets battle rating to 110")
-                            val Combat1       = Value("Combat1", "Enhanced weaponry", Combat,
-                            2, "Sets battle rating to 105")
-  val Combat2       = Value("Combat2", "Tempered armor", Combat,
-                            4, "Sets battle rating to 110")
+                            5, "Sets battle rating to 125")
+  val Combat3       = Value("Combat1", "Enhanced weaponry", Combat,
+                            8, "Sets battle rating to 150")
+  val Combat4       = Value("Combat2", "Tempered armor", Combat,
+                            13, "Sets battle rating to 170")
+  val Combat5       = Value("Combat1", "Enhanced weaponry", Combat,
+                            17, "Sets battle rating to 200")
+  val Combat6       = Value("Combat2", "Tempered armor", Combat,
+                            21, "Sets battle rating to 250")
+  val Combat7       = Value("Combat1", "Enhanced weaponry", Combat,
+                            25, "Sets battle rating to 300")
+  val Combat8       = Value("Combat2", "Tempered armor", Combat,
+                            30, "Sets battle rating to 360")
                             
   
   //----------------------------------------------------------------------
@@ -240,7 +248,7 @@ object Tech extends Enumerator[Tech] {
   val Prod5   = Value("Prod5", "Complete automation", Policy,
                       28, "500% factory productivity")
   
-  val startingTechs = List(Engines1, Gun1, Armor1)
+  val startingTechs = List(Engines1)
   
   val categorizedVals = TechCategory.organizeTechs(values)
   
