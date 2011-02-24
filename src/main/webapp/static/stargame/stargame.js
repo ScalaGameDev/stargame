@@ -67,15 +67,37 @@ function showStarSidebar(sv) {
   
   if(sv.planets !== undefined) {
     var planetsTable = "<table>" +
-      row("th", ["Type", "Pop", "Growth/year"]) +
+      row("th", ["Type", "Pop", "Income", ""]) +
       sv.planets.map(function(p) {
-        var maxPop = p.baseMaxPop*mapView.playerInfo.maxPopMultiplier;
+        p.maxPop = p.baseMaxPop*mapView.playerInfo.maxPopMultiplier;
         return row("td", [p.pType, 
-          p.pop.toFixed(1)+"/"+maxPop.toFixed(1), p.popGrowthRate.toFixed(1)])
+          p.pop.toFixed(1),
+          (p.pop*p.mineralWealth).toFixed(1),
+          "<button id='BtnPlanet"+p.id+"'>Detail</button>"])
       }).join("") +
       "</table>";
     
     $('#star-planets').html(planetsTable);
+    
+    // Set up dialogs. Must be done after html set
+    sv.planets.map(function(p) {
+      function twoElemRow(a, b) {
+        return "<tr><th>"+a+"</th><td>"+b+"</td></tr>\n";
+      }
+      $('#BtnPlanet'+p.id).click(function(e) {
+        var diagContents = "<h3>Planet: " + sv.name + " " + p.id + "</h3>" +
+          "<h4>Year: " + mapView.gameYear.toFixed(1) + "</h4>" +
+          "<table>" +
+          twoElemRow("Type", p.pType) +
+          twoElemRow("Population", p.pop.toFixed(2)) +
+          twoElemRow("Maximum Pop.", p.maxPop.toFixed(2)) +
+          twoElemRow("Pop. growth rate", p.popGrowthRate.toFixed(2)) +
+          twoElemRow("Mineral wealth", p.mineralWealth.toFixed(2)) +
+          twoElemRow("Income rate", (p.pop*p.mineralWealth).toFixed(2)) +
+          "</table>";
+        $('<div/>').html(diagContents).dialog("Planet Detail");
+      });
+    });
   } else {
     $('#star-planets').html("");
   }

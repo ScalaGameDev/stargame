@@ -9,7 +9,7 @@ function setMapView(mapViewStr) {
     "<td class='dashboard'>Attack: " + 100 + "</td>" +
     "<td class='dashboard'>Speed: "  + mapView.playerInfo.speed + "</td>" +
     "<td class='dashboard'>Range: "  + mapView.playerInfo.range + "</td>" +
-    "<td class='dashboard'>Year: "   + mapView.gameYear.toFixed(2) + "</td>" +
+    "<td class='dashboard'>Year: "   + mapView.gameYear.toFixed(1) + "</td>" +
     "</tr></table>");
   
   drawMap();
