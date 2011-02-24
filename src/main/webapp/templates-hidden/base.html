@@ -8,10 +8,11 @@
     <lift:CSS.blueprint />
     <lift:CSS.fancyType />
 
-		<link type="text/css" href="/static/css/trontastic/jquery-ui-1.8.6.custom.css" rel="stylesheet" />	
-		<script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="/static/js/jquery-ui-1.8.6.custom.min.js"></script>
-        <script type="text/javascript" src="/static/js/jquery.event.wheel-1.0.js"></script>
+		<link type="text/css" href="/static/css/trontastic/jquery-ui-1.8.9.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.event.wheel-1.0.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ba-outside-events.min.js"></script>
 
     <script id="json" src="/classpath/json.js" type="text/javascript"/>
     <style type="text/css">
@@ -59,7 +60,7 @@
 
   </style>
   
-  <link rel="stylesheet" type="text/css" media="screen" href="/static/openid.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/static/css/openid.css" />
   </head>
   <body>
     <div class="container">
@@ -69,7 +70,7 @@
       <div class="column span-12 last" style="text-align: right">
         <lift:bind name="topRight" /> 
       </div>
-      <script type="text/javascript" src="/static/jquery.openid.js"></script>
+      <script type="text/javascript" src="/static/js/jquery.openid.js"></script>
       <script type="text/javascript">  $(function() { $("form.openid:eq(0)").openid(); });</script>
 
       <hr/>

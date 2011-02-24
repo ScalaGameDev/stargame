@@ -103,8 +103,9 @@ function initMapPort() {
     mapPort.normalizePos();
     
     // select the home star on load
-    clickEntities([{ 
+    selectEntities([{ 
       type: 'sv', 
+      euid: homeStar.euid,
       obj: homeStar 
     }]);
   }

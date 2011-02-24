@@ -95,7 +95,13 @@ function showStarSidebar(sv) {
           twoElemRow("Mineral wealth", p.mineralWealth.toFixed(2)) +
           twoElemRow("Income rate", (p.pop*p.mineralWealth).toFixed(2)) +
           "</table>";
-        $('<div/>').html(diagContents).dialog("Planet Detail");
+        var diagDiv = $('<div></div>').html(diagContents).dialog({
+          title: "Planet Detail"
+        });
+        diagDiv.bind('clickoutside', function() { 
+          diagDiv.dialog('close');
+        });
+        return false;
       });
     });
   } else {
