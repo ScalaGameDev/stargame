@@ -53,8 +53,7 @@ object Actions {
   def BuyTech(sender: StarGameComet, tech: Tech) =
     Mutate( sender.stateId, sender, (s: StarGameState) => {
       val p = s.players(sender.player.id) 
-      s.updatedPlayer(p.copy(techs=tech::p.techs, gold=p.gold-tech.cost,
-        canResearchTechs=p.canResearchTechs.map(_.filter(_!=tech))))
+      s.updatedPlayer(p.copy(techs=tech::p.techs, gold=p.gold-tech.cost))
     })
       
   def DispatchShips(sender: StarGameComet,

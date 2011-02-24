@@ -52,14 +52,14 @@ class StarGameComet extends CometActor with Loggable {
     playerOpt = state.players.find(_.openid == Some(openid))
     
     // schedule task to poll as often as the tick length
-    /*if(intervalTask.isEmpty) {
+    if(intervalTask.isEmpty) {
       def taskF() = sg ! InquireMapUpdates(stateId, this)
       val interval = math.max(
         (StarGameState.tickSizeYears/state.yearsPerDay*86400*1000).toLong,
         1000)
         
       intervalTask = Some(ImTimer.addTask(taskF, interval, interval))
-    }*/
+    }
   }
   
   override def localSetup() = {
@@ -303,17 +303,14 @@ class StarGameComet extends CometActor with Loggable {
           <h3>Technologies</h3>
           <div id="research-accordian">
           {
-            List( TechCategory.values, 
-                  player.organizedTechs, 
-                  player.canResearchTechs
-            ).transpose map { 
-              case List(category: TechCategory, 
-                        techs: List[Tech], choices: List[Tech]) =>
+            List( TechCategory.values,
+                  Tech.allOrganizedTechs ).transpose map { 
+              case List(category: TechCategory, categoryTechs: List[Tech]) =>
                 <h4 style="padding-left: 30px;">{category}</h4> ++
                 <div>
                   <ul>
                   {
-                    (techs ++ choices.take(3)).map(t =>
+                    categoryTechs.map(t =>
                       <li>{a(styleTech(t), showTechPane(t))}</li>
                     )
                   }

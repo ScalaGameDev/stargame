@@ -26,8 +26,8 @@ extends Fleet
   
   def newUUID() = copy(uuid=java.util.UUID.randomUUID().toString())
   
-  def weaken(score: Double, totalScore: Double) = 
-    copy(ships=math.max(((score/totalScore)*ships).toInt, 1))
+  def weaken(pSurviving: Double) = 
+    copy(ships=math.max((pSurviving*ships).toInt, 1)) // at least one survivor
 }
  
 case class MovingFleet( uuid: String, playerId: Int,
@@ -92,18 +92,10 @@ object Fleet {
         val scoresAndFleets = fleets.map( f => {
           val player = players(f.playerId)
           ((f.ships*player.battlePower*SimRandom.random(0.8, 1.2)), f)
-        })
+        }).sortBy(_._1) // sort by score
         
-        val totalScore = scoresAndFleets.map(_._1).sum
-        
-        val survivingWeakenedFleets = scoresAndFleets.sortBy(_._1).tail.map {
-          case (score, fleet) => fleet.weaken(score, totalScore)
-        }
-        
-        if(survivingWeakenedFleets.length == 1)
-          Some(survivingWeakenedFleets.head)
-        else
-          doBattle(survivingWeakenedFleets, players)
+        Some(scoresAndFleets.head._2.weaken(
+          scoresAndFleets(1)._1/scoresAndFleets(0)._1)) // score_2/score_1 
       }
     }
   }

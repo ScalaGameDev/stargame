@@ -56,6 +56,33 @@ function showFleetSidebar(fv) {
   selectSidebar("fleetinfo");
 }
 
+function showStarSidebar(sv) {
+  $('#star-name').html(starViewName(sv));
+  $('#star-class').html(sv.sClass);
+  
+  function row(tag, items) {
+    return "<tr>" + items.map(function(item) { 
+      return "<"+tag+">"+item+"</"+tag+">" }).join("") + "</tr>";
+  }
+  
+  if(sv.planets !== undefined) {
+    var planetsTable = "<table>" +
+      row("th", ["Type", "Pop", "Growth/year"]) +
+      sv.planets.map(function(p) {
+        var maxPop = p.baseMaxPop*mapView.playerInfo.maxPopMultiplier;
+        return row("td", [p.pType, 
+          p.pop.toFixed(1)+"/"+maxPop.toFixed(1), p.popGrowthRate.toFixed(1)])
+      }).join("") +
+      "</table>";
+    
+    $('#star-planets').html(planetsTable);
+  } else {
+    $('#star-planets').html("");
+  }
+  
+  selectSidebar("starinfo");
+}
+
 function selectEntities(entities) {
   // on select new entity, erase toStarId
   fleetDispatchToStarId = null;
@@ -72,17 +99,26 @@ function selectEntities(entities) {
   var e = entities[clickIndex];
   mapPort.selectedEuid = e.euid;
   
-  if(e.type === "sv") {
-    $('#star-name').html(starViewName(e.obj));
-    $('#star-class').html(e.obj.sClass);
-    selectSidebar("starinfo");
-  } else if(e.type === "fv") {
-    
+  if(e.type === "fv") {  
     // select fleet again: reset ship count to max
     fleetDispatchQuantity = e.obj.ships;
-    showFleetSidebar(e.obj);
   }
+  
+  refreshEntitySelection(); // show the sidebars
+  
   return false;
+}
+
+function refreshEntitySelection() {
+  var e = mapPort.selectedEntity();
+  if(e !== undefined) {
+    if(e.type === 'sv') {
+      showStarSidebar(e.obj);
+    } else if(e.type === 'fv') {
+      // don't reset fleet dispatch to or number
+      showFleetSidebar(e.obj);
+    }
+  }
 }
 
 function clickEntities(entities) {

@@ -47,7 +47,7 @@ object Star {
       List.fill(nPlanets)(
         StarClass.randomZone(sClass, nPlanets)).sortBy(_.order)
     
-    val idZonePairs = (1 to nPlanets).toList zip zones 
+    val idZonePairs = (0 until nPlanets).toList zip zones 
     
     idZonePairs.map(p => Planet.genRandom(p._1, sClass, p._2))
   }

@@ -8,7 +8,8 @@ case class StarView( euid: String,
                      
 case class FleetView( euid: String, uuid: String,
                       playerId: Int, ships: Int,
-                      fromStarId: Option[Int] = None, 
+                      moving: Boolean,
+                      fromStarId: Int, 
                       toStarId: Option[Int] = None,
                       arriveYear: Option[Double] = None, 
                       x: Double, y: Double )
@@ -38,13 +39,15 @@ object FleetView {
   
   def fromFleet(s: StarGameState, f: StationaryFleet) = {
     val (x,y) = f.position(s)
-    FleetView(f.euid, f.uuid, f.playerId, f.ships, None, None, None, x, y)
+    FleetView(f.euid, f.uuid, f.playerId, f.ships, false,
+              f.fromStarId, 
+              None, None, x, y)
   }
   
   def fromFleet(s: StarGameState, f: MovingFleet) = {
     val (x,y) = f.position(s)
-    FleetView(f.euid, f.uuid, f.playerId, f.ships, 
-              Some(f.fromStarId), Some(f.toStarId), 
+    FleetView(f.euid, f.uuid, f.playerId, f.ships, true,
+              f.fromStarId, Some(f.toStarId), 
               Some(f.arriveYear), x, y)
   }
 }

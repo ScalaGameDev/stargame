@@ -65,13 +65,24 @@ case class StarGameState( _id: String, createdBy: String, name: String,
   def advancedOneTick() = {
     val curYear = gameYear+StarGameState.tickSizeYears
     
-    // TODO: star growth and migration
+    // star growth
+    val grownStars = stars.map(s => {
+      if(s.ownerIdOpt.isDefined) {
+        val owningPlayer = players(s.ownerIdOpt.get)
+        val newPlanets = 
+          s.planets.map(_.grow(owningPlayer, StarGameState.tickSizeYears, s.id))
+        
+        s.copy(planets = newPlanets)
+      } else s
+    })
+    
+    // wealth distribution
     
     // newly arrived ships and moving fleets
     val (newlyArrivedFleets, newMovingFleets) = 
       movingFleets.partition( _.arrived(curYear) )
     
-    val (newStars, newReports) = stars.map(s => {
+    val (newStars, newReports) = grownStars.map(s => {
       // 1. process ship production
       val s1 = s.producedShips(StarGameState.tickSizeYears)
       
@@ -83,7 +94,10 @@ case class StarGameState( _id: String, createdBy: String, name: String,
         Fleet.mergeByPlayer(s1.garrison.toList ++ fleetsArrivedHere)
       
       // 3. do battle, leaving just one fleet standing
-      val finalGarrison = Fleet.doBattle(allFleetsHere.toList, players)
+      val finalGarrison = Fleet.doBattle(allFleetsHere.toList, players) match {
+        case Some(g) => Some(g.copy(fromStarId = s.id)) // Change the star id 
+        case None => None
+      }
       
       // 4. generate battle report
       val reportOpt : Option[BattleReport] = if(allFleetsHere.size > 1) {

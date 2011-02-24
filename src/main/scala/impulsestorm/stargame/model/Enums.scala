@@ -66,11 +66,9 @@ object TechCategory extends Enumerator[TechCategory] {
   val Propulsion = Value("Propulsion") // 4
   // 1 - Weapons - Beam, projectile, missiles
   val Combat     = Value("Combat")
-  // 2 - Battle computers, Ship detection, ECM
-  val Sensors    = Value("Sensors")
-  // 3 - Setttling new planet types, max population, infrastructure cost
+  // 2 - Setttling new planet types, max population, infrastructure cost
   val Civil      = Value("Civil")
-  // 4 - Productivity and allegiance
+  // 3 - Productivity and allegiance
   val Policy     = Value("Policy")
 
   def organizeTechs(techs: List[Tech]) = values.map { cat =>  
@@ -96,10 +94,8 @@ case class Tech(name: String, longName: String, category: TechCategory,
 }
 
 object Tech extends Enumerator[Tech] {
-  import TechCategory.{Propulsion, Combat, Sensors, Civil, Policy}
+  import TechCategory.{Propulsion, Combat, Civil, Policy}
   
-  val Engines1      = Value("Engines1", "Chemical engines", Propulsion,
-                            1, "Equipped ships move at warp speed 1")
   val Range1        = Value("Range4", "Hydrogen fuel cells", Propulsion,
                             2, "Ships have a range of 6")
   val Range2        = Value("Range5", "Deuterium fuel cells", Propulsion,
@@ -141,56 +137,22 @@ object Tech extends Enumerator[Tech] {
   val Combat7       = Value("Combat1", "Enhanced weaponry", Combat,
                             25, "Sets battle rating to 300")
   val Combat8       = Value("Combat2", "Tempered armor", Combat,
-                            30, "Sets battle rating to 360")
-                            
-  
-  //----------------------------------------------------------------------
-                                 
-  val Sensors1 = Value("Sensors1", "Combat sensors Alpha", Sensors,
-                       2, "+1 to hit (excluding missiles)")
-  val ECM1     = Value("ECM1", "ECM Alpha", Sensors,
-                       3, "Add-on: +1 evade missiles")
-  val Scanner1 = Value("Scanner1", "Deep space scanner", Sensors,
-                       5, "Colonies can detect ships 3 ly away")
-  val Sensors2 = Value("Sensors2", "Combat sensors Beta", Sensors,
-                       7, "+2 to hit (excluding missiles)")
-  val ECM2     = Value("ECM2", "ECM Beta", Sensors,
-                       9, "Add-on: +2 evade missiles")                                
-  val Scanner2 = Value("Scanner2", "Improved space scanner", Sensors,
-                       12, "Colonies can detect ships 5 ly away")
-  val Sensors3 = Value("Sensors3", "Combat sensors Gamma", Sensors,
-                       13, "+3 to hit (excluding missiles)")
-  val ECM3     = Value("ECM3", "ECM Gamma", Sensors,
-                       15, "Add-on: +3 evade missiles")
-  val Scanner3 = Value("Scanner3", "Advanced space scanner", Sensors,
-                       17, "Colonies can detect ships 7 ly away")
-  val ECM4     = Value("ECM4", "ECM Delta", Sensors,
-                       19, "Add-on: +4 evade missiles")
-  val Sensors4 = Value("Sensors4", "Combat sensors Delta", Sensors,
-                       20, "+4 to hit (excluding missiles)")
-  val ECM5     = Value("ECM5", "ECM Epsilon", Sensors,
-                       22, "+5 evade missiles")
-  val Sensors5 = Value("Sensors5", "Combat sensors Epsilon", Sensors,
-                       25, "+5 to hit (excluding missiles)")
-  val Sensors6 = Value("Sensors6", "Combat sensors Zeta", Sensors,
-                       28, "+6 to hit (excluding missiles)")
-  val ECM6     = Value("ECM6", "ECM Zeta", Sensors,
-                       28, "+6 evade missiles")
-  val Scanner4 = Value("Scanner4", "Subspace scanner", Sensors,
+                            30, "Sets battle rating to 360")         
+  val Scanner1 = Value("Scanner1", "Deep space scanner", Combat,
+                       5, "Colonies can detect ships 3 ly away")                 
+  val Scanner2 = Value("Scanner2", "Improved space scanner", Combat,
+                       14, "Colonies can detect ships 5 ly away")
+  val Scanner3 = Value("Scanner3", "Advanced space scanner", Combat,
+                       21, "Colonies can detect ships 7 ly away")
+  val Scanner4 = Value("Scanner4", "Subspace scanner", Combat,
                        30, "Colonies can detect ships 11 ly away")
   
   //---------------------------------------------------------------------
   // Civil - new planet types, max population, infrastructure cost, maintainence
-  val Industry9   = Value("Industry9", "Industrial Tech 9", Civil,
-                          2, "Reduces the cost of a factory to 9 RU")
   val MaxPop10    = Value("MaxPop10", "Coordinated zoning", Civil,
                           4, "Max population +10%")
-  val Maintain80  = Value("Maintain80", "Basic conservation", Civil,
-                          5, "Reduces factory maintaince to 80%")
   val IceCol      = Value("IceCol", "Arctic exploration", Civil,
                           6, "Can colonize Ice planets")
-  val Industry8   = Value("Industry8", "Industrial Tech 8", Civil,
-                          8, "Reduces the cost of a factory to 8 RU")
   val BarrenCol   = Value("BarrenCol", "Barren colonization", Civil,
                           9, "Can colonize Barren planets")
   val MaxPop20    = Value("MaxPop20", "Competent planning", Civil,
@@ -199,65 +161,34 @@ object Tech extends Enumerator[Tech] {
                           13, "Can colonize Dead planets")
   val AsteroidCol = Value("AsteroidCol", "Microgravity survival", Civil,
                           14, "Can colonize Asteroids")
-  val Industry7   = Value("Industry7", "Industrial Tech 7", Civil,
-                          14, "Reduces the cost of a factory to 7 RU")
-  val Maintain60  = Value("Maintain60", "Systematic conservation", Civil,
-                          16, "Reduces factory maintainence to 60%")
   val InfernoCol  = Value("InfernoCol", "Tectonic stabilization", Civil,
                           17, "Can colonize Inferno planets")
   val HostilePop  = Value("HostilePop", "Hostile environmental control", Civil,
-                          18, "Ice/Barren/Dead/Inferno planets: +50% max pop.")
-  val Industry6   = Value("Industry6", "Industrial Tech 6", Civil,
-                          18, "Reduces the cost of a factory to 6 RU")
+                          18, "Ice/Barren/Dead/Inferno planets: Normal growth")
   val GasGiantCol = Value("GasGiantColonies", "Atmospheric colonization", Civil,
                           20, "Can colonize Gas Giants")
-  val Industry5   = Value("Industry5", "Industrial Tech 5", Civil,
-                          23, "Reduces the cost of a factory to 5 RU")
   val MaxPop30    = Value("MaxPop30", "Dense zoning", Civil,
                           24, "Max population +30%")
-  val Maintain40  = Value("Maintain40", "Integrated maintainence", Civil,
-                          25, "Reduces factory maintainence to 40%")
-  val Industry4   = Value("Industry4", "Industrial Tech 4", Civil,
-                          28, "Reduces the cost of a factory to 4 RU")
  
   // Policy - productivity and allegiance
   val Grow1   = Value("Grow1", "Colonial medicine", Policy,
                       3, "Population growth rate +20%")
-  val Alleg10 = Value("Alleg10", "Humane goverance", Policy,
-                      7, "Allegiance +10%")
   val Prod2   = Value("Prod2", "Competent industrial management", Policy,
-                      8, "200% factory productivity")
-  val Sci1    = Value("Sci1", "Specialist Economy", Policy,
-                      10, "+20% research for all planets with >40M colonists")
+                      8, "140% shipyard productivity")
   val Grow2   = Value("Grow2", "Incentivized colonization", Policy,
                       12, "Population growth rate +40%")
-  val Alleg20 = Value("Alleg20", "Federated governance", Policy,
-                      13, "+20% Allegiance colonies, allies, & occupied worlds")
   val Prod3   = Value("Prod3", "Operations research", Policy,
-                      15, "300% factory productivity")
+                      15, "220% shipyard productivity")
   val Grow3   = Value("Grow3", "Abundant opportunity", Policy,
                       18, "Population growth rate +70%")
   val Prod4   = Value("Prod4", "Lean manufacturing", Policy,
                       21, "400% factory productivity")
-  val Sci2    = Value("Sci2", "Deep Specialization", Policy,
-                      22, "+40% research for all planets with >40M colonists")
-  val Alleg30 = Value("Alleg30", "Enlightened governance", Policy,
-                      24, "Allegiance from all worlds: +30%")
   val Grow4   = Value("Grow4", "Colonial self-sufficiency", Policy,
                       25, "Population growth rate +100%")
   val Prod5   = Value("Prod5", "Complete automation", Policy,
-                      28, "500% factory productivity")
+                      28, "600% shipyard productivity")
   
-  val startingTechs = List(Engines1)
-  
-  val categorizedVals = TechCategory.organizeTechs(values)
-  
-  // returns list of techs you can research, listed first by category, then
-  // by tech level. i.e. [[propulsion1, propulsion2, ...], [weapons1...], ...]
-  def generateCanResearchTechs() =
-    categorizedVals.map(l => 
-      Random.shuffle(l).filter(t => !startingTechs.contains(t))
-        .take((0.6*l.length).toInt).sortBy(_.level))
+  val allOrganizedTechs = TechCategory.organizeTechs(values)
                       
   val eclass = classOf[Tech]
   
@@ -394,22 +325,25 @@ object PlanetZone extends Enumerator[PlanetZone] {
   }
 }
 
-case class PlanetType(name: String) extends hasName
+case class PlanetType(name: String, requisiteTech: Option[Tech]) 
+extends hasName
 
 object PlanetType extends Enumerator[PlanetType] {
+  import Tech._
+  
   val Terran    = Value("Terran")
   val Ocean     = Value("Ocean")
   val Arid      = Value("Arid")
-  val Ice       = Value("Ice")
-  val Barren    = Value("Barren")
-  val Dead      = Value("Dead")
-  val Inferno   = Value("Inferno")
-  val Asteroid  = Value("Asteroid")
-  val GasGiant  = Value("Gas Giant")
+  val Ice       = Value("Ice", Some(IceCol))
+  val Barren    = Value("Barren", Some(BarrenCol))
+  val Dead      = Value("Dead", Some(DeadCol))
+  val Inferno   = Value("Inferno", Some(InfernoCol))
+  val Asteroid  = Value("Asteroid", Some(AsteroidCol))
+  val GasGiant  = Value("Gas Giant", Some(GasGiantCol))
   
   val eclass = classOf[PlanetType]
-  private def Value(name: String) =
-    addToMap(PlanetType(name))
+  private def Value(name: String, requisiteTech: Option[Tech] = None) =
+    addToMap(PlanetType(name, requisiteTech))
   
   def randomBaseMaxPop(pType: PlanetType) = pType match {
     case Terran   => random(60.0, 130.0)

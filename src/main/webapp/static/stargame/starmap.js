@@ -13,6 +13,11 @@ function setMapView(mapViewStr) {
     "</tr></table>");
   
   drawMap();
+  
+  // refresh sidebar of what's selected
+  if(mapPort !== null) {
+    refreshEntitySelection();
+  }
 }
 
 var mapPort = null; // map view settings
@@ -263,30 +268,7 @@ function drawMap() {
     };
   }
   
-  function drawStarView(sv) {
-    var [px,py] = spaceToPixel(sv.x, sv.y);
-    
-    ctx.beginPath();
-    ctx.fillStyle = classToFillStyle[sv.sClass];
-    ctx.arc(px, py, 10.0, 0, 2*Math.PI, true);
-    ctx.fill();
-    
-    if(sv.name) {
-      var textC = null;
-      if(sv.knownOwnerId !== undefined) {
-        textC = playerIdToColor[sv.knownOwnerId];
-      } else {
-        textC = '#888888';
-      }
-      ctx.fillStyle = textC;
-      ctx.fillText(sv.name, px-10, py+25);
-    }
-    
-    mapPort.entities.push(
-      makeEntity(px, py, 14, 14, 'sv', sv));
-  }
-  
-  function drawFleetView(fv) {
+    function drawFleetView(fv) {
     var [px,py] = spaceToPixel(fv.x, fv.y);
     
     ctx.save();
@@ -328,10 +310,37 @@ function drawMap() {
       makeEntity(px, py, 12, 8, 'fv', fv));
   }
   
+  function drawStarView(sv) {
+    var [px,py] = spaceToPixel(sv.x, sv.y);
+    
+    ctx.beginPath();
+    ctx.fillStyle = classToFillStyle[sv.sClass];
+    ctx.arc(px, py, 10.0, 0, 2*Math.PI, true);
+    ctx.fill();
+    
+    if(sv.name) {
+      var textC = null;
+      if(sv.knownOwnerId !== undefined) {
+        textC = playerIdToColor[sv.knownOwnerId];
+      } else {
+        textC = '#888888';
+      }
+      ctx.fillStyle = textC;
+      ctx.fillText(sv.name, px-10, py+25);
+    }
+    
+    mapPort.entities.push(
+      makeEntity(px, py, 14, 14, 'sv', sv));
+    
+    if(sv.visibleGarrison) {
+      drawFleetView(sv.visibleGarrison);
+    }
+  }
+  
   // draw all qualifying stars and fleets
   var visibleStarViews = mapView.starViews.filter(inViewPort); 
   visibleStarViews.map(drawStarView);
-  mapView.fleetViews.filter(inViewPort).map(drawFleetView);
+  mapView.movingFleetViews.filter(inViewPort).map(drawFleetView);
   
   // draw selected box  
   var e = mapPort.selectedEntity();

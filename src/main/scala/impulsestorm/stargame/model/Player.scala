@@ -12,81 +12,88 @@ case class Player( id: Int, openid: Option[String], alias: String,
                    exploredStarIds: Set[Int],
                    metPlayerIds: Set[Int],
                    gold: Double,
-                   techs: List[Tech], 
-                   canResearchTechs: List[List[Tech]])
+                   techs: List[Tech])
 {
-  lazy val organizedTechs = TechCategory.organizeTechs(techs)
+  
+  import Tech._
   
   lazy val sensorRange : Int = {
-    val sensorTechs = organizedTechs(2)
-    if(sensorTechs.contains(Tech.Scanner4))
+    if(techs.contains(Scanner4))
       11
-    else if(sensorTechs.contains(Tech.Scanner3))
+    else if(techs.contains(Scanner3))
       7
-    else if(sensorTechs.contains(Tech.Scanner2))
+    else if(techs.contains(Scanner2))
       5
-    else if(sensorTechs.contains(Tech.Scanner1))
+    else if(techs.contains(Scanner1))
       3
     else
       1
   }
   
   lazy val range : Int = {
-    val pTechs = organizedTechs(0)
-    if(pTechs.contains(Tech.Range7))
+    if(techs.contains(Range7))
       13
-    else if(pTechs.contains(Tech.Range6))
+    else if(techs.contains(Range6))
       12
-    else if(pTechs.contains(Tech.Range5))
+    else if(techs.contains(Range5))
       11
-    else if(pTechs.contains(Tech.Range4))
+    else if(techs.contains(Range4))
       10
-    else if(pTechs.contains(Tech.Range3))
+    else if(techs.contains(Range3))
       9
-    else if(pTechs.contains(Tech.Range2))
+    else if(techs.contains(Range2))
       8
-    else if(pTechs.contains(Tech.Range1))
+    else if(techs.contains(Range1))
       7
     else
       6
   }
   
   lazy val speed : Double = {
-    val pTechs = organizedTechs(0)
-    if(pTechs.contains(Tech.Engines6))
+    if(techs.contains(Engines6))
       2.5
-    else if(pTechs.contains(Tech.Engines5))
+    else if(techs.contains(Engines5))
       2.2
-    else if(pTechs.contains(Tech.Engines4))
+    else if(techs.contains(Engines4))
       1.9
-    else if(pTechs.contains(Tech.Engines3))
+    else if(techs.contains(Engines3))
       1.6
-    else if(pTechs.contains(Tech.Engines2))
+    else if(techs.contains(Engines2))
       1.3
     else
       1
   }
   
   lazy val battlePower : Int = {
-    val cTechs = organizedTechs(1)
-    if(cTechs.contains(Tech.Combat8))
+    if(techs.contains(Combat8))
       360
-    else if(cTechs.contains(Tech.Combat7))
+    else if(techs.contains(Combat7))
       300
-    else if(cTechs.contains(Tech.Combat6))
+    else if(techs.contains(Combat6))
       250
-    else if(cTechs.contains(Tech.Combat5))
+    else if(techs.contains(Combat5))
       200
-    else if(cTechs.contains(Tech.Combat4))
+    else if(techs.contains(Combat4))
       170
-    else if(cTechs.contains(Tech.Combat3))
+    else if(techs.contains(Combat3))
       150
-    else if(cTechs.contains(Tech.Combat2))
+    else if(techs.contains(Combat2))
       125
-    else if(cTechs.contains(Tech.Combat1))
+    else if(techs.contains(Combat1))
       110
     else
       100
+  }
+  
+  lazy val maxPopMultiplier : Double = {
+    if(techs.contains(MaxPop30)) 
+      1.3
+    else if(techs.contains(MaxPop20)) 
+      1.2
+    else if(techs.contains(MaxPop10)) 
+      1.1
+    else 
+      1.0
   }
 }
 
@@ -109,14 +116,12 @@ object Player {
                      )
   
   def startingPlayer( id: Int, pSpec: PlayerSpec, homeStarId: Int) = {
-    val canResearchTechs = Tech.generateCanResearchTechs()
     Player(id, pSpec.openid, pSpec.alias, pSpec.traits.toSet,
            homeStarId = homeStarId,
            exploredStarIds = Set(homeStarId),
            metPlayerIds = Set(id),
            gold = 0,
-           techs = Tech.startingTechs, 
-           canResearchTechs=canResearchTechs)
+           techs = Nil)
   }
 }
 
