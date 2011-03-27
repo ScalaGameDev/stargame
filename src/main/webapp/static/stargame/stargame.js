@@ -66,13 +66,14 @@ function showStarSidebar(sv) {
   }
   
   if(sv.planets !== undefined) {
-    var planetsTable = "<table>" +
+    var planetsTable = 
+      "<table id='planets-table'>" +
       row("th", ["Type", "Pop", "Income", ""]) +
       sv.planets.map(function(p) {
         p.maxPop = p.baseMaxPop*mapView.playerInfo.maxPopMultiplier;
         return row("td", [p.pType, 
-          p.pop.toFixed(1),
-          (p.pop*p.mineralWealth).toFixed(1),
+          p.pop.toFixed(1) + " M",
+          (p.pop*p.mineralWealth).toFixed(1) + " RU/yr",
           "<button id='BtnPlanet"+p.id+"'>Detail</button>"])
       }).join("") +
       "</table>";
@@ -82,21 +83,22 @@ function showStarSidebar(sv) {
     // Set up dialogs. Must be done after html set
     sv.planets.map(function(p) {
       function twoElemRow(a, b) {
-        return "<tr><th>"+a+"</th><td>"+b+"</td></tr>\n";
+        return "<tr><td><b>"+a+"</b></td><td>"+b+"</td></tr>\n";
       }
       $('#BtnPlanet'+p.id).click(function(e) {
-        var diagContents = "<h3>Planet: " + sv.name + " " + p.id + "</h3>" +
-          "<h4>Year: " + mapView.gameYear.toFixed(1) + "</h4>" +
-          "<table>" +
+        var diagContents = "<table>" +
           twoElemRow("Type", p.pType) +
-          twoElemRow("Population", p.pop.toFixed(2)) +
-          twoElemRow("Maximum Pop.", p.maxPop.toFixed(2)) +
-          twoElemRow("Pop. growth rate", p.popGrowthRate.toFixed(2)) +
-          twoElemRow("Mineral wealth", p.mineralWealth.toFixed(2)) +
-          twoElemRow("Income rate", (p.pop*p.mineralWealth).toFixed(2)) +
+          twoElemRow("Maximum Pop.", p.maxPop.toFixed(2) + " M") +
+          twoElemRow("Pop. growth rate", p.popGrowthRate.toFixed(2) + " M/yr") +
+          twoElemRow("Population", p.pop.toFixed(2) + " M") +
+          twoElemRow("Mineral wealth", 
+            p.mineralWealth.toFixed(2) + " RU/(M*yr)") +
+          twoElemRow("Income rate", 
+            (p.pop*p.mineralWealth).toFixed(2) + " RU/yr") +
           "</table>";
         var diagDiv = $('<div></div>').html(diagContents).dialog({
-          title: "Planet Detail"
+          title: sv.name + " " + p.id + " Details (Year " + 
+                 mapView.gameYear.toFixed(1) + ")" 
         });
         diagDiv.bind('clickoutside', function() { 
           diagDiv.dialog('close');

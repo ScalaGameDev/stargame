@@ -292,7 +292,7 @@ class StarGameComet extends CometActor with Loggable {
       if(player.techs.contains(tech)) {
         <span>{tech.toString} - Done</span>
       } else {
-        <span>{tech.toString} - {tech.cost}RU</span>
+        <span>{tech.toString} - {tech.cost} RU</span>
       }
     }
 

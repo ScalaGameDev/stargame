@@ -77,6 +77,8 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     })
     
     // wealth distribution
+    val totalWealthRate = stars.map(_.planets.map(_.wealthYield).sum).sum
+    val totalWealthThisTick = 
     
     // newly arrived ships and moving fleets
     val (newlyArrivedFleets, newMovingFleets) = 
@@ -126,11 +128,11 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     // exploredStarIds
     val newPlayers = players.map( p => {
       
-      val sensors = stars.filter(_.ownerIdOpt == Some(p.id)) 
+      val sensors = newStars.filter(_.ownerIdOpt == Some(p.id)) 
       
       // detect stars with sensors
       val detectedStars = 
-        FleetView.inRangeItems(this, p.sensorRange, sensors, stars.toSet)
+        FleetView.inRangeItems(this, p.sensorRange, sensors, newStars.toSet)
       val detectedColonizedStars = detectedStars.filter(_.ownerIdOpt.isDefined) 
       
       val detectedPlayers = detectedColonizedStars.map(_.ownerIdOpt.get).toSet
