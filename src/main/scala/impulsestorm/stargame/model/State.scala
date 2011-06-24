@@ -66,7 +66,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     val curYear = gameYear+StarGameState.tickSizeYears
     
     // star growth
-    val grownStars = stars.map(s => {
+    val stars2 = stars.map(s => {
       if(s.ownerIdOpt.isDefined) {
         val owningPlayer = players(s.ownerIdOpt.get)
         val newPlanets = 
@@ -76,15 +76,11 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       } else s
     })
     
-    // wealth distribution
-    val totalWealthRate = stars.map(_.planets.map(_.wealthYield).sum).sum
-    val totalWealthThisTick = 
-    
     // newly arrived ships and moving fleets
     val (newlyArrivedFleets, newMovingFleets) = 
       movingFleets.partition( _.arrived(curYear) )
     
-    val (newStars, newReports) = grownStars.map(s => {
+    val (stars3, newReports) = stars2.map(s => {
       // 1. process ship production
       val s1 = s.producedShips(StarGameState.tickSizeYears)
       
@@ -104,13 +100,10 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       // 4. generate battle report
       val reportOpt : Option[BattleReport] = if(allFleetsHere.size > 1) {
         val victorId = finalGarrison.get.playerId
-        val victorCasualties = 
-          allFleetsHere.find(_.playerId == victorId).get.ships -
-          finalGarrison.get.ships
-        
+        val shipsRemaining = finalGarrison.get.ships
         val loserIds = allFleetsHere.map(_.playerId) - victorId
         
-        Some(BattleReport(victorId, victorCasualties, loserIds, s.id, curYear))
+        Some(BattleReport(victorId, shipsRemaining, loserIds, s.id, curYear))
       } else None
       
       // 5. transfer ownership
@@ -125,14 +118,23 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       (finalStar, reportOpt)
     }).unzip
     
-    // exploredStarIds
     val newPlayers = players.map( p => {
+            
+      // wealth distribution
+      val totalWealthRate = 
+        stars3.filter(_.ownerIdOpt==Some(p.id)).map(
+          _.planets.map(_.wealthYield).sum
+        ).sum
+      val wealthEarnedThisTick = totalWealthRate*StarGameState.tickSizeYears
       
-      val sensors = newStars.filter(_.ownerIdOpt == Some(p.id)) 
+      // Sensors include colonies AND newly arrived fleets (before battle)
+      val sensors = 
+        stars3.filter(_.ownerIdOpt == Some(p.id)) ++ 
+        newlyArrivedFleets.filter(_.playerId == p.id) 
       
       // detect stars with sensors
       val detectedStars = 
-        FleetView.inRangeItems(this, p.sensorRange, sensors, newStars.toSet)
+        FleetView.inRangeItems(this, p.sensorRange, sensors, stars3.toSet)
       val detectedColonizedStars = detectedStars.filter(_.ownerIdOpt.isDefined) 
       
       val detectedPlayers = detectedColonizedStars.map(_.ownerIdOpt.get).toSet
@@ -148,12 +150,13 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       val newExploredStarIds = // union of all three 
         p.exploredStarIds | detectedStars.map(_.id).toSet | metPlayersStarIds
       
-      p.copy(exploredStarIds=newExploredStarIds, metPlayerIds=newMetPlayers)
+      p.copy(exploredStarIds=newExploredStarIds, metPlayerIds=newMetPlayers,
+             gold = p.gold+wealthEarnedThisTick)
     })
     
     copy(gameYear=curYear, movingFleets=newMovingFleets, 
          players=newPlayers,
-         stars=newStars, reports=reports ++ newReports.flatten)
+         stars=stars3, reports=reports ++ newReports.flatten)
   }
   
   def updated() : StarGameState = {

@@ -89,7 +89,7 @@ case class Tech(name: String, longName: String, category: TechCategory,
 {
   override def toString = longName
   
-  lazy val cost = (8 * math.exp(0.15*level)).toInt * 10
+  lazy val cost = (40 * math.exp(0.15*level)).toInt * 10
   
 }
 

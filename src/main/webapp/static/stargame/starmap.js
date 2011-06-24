@@ -5,7 +5,8 @@ function setMapView(mapViewStr) {
   // update player dashboard
   $('#playerInfoDashboard').html(
     "<table><tr>" +
-    "<td class='dashboard'>RU: " + mapView.playerInfo.player.gold + "</td>" +
+    "<td class='dashboard'>RU: " + 
+      mapView.playerInfo.player.gold.toFixed(1) + "</td>" +
     "<td class='dashboard'>Attack: " + 100 + "</td>" +
     "<td class='dashboard'>Speed: "  + mapView.playerInfo.speed + "</td>" +
     "<td class='dashboard'>Range: "  + mapView.playerInfo.range + "</td>" +
@@ -13,6 +14,18 @@ function setMapView(mapViewStr) {
     "</tr></table>");
   
   drawMap();
+  
+  var pid = mapView.playerInfo.player.id;
+  
+  // generate battle reports html
+  var rptDivs = mapView.lastReports.map(function(r) {
+    return "<div>Battle over " + mapView.starViews(r.starId).name + "<br/>" +
+           "Victor: " + mapView.playerNames(r.victorId) + 
+           " with " + r.shipsRemaining + " ships remaining" +
+           "</div>";
+  });
+  
+  $('#reports').html(rptDivs.join("\n"));
   
   // refresh sidebar of what's selected
   if(mapPort !== null) {

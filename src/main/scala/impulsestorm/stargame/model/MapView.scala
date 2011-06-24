@@ -65,7 +65,9 @@ object MapBounds {
 
 case class MapView(starViews: List[StarView], movingFleetViews: Set[FleetView],
                    mapBounds: MapBounds, yearsPerDay: Double, 
-                   playerInfo: PlayerInfo, gameYear: Double)
+                   playerInfo: PlayerInfo, gameYear: Double,
+                   lastReports: List[BattleReport],
+                   playerNames: List[String])
 
 object MapView {
   def from(s: StarGameState, player: Player) = {
@@ -84,7 +86,7 @@ object MapView {
         if(star.garrison.isDefined && star.ownerIdOpt == Some(player.id))
           Some(FleetView.fromFleet(s, star.garrison.get))
         else None
-      
+        
       StarView("sv-"+star.id,
                star.id, 
                onlyIfExplored(star.name), 
@@ -95,9 +97,14 @@ object MapView {
                knownGarrison)
     })
     
+    val latestPlayerReports = s.reports.filter(
+      r => r.victorId == player.id || r.loserIds.contains(player.id)
+    ).takeRight(10).reverse
+    
     val movingFleetViews = FleetView.visibleMovingFvs(s, player)
     
     MapView(starViews, movingFleetViews, MapBounds(s), s.yearsPerDay, 
-            PlayerInfo.from(player), s.gameYear)
+            PlayerInfo.from(player), s.gameYear, latestPlayerReports,
+            s.players.map(_.alias))
   }
 }
