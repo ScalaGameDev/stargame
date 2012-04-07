@@ -52,7 +52,7 @@ class StarGameComet extends CometActor with Loggable {
     playerOpt = state.players.find(_.openid == Some(openid))
     
     // schedule task to poll as often as the tick length
-    if(intervalTask.isEmpty) {
+    if(state.started && intervalTask.isEmpty) {
       def taskF() = sg ! InquireMapUpdates(stateId, this)
       val interval = math.max(
         (StarGameState.tickSizeYears/state.yearsPerDay*86400*1000).toLong,
@@ -92,7 +92,7 @@ class StarGameComet extends CometActor with Loggable {
       logger.info("StarGameComet gets hinted state")
       hintOpt = Some(hint)
       acceptNewState(state)
-      if(hint.mapInfoChangeOnly)
+      if(state.isOneOfThePlayers(openid) && hint.mapInfoChangeOnly)
         partialUpdate(sendHint() & setMapView)
       else
         reRender
@@ -127,31 +127,43 @@ class StarGameComet extends CometActor with Loggable {
     case _ => Noop    
   }
   
-  def viewPlayer = (setTitle("Player view") & setHtmlPlayersList & 
+  def viewPlayer(started: Boolean, owner: Boolean) = {
+    val title = if(started)
+      "Game in progress"
+    else
+      "Waiting for players. (%d/%d)".format(
+        state.players.length, state.nPlayers)
+    
+    (setTitle(title) & setHtmlPlayersList & 
+    (if(owner) setHtmlStartGame else Noop) & 
     setHtmlResearch & setHtmlMapCmds & 
-    showPanes(List("research", "map")) &
+    showPanes(List("research", "map", "playersList", "startGame")) &
     setMapView & sendHint())
+  }
     
   def viewObserver =
     setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
       showPane("playerList")
   
-  def viewJoin =
-    setTitle("Join game") & setHtmlPlayersList & setHtmlJoin &
-      showPanes(List("playersList", "join"))
+  def viewJoin(owner: Boolean) =
+    setTitle("Join game") & setHtmlPlayersList & setHtmlJoin & 
+      (if(owner) setHtmlStartGame else Noop) &
+      showPanes(List("playersList", "join", "startGame"))
   
   def render = {
     stateOpt match {
       case None => {
         SetHtml("title", <p>Loading state...</p>)
       }
-      case Some(state) => if(state.isOneOfThePlayers(openid)) {
-        viewPlayer
-      } else if(state.started) {
-        viewObserver
-      } else {
-        viewJoin
-      }
+      case Some(state) =>
+        val isOwner = openid == state.createdBy
+        if(state.isOneOfThePlayers(openid)) {
+          viewPlayer(state.started, isOwner)
+        } else if(state.started) {
+          viewObserver
+        } else {
+          viewJoin(isOwner)
+        }
     }
   }
   
@@ -172,11 +184,6 @@ class StarGameComet extends CometActor with Loggable {
     jsonFuncCmd("setMapView", MapView.from(state, player))
   
   def setHtmlPlayersList : JsCmd = {  
-    def startGame() = {
-      sg ! Actions.StartGame(this)
-      Noop
-    }
-    
     val players = state.players
     
     val existingPlayersHtml : NodeSeq = ( 
@@ -187,8 +194,16 @@ class StarGameComet extends CometActor with Loggable {
          else
            players.map( p => <tr><td></td><td>{p.alias}</td></tr> )}
       </table>
-    )
+    ) 
     
+    OnLoad(SetHtml("playersList", existingPlayersHtml))
+  }
+  
+  def setHtmlStartGame : JsCmd = {
+    def startGame() = {
+      sg ! Actions.StartGame(this)
+      Noop
+    }
     val startGameHtml : NodeSeq = 
       if(!state.started && openid == state.createdBy)
         <h2>Start game</h2>
@@ -199,9 +214,7 @@ class StarGameComet extends CometActor with Loggable {
           {ajaxButton("Start game filling slots with AI", startGame _)}
         </p>
       else <div/>
-      
-    
-    OnLoad(SetHtml("playersList", existingPlayersHtml ++ startGameHtml))
+    OnLoad(SetHtml("startGame", startGameHtml))
   }
   
   def setHtmlJoin : JsCmd = {
