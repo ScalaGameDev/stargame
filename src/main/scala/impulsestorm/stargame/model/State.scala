@@ -143,8 +143,6 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       
       val detectedPlayers = detectedColonizedStars.map(_.ownerIdOpt.get).toSet
       
-      println(detectedPlayers)
-      
       // meet players
       val newMetPlayers = p.metPlayerIds union detectedPlayers
       
@@ -152,7 +150,6 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       val metPlayersStarIds = stars.filter(s =>
           s.ownerIdOpt.isDefined && newMetPlayers.contains(s.ownerIdOpt.get)
         ).map(_.id).toSet
-      println(metPlayersStarIds)
       
       val newExploredStarIds = // union of all three 
         p.exploredStarIds | detectedStars.map(_.id).toSet | metPlayersStarIds

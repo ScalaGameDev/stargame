@@ -130,7 +130,7 @@ function starViewName(sv) {
   if(sv.name !== undefined) {
     return sv.name;
   } else {
-    return "Unexplored star";
+    return "Unexplored star " + sv.id;
   }
 }
 

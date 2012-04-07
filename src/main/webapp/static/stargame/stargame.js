@@ -101,10 +101,60 @@ function showStarSidebar(sv) {
     var productionHtml = "<strong>Production</strong><br/>";
     
     var productionHtml = productionHtml + 
-      "Shipyards: " + sv.factories + "<br/>" +
-      "Ships in queue: " + sv.queuedProduction + "<br/>";
+      "<table id='production-table'>" +
+      row("th", ["Shipyards", "Enqueued ships"]) +
+      row("td", [sv.factories, sv.queuedProduction]) +
+      row("td", [
+          "<button id='build-factories-1'>Build Factory</button>",
+          "<button id='build-ships-1'>Build Ship</button>"
+      ]) + 
+      row("td", [
+          "<button id='build-factories-10'>Build 10 Factories</button>",
+          "<button id='build-ships-10'>Build 10 Ships</button>"
+      ]) +
+      row("td", [
+          "<button id='build-factories-100'>Build 100 Factories</button>",
+          "<button id='build-ships-100'>Build 100 Ships</button>"
+      ]) +
+      "</table>"
+      ;
     
     $('#star-production').html(productionHtml);
+    
+    $('#build-factories-1').click(function() { buildFactories(sv.id, 1); });
+    $('#build-factories-10').click(function() { buildFactories(sv.id, 10); });
+    $('#build-factories-100').click(function() { buildFactories(sv.id, 100); });
+    
+    $('#build-ships-1').click(function() { buildShips(sv.id, 1); });
+    $('#build-ships-10').click(function() { buildShips(sv.id, 10); });
+    $('#build-ships-100').click(function() { buildShips(sv.id, 100); });
+      
+    var gold = mapView.playerInfo.player.gold;
+    // Shipyard affordability
+    function disableWithTitle(id, title) {
+      $('#'+id).attr('disabled', true).attr('title', title);
+    }
+    function checkAfford(id, cost) {
+      if(gold < cost) disableWithTitle(id, "Can't afford");
+    }
+    function checkFactorySufficient(id) {
+      if(sv.factories < 1)  
+        disableWithTitle(id, "Cannot produce ship without factories");
+      else if(sv.factories*5 <= sv.queuedProduction)
+        disableWithTitle(id, "Each factory can only queue 5 ships.");
+    }
+    
+    checkAfford('build-factories-1', 100);
+    checkAfford('build-factories-10', 10*100);
+    checkAfford('build-factories-100', 100*100);
+    
+    checkAfford('build-ships-1', 10);
+    checkAfford('build-ships-10', 10*10);
+    checkAfford('build-ships-100', 100*10);
+    
+    checkFactorySufficient('build-ships-1');
+    checkFactorySufficient('build-ships-10');
+    checkFactorySufficient('build-ships-100');
     
     // Set up dialogs. Must be done after html set
     sv.planets.map(function(p) {
@@ -134,6 +184,7 @@ function showStarSidebar(sv) {
     });
   } else {
     $('#star-planets').html("");
+    $('#star-production').html("");
   }
   
   selectSidebar("starinfo");

@@ -121,7 +121,7 @@ object Player {
            homeStarId = homeStarId,
            exploredStarIds = Set(homeStarId),
            metPlayerIds = Set(id),
-           gold = 100000,
+           gold = 800,
            techs = Nil,
            starsOwned = 0)
   }

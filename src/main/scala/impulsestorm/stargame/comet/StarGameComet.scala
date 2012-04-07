@@ -110,7 +110,7 @@ class StarGameComet extends CometActor with Loggable {
   }
   
   override def receiveJson = {
-    case x if {println("Got Json: "+x); false} => Noop
+    //case x if {println("Got Json: "+x); false} => Noop
     case JObject(List(JField("command", JString("dispatchShips")), 
                       JField("params", JArray(List(
                         JInt(fromStarId), JInt(quantity), JInt(toStarId) 
@@ -121,14 +121,16 @@ class StarGameComet extends CometActor with Loggable {
     }
     case JObject(List(JField("command", JString("buildFactories")), 
                       JField("params", JArray(List(
-                        JInt(starId), JInt(nFactories) 
+                        JInt(starId), JInt(n) 
                       ))))) => {
+      sg ! Actions.BuildFactories(this, starId.intValue, n.intValue)
       Noop
     }
     case JObject(List(JField("command", JString("buildShips")), 
                       JField("params", JArray(List(
-                        JInt(starId), JInt(nShips) 
+                        JInt(starId), JInt(n) 
                       ))))) => {
+      sg ! Actions.BuildShips(this, starId.intValue, n.intValue)
       Noop
     }
   } 
@@ -389,10 +391,10 @@ class StarGameComet extends CometActor with Loggable {
     "}") &
     JsRaw("function buildFactories(starId, nFactories) {" + 
       jsonSend("buildFactories",
-        JsRaw("[starId, nShips]")).toJsCmd +
+        JsRaw("[starId, nFactories]")).toJsCmd +
     "}") &
     JsRaw("function buildShips(starId, nShips) {" + 
-      jsonSend("buildFactories",
+      jsonSend("buildShips",
         JsRaw("[starId, nShips]")).toJsCmd +
     "}") 
     

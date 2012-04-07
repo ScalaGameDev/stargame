@@ -56,7 +56,7 @@ object Actions {
       s.updatedPlayer(p.copy(techs=tech::p.techs, gold=p.gold-tech.cost))
     } else error(s, sender, "Game already over."))
   
-  def BuyFactories(sender: StarGameComet, starId: Int, nFactories: Int) =
+  def BuildFactories(sender: StarGameComet, starId: Int, nFactories: Int) =
     Mutate( sender.stateId, sender, (s: StarGameState) => if(!s.finished) {
       val p = s.players(sender.player.id) 
       val oldStar = s.stars(starId)
@@ -74,19 +74,21 @@ object Actions {
       } else error(s, sender, "You do not own that star.")
     } else error(s, sender, "Game already over."))
       
-  def BuyShips(sender: StarGameComet, starId: Int, nShips: Int) =
+  def BuildShips(sender: StarGameComet, starId: Int, nShips: Int) =
     Mutate( sender.stateId, sender, (s: StarGameState) => if(!s.finished) {
       val p = s.players(sender.player.id) 
       val oldStar = s.stars(starId)
       
       if(oldStar.ownerIdOpt == Some(p.id)) {
-        val cost = 1
+        val cost = 10
         val nCanAfford = math.min(nShips*cost, p.gold.toInt)/cost
-        val totalCost = cost*nCanAfford
+        val nCanQueue = oldStar.factories*5
+        val nQueued = math.min(nCanQueue, nCanAfford)
+        val totalCost = cost*nQueued
         
         val newStarList = s.stars.updated(starId, 
           oldStar.copy(queuedProduction = 
-            oldStar.queuedProduction + nCanAfford))
+            oldStar.queuedProduction + nQueued))
         
         s.updatedPlayer(p.copy(gold=p.gold-totalCost)).copy(
           stars = newStarList)
