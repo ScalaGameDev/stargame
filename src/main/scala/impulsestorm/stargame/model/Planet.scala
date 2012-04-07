@@ -63,8 +63,8 @@ case class Planet( id: Int, pType: PlanetType,
     else 0.0
     
     if(growthRate != 0.0) {
-      println("Grew planet %d of star %d at rate %f".format(
-        id, starId, growthRate))
+      /*println("Grew planet %d of star %d at rate %f".format(
+        id, starId, growthRate))*/
       
       val growth = timeSpan*growthRate
       

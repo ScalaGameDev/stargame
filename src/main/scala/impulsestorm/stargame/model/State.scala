@@ -223,7 +223,7 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   }
   
   @tailrec def updated(s: StarGameState) : StarGameState =
-    if(s.gameYear + tickSizeYears > s.supposedToBeYear) s else {
+    if(!s.started && s.gameYear + tickSizeYears > s.supposedToBeYear) s else {
       updated(s.advancedOneTick())
     }
 }

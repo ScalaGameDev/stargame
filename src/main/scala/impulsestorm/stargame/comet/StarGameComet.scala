@@ -129,7 +129,7 @@ class StarGameComet extends CometActor with Loggable {
   
   def viewPlayer = (setTitle("Player view") & setHtmlPlayersList & 
     setHtmlResearch & setHtmlMapCmds & 
-    showPanes(List("playersList", "research", "map")) &
+    showPanes(List("research", "map")) &
     setMapView & sendHint())
     
   def viewObserver =
@@ -280,7 +280,10 @@ class StarGameComet extends CometActor with Loggable {
         <p>{tech.description}</p>
         <p>{
           if(player.techs.contains(tech)) "Already Researched" 
-          else ajaxButton("Buy - " + tech.cost + "RU", () => buyTech(tech))
+          else if(player.gold > tech.cost) 
+            ajaxButton("Buy - " + tech.cost + "RU", () => buyTech(tech))
+          else
+            "Cannot afford."
         }</p>
       </div>
     
