@@ -1,5 +1,6 @@
 var fleetDispatchQuantity = 0;
 var fleetDispatchToStarId = null;
+var lastResearchCategory = 0;
 
 function showFleetSidebar(fv) {
   $('#fleetContent').html(

@@ -36,7 +36,7 @@ class StarGameComet extends CometActor with Loggable {
   var intervalTask: Option[TimerTask] = None
   
   // Tech and Category index
-  var openResearchTech: Option[(Tech, Int)] = None
+  var openResearchTech: Option[Tech] = None
   
   def state = stateOpt.get
   def player = playerOpt.get
@@ -93,7 +93,7 @@ class StarGameComet extends CometActor with Loggable {
       hintOpt = Some(hint)
       acceptNewState(state)
       if(state.isOneOfThePlayers(openid) && hint.mapInfoChangeOnly)
-        partialUpdate(sendHint() & setMapView)
+        partialUpdate(sendHint() & setMapView & setHtmlResearch)
       else
         reRender
     }
@@ -137,7 +137,7 @@ class StarGameComet extends CometActor with Loggable {
     (setTitle(title) & setHtmlPlayersList & 
     (if(owner) setHtmlStartGame else Noop) & 
     setHtmlResearch & setHtmlMapCmds & 
-    showPanes(List("research", "map", "playersList", "startGame")) &
+    showPanes(List("research", "map", "playersList", "startGame", "reports")) &
     setMapView & sendHint())
   }
     
@@ -281,8 +281,6 @@ class StarGameComet extends CometActor with Loggable {
   
   def setHtmlResearch : JsCmd = {
     def buyTech(tech: Tech) : JsCmd= {
-      openResearchTech = 
-        Some((tech, TechCategory.values.indexOf(tech.category)))
       sg ! Actions.BuyTech(this, tech)
       Noop
     }
@@ -300,7 +298,8 @@ class StarGameComet extends CometActor with Loggable {
         }</p>
       </div>
     
-    def showTechPane(tech: Tech) = {
+    def showTechPane(tech: Tech) = () => {
+      openResearchTech = Some(tech)
       SetHtml("research-tech-info", techPaneContents(tech))
     }
     
@@ -327,7 +326,7 @@ class StarGameComet extends CometActor with Loggable {
                   <ul>
                   {
                     categoryTechs.map(t =>
-                      <li>{a(styleTech(t), showTechPane(t))}</li>
+                      <li>{a(showTechPane(t), styleTech(t))}</li>
                     )
                   }
                   </ul>
@@ -340,7 +339,7 @@ class StarGameComet extends CometActor with Loggable {
         <div id="research-tech-info">
         {
           openResearchTech match {
-            case Some((tech, _)) => techPaneContents(tech)
+            case Some(tech) => techPaneContents(tech)
             case None => <div/>
           }
         }
@@ -348,12 +347,17 @@ class StarGameComet extends CometActor with Loggable {
         </td>
         </tr>
         </table>
-    )) & JsRaw(openResearchTech match {
-      case Some((_, categoryIndex)) => """$('#research-accordian').accordion({
-        active: %d
-      });""".format(categoryIndex)
-      case None => "$('#research-accordian').accordion();"
-    }))
+    )) & (openResearchTech match {
+      case None => Noop
+      case Some(tech) => showTechPane(tech)()
+    })) & JsRaw("""
+    $('#research-accordian').accordion({
+      active: lastResearchCategory
+    });
+    $('#research-accordian').bind('accordionchangestart', function(event, ui) {
+      lastResearchCategory = $('#research-accordian').accordion( "option", "active" );
+    });
+    """)
     
   }
   
