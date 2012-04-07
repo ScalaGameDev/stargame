@@ -3,7 +3,9 @@ package impulsestorm.stargame.model
 case class StarView( euid: String,
                      id: Int, name: Option[String], sClass: StarClass,
                      x: Double, y: Double, planets: Option[List[Planet]],
-                     knownOwnerId: Option[Int], queuedProduction: Option[Int],
+                     knownOwnerId: Option[Int],
+                     factories: Option[Int],
+                     queuedProduction: Option[Int],
                      visibleGarrison: Option[FleetView])
                      
 case class FleetView( euid: String, uuid: String,
@@ -93,6 +95,7 @@ object MapView {
                star.sClass, star.x, star.y, 
                onlyIfExplored(star.planets),
                knownOwnerId,
+               onlyIfOwned(star.factories),
                onlyIfOwned(star.queuedProduction),
                knownGarrison)
     })

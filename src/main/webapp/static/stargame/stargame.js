@@ -28,6 +28,10 @@ function showFleetSidebar(fv) {
       value: fleetDispatchQuantity
     });
     
+    $('#fleetDispatch').html(
+      "<button id='doDispatchBtn'>Dispatch</button><br/>");
+    $("#doDispatchBtn").button({disabled: true});
+    
     if(fleetDispatchToStarId !== null) {
       var toStar = mapView.starViews[fleetDispatchToStarId];
       
@@ -35,22 +39,20 @@ function showFleetSidebar(fv) {
         "Distance: " + dist(fv, toStar).toFixed(2) + "<br/>";
       
       if(!inRange(fv, toStar)) {
-        $('#fleetDispatch').html(header +
+        $('#fleetDispatch').append(header +
           "Destination out of range. Research longer range.");
       } else {
-        $('#fleetDispatch').html(header +
-          "ETA: " + etaHrs(fv, toStar) + "hrs" + 
-          "<br/>" + 
-          "<button id='doDispatchBtn'>Dispatch</button>"
+        $('#fleetDispatch').append(header +
+          "ETA: " + etaHrs(fv, toStar) + "hrs"
         );
         
-        $("#doDispatchBtn").button().click(function() {
+        $("#doDispatchBtn").button("enable").click(function() {
            jsonDispatchShips(fv.fromStarId, fleetDispatchQuantity, 
              fleetDispatchToStarId);
         });
       }
     } else {
-      $('#fleetDispatch').html("");
+      $('#fleetDispatch').append("Choose a star to dispatch fleet to.");
     }
   }
   
@@ -94,7 +96,15 @@ function showStarSidebar(sv) {
       }).join("") +
       "</table>";
     
-    $('#star-planets').html(planetsTable);
+    $('#star-planets').html("<strong>Planets</strong><br/>" + planetsTable);
+    
+    var productionHtml = "<strong>Production</strong><br/>";
+    
+    var productionHtml = productionHtml + 
+      "Shipyards: " + sv.factories + "<br/>" +
+      "Ships in queue: " + sv.queuedProduction + "<br/>";
+    
+    $('#star-production').html(productionHtml);
     
     // Set up dialogs. Must be done after html set
     sv.planets.map(function(p) {

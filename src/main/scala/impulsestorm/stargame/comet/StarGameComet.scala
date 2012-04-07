@@ -119,6 +119,18 @@ class StarGameComet extends CometActor with Loggable {
                                  toStarId.intValue)
       Noop
     }
+    case JObject(List(JField("command", JString("buildFactories")), 
+                      JField("params", JArray(List(
+                        JInt(starId), JInt(nFactories) 
+                      ))))) => {
+      Noop
+    }
+    case JObject(List(JField("command", JString("buildShips")), 
+                      JField("params", JArray(List(
+                        JInt(starId), JInt(nShips) 
+                      ))))) => {
+      Noop
+    }
   } 
   
   def sendHint() = hintOpt match {
@@ -374,6 +386,15 @@ class StarGameComet extends CometActor with Loggable {
     JsRaw("function jsonDispatchShips(fromStarId, quantity, toStarId) {" + 
       jsonSend("dispatchShips", 
         JsRaw("[fromStarId, quantity, toStarId]")).toJsCmd +
-    "}")
+    "}") &
+    JsRaw("function buildFactories(starId, nFactories) {" + 
+      jsonSend("buildFactories",
+        JsRaw("[starId, nShips]")).toJsCmd +
+    "}") &
+    JsRaw("function buildShips(starId, nShips) {" + 
+      jsonSend("buildFactories",
+        JsRaw("[starId, nShips]")).toJsCmd +
+    "}") 
+    
   }
 }
