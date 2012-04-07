@@ -10,11 +10,12 @@ import _root_.impulsestorm.stargame.lib._
 
 import scala.util.Random
 
-import se.scalablesolutions.akka.actor.{Actor}
+import akka.actor.{Actor, ActorSystem, Props}
 
-object StarGame {  
+object StarGame {
+  val actorSystem = ActorSystem("StarGameSystem")  
   val supervisor = 
-    Actor.actorOf(new StateSupervisor(StarGameMaster.spawn _)).start
+    actorSystem.actorOf(Props(new StateSupervisor(StarGameMaster.spawn _)))
 }
 
 object StarGameMenu {

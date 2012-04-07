@@ -4,7 +4,6 @@ import scala.util.Random
 import impulsestorm.stargame.lib.SimRandom._
 
 import net.liftweb.json._
-import net.liftweb.json.JsonAST._
 
 trait hasName {
   val name: String

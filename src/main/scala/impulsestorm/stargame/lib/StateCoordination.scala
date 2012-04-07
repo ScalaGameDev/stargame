@@ -1,14 +1,20 @@
 package impulsestorm.stargame.lib
 
-import se.scalablesolutions.akka.actor.{Actor, ActorRef}
+import akka.actor._
+import akka.util.duration._
+import akka.util.Timeout
 
 import net.liftweb.common.{SimpleActor, Logger}
 import java.util.Date
+import akka.pattern.ask
 
 class StateSupervisor(
-  newStateMaster: (String) => Option[ActorRef], 
+  newStateMaster: (String, ActorContext) => Option[ActorRef], 
   SMTimeout: Int = 300) 
-  extends Actor with Logger {
+  extends Actor with Logger 
+{
+    
+  implicit val timeout = Timeout(5 seconds)
   
   object CleanOldActorsMsg
     
@@ -26,7 +32,7 @@ class StateSupervisor(
     
     activeSMs.get(id) match {
       case Some((_, sMaster)) => touchAndGive(sMaster) // already in map
-      case None => newStateMaster(id) match {
+      case None => newStateMaster(id, context) match {
         case Some(sMaster) => touchAndGive(sMaster) // successful spawn
         case None => None // failure to spawn SM
       }
@@ -55,11 +61,11 @@ class StateSupervisor(
     killMap.values.foreach(dateSMasterTuple => {
       val sMaster = dateSMasterTuple._2
       // send the PrepareShutdownMsg and stop the actors.
-      (sMaster !! PrepareShutdown) match {
-        case Some(OK) => {
-          sMaster.stop
+      (sMaster ? PrepareShutdown) onComplete {
+        case Left(throwable) => throw throwable
+        case Right(OK) => {
+          sMaster ! PoisonPill
         }
-        case _ => throw new java.io.IOException("Failure on PrepareShutdownMsg")
       }
     })
     
@@ -99,7 +105,7 @@ trait StateMaster[StateType <: State[StateType]] extends Actor {
       listeners = listeners.filter(_!=sender) // set
     case PrepareShutdown =>
       saveToStorage()
-      self reply OK
+      sender ! OK
   }
   
   // non-atomic saving to durable storage

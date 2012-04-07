@@ -2,7 +2,7 @@ package impulsestorm.stargame.model
 import impulsestorm.stargame.lib._
 
 import net.liftweb.common.{SimpleActor, Logger}
-import se.scalablesolutions.akka.actor.{Actor}
+import akka.actor.{Actor, ActorContext, Props}
 
 case class Inquire(stateId: String, sender: SimpleActor[Any]) 
   extends FwdedMsg
@@ -54,11 +54,11 @@ class StarGameMaster(var state: StarGameState)
 }
 
 object StarGameMaster {
-  def spawn(id: String) = 
+  def spawn(id: String, context: ActorContext) = 
     if(id.length == 24) // find method should do check, but w/e
       StarGameState.find(id) match {
         case Some(state) => 
-          Some(Actor.actorOf(new StarGameMaster(state)).start)
+          Some(context.actorOf(Props(new StarGameMaster(state))))
         case _ => None
       }
     else
