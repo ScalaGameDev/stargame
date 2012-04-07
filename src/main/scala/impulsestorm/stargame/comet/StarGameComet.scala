@@ -52,7 +52,7 @@ class StarGameComet extends CometActor with Loggable {
     playerOpt = state.players.find(_.openid == Some(openid))
     
     // schedule task to poll as often as the tick length
-    if(state.started && intervalTask.isEmpty) {
+    if(state.started && !state.finished && intervalTask.isEmpty) {
       def taskF() = sg ! InquireMapUpdates(stateId, this)
       val interval = math.max(
         (StarGameState.tickSizeYears/state.yearsPerDay*86400*1000).toLong,
@@ -92,7 +92,9 @@ class StarGameComet extends CometActor with Loggable {
       logger.info("StarGameComet gets hinted state")
       hintOpt = Some(hint)
       acceptNewState(state)
-      if(state.isOneOfThePlayers(openid) && hint.mapInfoChangeOnly)
+      if(!state.finished && 
+         state.isOneOfThePlayers(openid) && 
+         hint.mapInfoChangeOnly)
         partialUpdate(sendHint() & setMapView & setHtmlResearch)
       else
         reRender
@@ -127,12 +129,17 @@ class StarGameComet extends CometActor with Loggable {
     case _ => Noop    
   }
   
-  def viewPlayer(started: Boolean, owner: Boolean) = {
-    val title = if(started)
-      "Game in progress"
-    else
-      "Waiting for players. (%d/%d)".format(
-        state.players.length, state.nPlayers)
+  def viewPlayer(owner: Boolean) = {
+    val title = 
+      if(state.finished) {
+        val victor = state.players(state.gameVictor)
+        "Game over. Victory to: %s (%s)".format(
+          victor.alias, victor.openid.getOrElse("AI"))
+      } else if(state.started)
+        "Game in progress"
+      else
+        "Waiting for players. (%d/%d)".format(
+          state.players.length, state.nPlayers)
     
     (setTitle(title) & setHtmlPlayersList & 
     (if(owner) setHtmlStartGame else Noop) & 
@@ -157,8 +164,10 @@ class StarGameComet extends CometActor with Loggable {
       }
       case Some(state) =>
         val isOwner = openid == state.createdBy
-        if(state.isOneOfThePlayers(openid)) {
-          viewPlayer(state.started, isOwner)
+        if(state.finished) {
+          viewPlayer(isOwner)
+        } else if(state.isOneOfThePlayers(openid)) {
+          viewPlayer(isOwner)
         } else if(state.started) {
           viewObserver
         } else {

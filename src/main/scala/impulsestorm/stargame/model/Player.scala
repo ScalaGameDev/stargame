@@ -12,7 +12,8 @@ case class Player( id: Int, openid: Option[String], alias: String,
                    exploredStarIds: Set[Int],
                    metPlayerIds: Set[Int],
                    gold: Double,
-                   techs: List[Tech])
+                   techs: List[Tech],
+                   starsOwned: Int)
 {
   
   import Tech._
@@ -120,8 +121,9 @@ object Player {
            homeStarId = homeStarId,
            exploredStarIds = Set(homeStarId),
            metPlayerIds = Set(id),
-           gold = 1000,
-           techs = Nil)
+           gold = 100000,
+           techs = Nil,
+           starsOwned = 0)
   }
 }
 

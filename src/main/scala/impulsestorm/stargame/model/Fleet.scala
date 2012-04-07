@@ -48,7 +48,7 @@ extends Fleet {
   
   def arrived(year: Double) : Boolean = year > arriveYear
   
-  def arrive = StationaryFleet(uuid, playerId, ships, fromStarId)
+  def arrive = StationaryFleet(uuid, playerId, ships, toStarId)
   
   def newUUID() = copy(uuid=java.util.UUID.randomUUID().toString())
 }
@@ -92,10 +92,10 @@ object Fleet {
         val scoresAndFleets = fleets.map( f => {
           val player = players(f.playerId)
           ((f.ships*player.battlePower*SimRandom.random(0.8, 1.2)), f)
-        }).sortBy(_._1) // sort by score
+        }).sortBy(_._1).reverse // sort by score
         
         Some(scoresAndFleets.head._2.weaken(
-          scoresAndFleets(1)._1/scoresAndFleets(0)._1)) // score_2/score_1 
+          1.0-scoresAndFleets(1)._1/scoresAndFleets(0)._1)) // score_2/score_1 
       }
     }
   }

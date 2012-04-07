@@ -19,13 +19,13 @@ function setMapView(mapViewStr) {
   
   // generate battle reports html
   var rptDivs = mapView.lastReports.map(function(r) {
-    return "<div>Battle over " + mapView.starViews(r.starId).name + "<br/>" +
-           "Victor: " + mapView.playerNames(r.victorId) + 
+      return "<div>Battle over " + mapView.starViews[r.starId].name + "<br/>" +
+           "Victor: " + mapView.playerNames[r.victorId] + 
            " with " + r.shipsRemaining + " ships remaining" +
            "</div>";
   });
   
-  $('#reports').html(rptDivs.join("\n"));
+  $('#reports').html("<h2>Reports</h2>"+rptDivs.join("\n"));
   
   // refresh sidebar of what's selected
   if(mapPort !== null) {
@@ -189,7 +189,9 @@ function setDragAction(selector, action, startAction, finishAction) {
   function myCurPos(e) { return curPos(e, selector); }
   
   selector.mousedown(function(e) {
-    var [startPx, startPy] = myCurPos(e);
+    var startPs = myCurPos(e);
+    var startPx = startPs[0];
+    var startPy = startPs[1];
     
     if(startAction !== undefined) { 
       startAction(startPx, startPy); 
@@ -198,7 +200,8 @@ function setDragAction(selector, action, startAction, finishAction) {
     var dragged = false;
     
     var moveHandle = function(moveEvent) {
-      var [px, py] = myCurPos(moveEvent);
+      var ps = myCurPos(moveEvent);
+      var px = ps[0]; var py = ps[1];
       if(!dragged && Math.abs(px-startPx)+Math.abs(py-startPy) > 4) {
         dragged = true;
       }
@@ -211,8 +214,9 @@ function setDragAction(selector, action, startAction, finishAction) {
       selector.unbind('mousemove');
       $(document).unbind('mouseup');
       
-      if(finishAction !== undefined) { 
-        var [endPx, endPy] = myCurPos(upEvent);
+      if(finishAction !== undefined) {
+        var endPs = myCurPos(upEvent);
+        var endPx = endPs[0]; var endPy = endPs[1]; 
         finishAction(endPx, endPy, dragged); 
       }
     });
@@ -263,7 +267,8 @@ function drawMap() {
   ctx.fillRect(0,0,w,h);
   
   function inViewPort(itemWithPosition) {
-    var [px,py] = spaceToPixel(itemWithPosition.x, itemWithPosition.y);
+    var ps = spaceToPixel(itemWithPosition.x, itemWithPosition.y);
+    var px = ps[0]; var py = ps[1]; 
     return px < canvas.width && px > 0 &&
            py < canvas.height && py > 0;
   }
@@ -282,8 +287,9 @@ function drawMap() {
     };
   }
   
-    function drawFleetView(fv) {
-    var [px,py] = spaceToPixel(fv.x, fv.y);
+  function drawFleetView(fv) {
+    var ps = spaceToPixel(fv.x, fv.y);
+    var px = ps[0]; var py = ps[1]; 
     
     ctx.save();
     
@@ -325,7 +331,8 @@ function drawMap() {
   }
   
   function drawStarView(sv) {
-    var [px,py] = spaceToPixel(sv.x, sv.y);
+    var ps = spaceToPixel(sv.x, sv.y);
+    var px = ps[0]; var py = ps[1];
     
     ctx.beginPath();
     ctx.fillStyle = classToFillStyle[sv.sClass];

@@ -17,7 +17,7 @@ class StarGameSnip {
   def newfrm(in: NodeSeq) : NodeSeq = {
     var name = "Untitled Game"
     var mapSize = 1;
-    var nPlayers = 4;
+    var nPlayers = 3;
     
     def handleForm() = {
       val gameName = if(name != "") name else "Untitled Game"
@@ -41,7 +41,7 @@ class StarGameSnip {
                                          default = Full(mapSize),
                                          onSubmit = mapSize = _ ),
       "nPlayers" -> SHtml.selectObj[Int](options = 
-                                         (1 to 8) zip (1 to 8).map(_.toString),
+                                         (2 to 8) zip (2 to 8).map(_.toString),
                                          default = Full(nPlayers),
                                          onSubmit = nPlayers = _),
       "submit"   -> SHtml.submit("Create game", handleForm)
@@ -53,15 +53,22 @@ class StarGameSnip {
     val allGames = StarGameState.findAll
     
     def bindGames(template: NodeSeq) : NodeSeq = {
-      allGames.flatMap( g => 
+      allGames.flatMap( g => {
+        val status = if(g.finished)
+          "Victory: %s".format(g.players(g.gameVictor).openid.getOrElse("AI"))
+        else if(g.started) 
+          "In progress" 
+        else 
+          "Waiting for players"
+        
         bind("game", template,
           "name"->g.name,
           "mapSize"->g.mapSize,
           "nPlayers"->"%d/%d".format(g.players.length, g.nPlayers),
-          "status"-> (if(g.started) "In progress" else "Waiting for players"),
+          "status"-> status,
           "playLink"-> <a href={"play/"+g._id}>Play</a>
         )
-      )
+      })
     }
     
     bind("list", in,

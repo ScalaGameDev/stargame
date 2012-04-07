@@ -17,6 +17,9 @@ case class StarGameState( _id: String, createdBy: String, name: String,
                           mapSize: String, nPlayers: Int,
                           
                           started: Boolean = false,
+                          finished: Boolean = false,
+                          gameVictor: Int = -1,
+                          
                           realStartTime: Date,
                           
                           gameYear: Double = 0,
@@ -92,10 +95,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
         Fleet.mergeByPlayer(s1.garrison.toList ++ fleetsArrivedHere)
       
       // 3. do battle, leaving just one fleet standing
-      val finalGarrison = Fleet.doBattle(allFleetsHere.toList, players) match {
-        case Some(g) => Some(g.copy(fromStarId = s.id)) // Change the star id 
-        case None => None
-      }
+      val finalGarrison = Fleet.doBattle(allFleetsHere.toList, players)
       
       // 4. generate battle report
       val reportOpt : Option[BattleReport] = if(allFleetsHere.size > 1) {
@@ -119,17 +119,21 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     }).unzip
     
     val newPlayers = players.map( p => {
+      // collect all stars of player
+      val playerStars = stars3.filter(_.ownerIdOpt==Some(p.id))
+      
+      // update player's stars owned count
+      val newStarsOwned = playerStars.length
             
       // wealth distribution
       val totalWealthRate = 
-        stars3.filter(_.ownerIdOpt==Some(p.id)).map(
+        playerStars.map(
           _.planets.map(_.wealthYield).sum
         ).sum
       val wealthEarnedThisTick = totalWealthRate*StarGameState.tickSizeYears
       
       // Sensors include colonies AND newly arrived fleets (before battle)
-      val sensors = 
-        stars3.filter(_.ownerIdOpt == Some(p.id)) ++ 
+      val sensors = playerStars ++ 
         newlyArrivedFleets.filter(_.playerId == p.id) 
       
       // detect stars with sensors
@@ -139,6 +143,8 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       
       val detectedPlayers = detectedColonizedStars.map(_.ownerIdOpt.get).toSet
       
+      println(detectedPlayers)
+      
       // meet players
       val newMetPlayers = p.metPlayerIds union detectedPlayers
       
@@ -146,17 +152,25 @@ case class StarGameState( _id: String, createdBy: String, name: String,
       val metPlayersStarIds = stars.filter(s =>
           s.ownerIdOpt.isDefined && newMetPlayers.contains(s.ownerIdOpt.get)
         ).map(_.id).toSet
+      println(metPlayersStarIds)
       
       val newExploredStarIds = // union of all three 
         p.exploredStarIds | detectedStars.map(_.id).toSet | metPlayersStarIds
       
       p.copy(exploredStarIds=newExploredStarIds, metPlayerIds=newMetPlayers,
-             gold = p.gold+wealthEarnedThisTick)
+             gold = p.gold+wealthEarnedThisTick, starsOwned=newStarsOwned)
     })
+    
+    // Check victory conditions. (Own 80% of stars)
+    val gameVictor = 
+      newPlayers.find(_.starsOwned.toDouble/stars.length > 0.8)
+        .map(_.id)
     
     copy(gameYear=curYear, movingFleets=newMovingFleets, 
          players=newPlayers,
-         stars=stars3, reports=reports ++ newReports.flatten)
+         stars=stars3, reports=reports ++ newReports.flatten,
+         finished = gameVictor.isDefined, 
+         gameVictor = gameVictor.getOrElse(-1))
   }
   
   def updated() : StarGameState = {
@@ -177,11 +191,13 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   
   val starDensity = 1/36.0 // One per 36 square light years
   
-  val sizesNStars   = List(24, 48, 70, 108)
+  val sizesNStars   = List(8, 16, 36, 60, 108)
   val sizesAreas    = sizesNStars.map(_ / starDensity)
-  val sizesNames    = List("Small", "Medium", "Large", "Huge")
   val sizesSqLength = sizesAreas.map(A => math.sqrt(A))
-  val sizesIndices  = List(0,1,2,3)  
+  val sizesIndices  = List(0,1,2,3,4)  
+  
+  val sizesNames    = List("Tiny", "Small", "Medium", "Large", "Huge")
+    .zip(sizesNStars).map(t => "%s (%d)".format(t._1, t._2))
   
   val tickSizeYears = 0.1 // how long a tick should be (in year terms) 6 minutes
   
@@ -223,7 +239,10 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   }
   
   @tailrec def updated(s: StarGameState) : StarGameState =
-    if(!s.started || s.gameYear + tickSizeYears > s.supposedToBeYear) s else {
+    if(!s.started || s.finished 
+    || s.gameYear + tickSizeYears > s.supposedToBeYear) {
+       s
+    } else {
       updated(s.advancedOneTick())
     }
 }

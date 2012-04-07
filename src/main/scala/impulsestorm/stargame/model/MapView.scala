@@ -67,7 +67,7 @@ case class MapView(starViews: List[StarView], movingFleetViews: Set[FleetView],
                    mapBounds: MapBounds, yearsPerDay: Double, 
                    playerInfo: PlayerInfo, gameYear: Double,
                    lastReports: List[BattleReport],
-                   playerNames: List[String])
+                   playerNames: List[String], gameStarted: Boolean)
 
 object MapView {
   def from(s: StarGameState, player: Player) = {
@@ -105,6 +105,6 @@ object MapView {
     
     MapView(starViews, movingFleetViews, MapBounds(s), s.yearsPerDay, 
             PlayerInfo.from(player), s.gameYear, latestPlayerReports,
-            s.players.map(_.alias))
+            s.players.map(_.alias), s.started)
   }
 }

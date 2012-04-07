@@ -52,7 +52,7 @@ case class Planet( id: Int, pType: PlanetType,
           if(logisticGrowthRate < 0.0)
             min(-0.1, logisticGrowthRate)
           else
-            max(0.1, logisticGrowthRate)
+            max(0.5, logisticGrowthRate)
         
         baseRate*hostileMultiplier*techMultiplier
       }

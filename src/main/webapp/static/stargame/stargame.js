@@ -72,8 +72,23 @@ function showStarSidebar(sv) {
       row("th", ["Type", "Pop", "Income", ""]) +
       sv.planets.map(function(p) {
         p.maxPop = p.baseMaxPop*mapView.playerInfo.maxPopMultiplier;
+        var pop = p.pop.toFixed(1);
+        var popColor = "#000000";
+        var popTitle = pop + "M / " + p.maxPop.toFixed(1) + "M";
+        
+        if(mapView && mapView.gameStarted) {
+          if(p.maxPop - p.pop < 0.01) {
+            popColor = "#00ff00";
+            popTitle = "Maximum population reached";
+          } else if(p.popGrowthRate < 0.001) {
+            popColor = "#ff0000";
+            popTitle = "Insufficient technology to colonize";
+          }
+        }
+        
         return row("td", [p.pType, 
-          p.pop.toFixed(1) + " M",
+            "<strong title='"+popTitle+"' style='color: "+ popColor +"'>" 
+            + pop + "</strong>",
           (p.pop*p.mineralWealth).toFixed(1) + " RU/yr",
           "<button id='BtnPlanet"+p.id+"'>Detail</button>"])
       }).join("") +
