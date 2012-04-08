@@ -1,25 +1,34 @@
-<lift:surround with="base-nohead" at="content">
-  <p><a href="/stargame/new">New game</a></p>
-  
-  <lift:StarGameSnip.list>
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Map size</th>
-      <th>Players</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-    <list:listgames>
+<lift:surround with="base-noheadnowrap" at="content">
+  <div class="column span-12" style="text-align: center">
+    <lift:StarGameSnip.list>
+    <h2><list:tableTitle/></h2>
+    <table>
       <tr>
-        <td><game:name /></td>
-        <td><game:mapSize /></td>
-        <td><game:nPlayers /></td>
-        <td><game:status /></td>
-        <td><game:playLink /></td>
+        <th>Name</th>
+        <th>Map size</th>
+        <th>Players</th>
+        <th>Status</th>
+        <th></th>
       </tr>
-    </list:listgames>
-  </table>
-  </lift:StarGameSnip.list>
+      <list:listgames>
+        <tr>
+          <td><game:name /></td>
+          <td><game:mapSize /></td>
+          <td><game:nPlayers /></td>
+          <td><game:status /></td>
+          <td><game:playLink /></td>
+        </tr>
+      </list:listgames>
+    </table>
+    </lift:StarGameSnip.list>
+    
+    <h2><a href="/stargame/new">New game</a></h2>
+  </div>
+  <div class="column span-12 last" 
+    style="text-align: center;">
+    <img src="/static/img/screenie.png" style="
+           border: 3px outset #aaaadd;
+           margin: 15px;" />
+    <br/>
+  </div>
 </lift:surround>
-

@@ -7,7 +7,7 @@ function setMapView(mapViewStr) {
     "<table class='dashboard'>" + 
     "<tr>" +
       "<td>RU: " + playerInfo.player.gold.toFixed(1) + "</td>" +
-      "<td>Sensor range: "   + mapView.gameYear.toFixed(1) + "</td>" +
+      "<td>Sensor range: "   + playerInfo.sensorRange + "</td>" +
       "<td>Year: "   + mapView.gameYear.toFixed(1) + "</td>" +
     "</tr>" +
     "<tr>" +

@@ -21,10 +21,15 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info)
     "net.liftweb" %% "lift-mongodb" % liftVersion % "compile->default",
     "net.liftweb" %% "lift-openid" % liftVersion % "compile->default",
     "net.liftweb" %% "lift-json" % liftVersion % "compile->default",
+    "org.scala-lang" % "scala-compiler" % "2.9.1",
     "com.typesafe.akka" % "akka-actor" % "2.0",
     "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default",
     "ch.qos.logback" % "logback-classic" % "1.0.1"
   ) ++ super.libraryDependencies
+  
+  override def webappClasspath = 
+    super.webappClasspath +++ 
+    buildCompilerJar 
   
   /*override def ivyXML =
     <dependencies>

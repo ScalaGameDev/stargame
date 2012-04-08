@@ -21,6 +21,7 @@ case class StarGameState( _id: String, createdBy: String, name: String,
                           gameVictor: Int = -1,
                           
                           realStartTime: Date,
+                          lastMutateTime: Date,
                           
                           gameYear: Double = 0,
                           
@@ -160,13 +161,14 @@ case class StarGameState( _id: String, createdBy: String, name: String,
     
     // Check victory conditions. (Own 80% of stars)
     val gameVictor = 
-      newPlayers.find(_.starsOwned.toDouble/stars.length > 0.8)
+      newPlayers.find(_.starsOwned.toDouble/stars.length > 0.75)
         .map(_.id)
+    val gameTimeout = gameYear > 1000.0
     
     copy(gameYear=curYear, movingFleets=newMovingFleets, 
          players=newPlayers,
          stars=stars3, reports=reports ++ newReports.flatten,
-         finished = gameVictor.isDefined, 
+         finished = gameVictor.isDefined || gameTimeout, 
          gameVictor = gameVictor.getOrElse(-1))
   }
   
@@ -227,7 +229,9 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
       // currently does no filtering to ensure players start far from each other
       StarGameState(id, createdBy, name, sizesNames(size), 
                     yearsPerDay=yearsPerDay,
-                    realStartTime=new Date, nPlayers=nPlayers, stars=stars,
+                    realStartTime=new Date,
+                    lastMutateTime=new Date,
+                    nPlayers=nPlayers, stars=stars,
                     players=Nil, movingFleets=Set(),
                     availableStartStarIds = starIdsWithTerran)
     } else {

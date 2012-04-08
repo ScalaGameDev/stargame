@@ -3,6 +3,7 @@ import impulsestorm.stargame.lib._
 
 import net.liftweb.common.{SimpleActor, Logger}
 import akka.actor.{Actor, ActorContext, Props}
+import java.util.Date
 
 case class Inquire(stateId: String, sender: SimpleActor[Any]) 
   extends FwdedMsg
@@ -22,25 +23,26 @@ class StarGameMaster(var state: StarGameState)
   
   def myReceive: PartialFunction[Any, Unit] = {
     case Mutate(stateId, sender, mutateF) => { 
-      state = mutateF(state.updated())
+      state = mutateF(state.updated()).copy(lastMutateTime = new Date)
       listeners.foreach(_ ! state)
       
       saveToStorage()    
     }
     case MutateHinted(stateId, sender, mutateHintedF) => {
-      val (newstate, hint) = mutateHintedF(state.updated())
-      listeners.foreach(_ ! (newstate, hint))
+      val (newstate1, hint) = mutateHintedF(state.updated())
+      val newstate2 = newstate1.copy(lastMutateTime = new Date)
+      listeners.foreach(_ ! (newstate2, hint))
       
-      state = newstate
+      state = newstate2
       saveToStorage()
     }
     case Inquire(id, sender) => {
-      state = state.updated()
+      state = state.updated().copy(lastMutateTime = new Date)
       sender ! state
       saveToStorage()
     }
     case InquireMapUpdates(id, sender) => {
-      state = state.updated()
+      state = state.updated().copy(lastMutateTime = new Date)
       sender ! (state, Hint(true))
     }
   }
@@ -54,7 +56,7 @@ class StarGameMaster(var state: StarGameState)
 }
 
 object StarGameMaster {
-  def spawn(id: String, context: ActorContext) = 
+  def spawn(id: String, context: ActorContext) = {    
     if(id.length == 24) // find method should do check, but w/e
       StarGameState.find(id) match {
         case Some(state) => 
@@ -63,6 +65,7 @@ object StarGameMaster {
       }
     else
       None
+  }
 }
 
 trait hasPosition {

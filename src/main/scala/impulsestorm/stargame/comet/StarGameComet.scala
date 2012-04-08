@@ -58,7 +58,7 @@ class StarGameComet extends CometActor with Loggable {
       }
       val interval = math.max(
         (StarGameState.tickSizeYears/state.yearsPerDay*(86400*1000)).toLong,
-        1000)
+        2000)
         
       intervalTask = Some(ImTimer.addTask(taskF, interval, interval))
     }
@@ -147,14 +147,10 @@ class StarGameComet extends CometActor with Loggable {
   
   def viewPlayer(owner: Boolean) = {
     val title = 
-      if(state.finished) {
-        val victor = state.players(state.gameVictor)
-        "Game over. Victory to: %s".format(
-          victor.alias)
-      } else if(state.started)
-        "Game in progress"
+      if(state.started)
+        "Game running. Good luck."
       else
-        "Waiting for players. (%d/%d)".format(
+        "Game frozen. Waiting for players. (%d/%d)".format(
           state.players.length, state.nPlayers)
     
     (setTitle(title) & setHtmlPlayersList & 
@@ -164,14 +160,22 @@ class StarGameComet extends CometActor with Loggable {
     setMapView & sendHint())
   }
     
-  def viewObserver(finished: Boolean) =
-    setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
+  def viewObserver(finished: Boolean) = {
+    val title = if(state.finished) {
+      if(state.gameVictor != -1) {
+        val victor = state.players(state.gameVictor)
+        "Game over. Victory to: %s".format(victor.alias)
+      } else "Game over. Draw."
+    } else "Game '%s' in progress".format(state.name)
+    
+    setTitle(title) & setHtmlPlayersList &
       showPane("playersList")
       // The enlightened finished observer isn't ready yet
       /*(if(finished) 
         setMapView & showPanes(List("mapView", "playersList")) 
       else 
         showPane("playersList"))*/
+  }
   
   def viewJoin(owner: Boolean) =
     setTitle("Join game") & setHtmlPlayersList & setHtmlJoin & 
@@ -240,14 +244,18 @@ class StarGameComet extends CometActor with Loggable {
       if(!state.started && openid == state.createdBy)
         <h2>Start game</h2>
         <p>
-        {"%d out of %d slots filled".format(
+        {"%d out of %d slots filled. Warning: AI does nothing.".format(
           state.players.length, state.nPlayers)}
           <br/>
-          {ajaxButton("Start game filling slots with AI", startGame _)
+          {
+            ajaxButton("Start game filling rest of slots with AI", startGame _,
+              "class"->"btnStart")
           }
         </p>
+        <hr/>
       else <div/>
-    OnLoad(SetHtml("startGame", startGameHtml))
+    OnLoad(SetHtml("startGame", startGameHtml) &  
+      JsRaw("$('.btnStart').button()"))
   }
   
   def setHtmlJoin : JsCmd = {
@@ -315,7 +323,8 @@ class StarGameComet extends CometActor with Loggable {
   def setHtmlResearch : JsCmd = {
     def buyTech(tech: Tech) : JsCmd= {
       sg ! Actions.BuyTech(this, tech)
-      Noop
+      // close dialog, otherwise funky behavior
+      JsRaw("$('#research').dialog('close');")
     }
     
     def techPaneContents(tech: Tech) = 

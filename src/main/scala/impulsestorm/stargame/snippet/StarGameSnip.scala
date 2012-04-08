@@ -12,11 +12,13 @@ import impulsestorm.stargame.model.StarGame
 import impulsestorm.stargame.model.StarGameState
 import impulsestorm.stargame.lib.ImOpenIDVendor
 
+import java.util.Date
+
 class StarGameSnip {
   
   def newfrm(in: NodeSeq) : NodeSeq = {
     var name = "Untitled Game"
-    var mapSize = 1;
+    var mapSize : Int = 1;
     var nPlayers = 3;
     var yearsPerDay : Double = 8640.0; // turbo speed for testing
     
@@ -26,8 +28,7 @@ class StarGameSnip {
       144.0->"Slacking off at work: 1 yr = 10 min",
       24.0->"Casual: 1 yr = 1 hr",
       12.0->"Strategic: 1yr = 2 hr",
-      6.0->"Contemplative: 1 yr = 4 hr",
-      2.0->"Slow: 1 yr = 12 hr"
+      6.0->"Contemplative: 1 yr = 4 hr"
     )
       
     
@@ -65,13 +66,32 @@ class StarGameSnip {
   }
   
   def list(in: NodeSeq) : NodeSeq = {
-    
     val allGames = StarGameState.findAll
     
-    def bindGames(template: NodeSeq) : NodeSeq = {
-      allGames.flatMap( g => {
-        val status = if(g.finished)
-          "Victory: %s".format(g.players(g.gameVictor).alias)
+    // use opportunity to cull old games
+    val (toDelete, goodGames) = allGames.partition({ state =>
+      val msSinceLastMutate = (new Date).getTime - state.lastMutateTime.getTime
+      val daysSinceLastMutate = msSinceLastMutate/(86400*1000)
+      
+      daysSinceLastMutate > 4
+    })
+    toDelete.foreach(_.delete)
+    
+    val (myGames, otherGames) =   
+      goodGames.partition(g =>
+        g.createdBy == ImOpenIDVendor.identifier ||
+        g.isOneOfThePlayers(ImOpenIDVendor.identifier))
+    
+    val awaitingGames = otherGames.filter(!_.started)
+    
+    def bindGames(games: List[StarGameState])(template: NodeSeq) : NodeSeq = {
+      games.flatMap( g => {
+        val status = if(g.finished) {
+          if(g.gameVictor != -1)
+            "Game over: Victory: %s".format(g.players(g.gameVictor).alias)
+          else
+            "Game over: Draw"
+        }
         else if(g.started) 
           "In progress" 
         else 
@@ -87,8 +107,22 @@ class StarGameSnip {
       })
     }
     
-    bind("list", in,
-      "listgames" -> bindGames _)
+    {
+      if(!myGames.isEmpty)
+        bind("list", in,
+          "tableTitle" -> "My games",
+          "listgames" -> bindGames(myGames) _)
+      else
+        <div></div>
+    } ++ {
+      if(!awaitingGames.isEmpty)      
+        bind("list", in,
+          "tableTitle" -> "Games awaiting players",
+          "listgames" -> bindGames(awaitingGames) _)
+      else
+        <div></div>
+    }
+    
   }
   
   def play(in: NodeSeq) : NodeSeq = S.param("gameId") match {

@@ -21,7 +21,7 @@ object StarGame {
 object StarGameMenu {
   import impulsestorm.stargame.lib.ImOpenIDVendor.loginFirst
                       
-  val root = Menu("Stargame") / "stargame" / "index" submenus (
+  val root = Menu("Stargame") / "stargame" / "index" >> loginFirst submenus (
     Menu("New Stargame") / "stargame" / "new" >> loginFirst >> Hidden,
     Menu("Play Stargame") / "stargame" / "play" / ** >> loginFirst >> Hidden
   )

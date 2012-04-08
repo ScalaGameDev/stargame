@@ -19,11 +19,12 @@ class OpenId {
   def dedicatedLoginForm(in: NodeSeq): NodeSeq = {
     def redirectTo(url: String) = {
       println("Redir to: " + url)
+      ImOpenIDVendor.loginRedirect.set(None)
       S.redirectTo(url)
     }
       
     if(ImOpenIDVendor.loggedIn) {
-      ImOpenIDVendor.loginRedirect.get.getOrElse("/stargame/")
+      redirectTo(ImOpenIDVendor.loginRedirect.get.getOrElse("/stargame/"))
     }
     ImOpenIDVendor.showUserBox(in)
   }
