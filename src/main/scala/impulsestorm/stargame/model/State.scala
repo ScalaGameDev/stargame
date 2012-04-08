@@ -200,11 +200,15 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
   
   // size: 0=Small, 1=Medium, etc.
   // returns: newly created state
-  def newState(createdBy: String, name: String = "Untitled Game", size: Int = 1,
+  def newState(createdBy: String, name: String = "Untitled Game", 
+               yearsPerDay: Double = 1440,
+               size: Int = 1,
                nPlayers: Int = 3) : StarGameState = {
     
+    println("nPlayers: %d".format(nPlayers))
+    println("size: %d".format(size))
+    println("years per day: %f".format(yearsPerDay))
     val id = (new ObjectId).toString
-    val yearsPerDay = 8000.0
     
     val numStars = sizesNStars(size)
     val mapSizeL = sizesSqLength(size)
@@ -231,7 +235,8 @@ object StarGameState extends MongoDocumentMeta[StarGameState] with Logger {
            "(%d/%d) found.".format(starIdsWithTerran.length, nPlayers))
       
       // try again
-      newState(createdBy, name, size, nPlayers)
+      newState(createdBy, name=name, yearsPerDay=yearsPerDay, size=size,
+               nPlayers=nPlayers)
     }
   }
   

@@ -68,6 +68,13 @@ function showStarSidebar(sv) {
       return "<"+tag+">"+item+"</"+tag+">" }).join("") + "</tr>";
   }
   
+  if(sv.visibleGarrison !== undefined) {
+    $('#star-garrison').html("<strong>Ships in garrison</strong><br/>" + 
+      sv.visibleGarrison.ships);
+  } else {
+    $('#star-garrison').html("");
+  }
+  
   if(sv.planets !== undefined) {
     var planetsTable = 
       "<table id='planets-table'>" +

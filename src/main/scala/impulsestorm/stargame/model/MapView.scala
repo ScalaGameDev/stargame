@@ -93,7 +93,7 @@ object MapView {
                star.id, 
                onlyIfExplored(star.name), 
                star.sClass, star.x, star.y, 
-               onlyIfExplored(star.planets),
+               onlyIfOwned(star.planets),
                knownOwnerId,
                onlyIfOwned(star.factories),
                onlyIfOwned(star.queuedProduction),

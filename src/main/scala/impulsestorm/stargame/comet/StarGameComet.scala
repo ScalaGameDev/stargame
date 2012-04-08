@@ -53,9 +53,12 @@ class StarGameComet extends CometActor with Loggable {
     
     // schedule task to poll as often as the tick length
     if(state.started && !state.finished && intervalTask.isEmpty) {
-      def taskF() = sg ! InquireMapUpdates(stateId, this)
+      def taskF() = {
+        println("I inquire about updates")
+        sg ! InquireMapUpdates(stateId, this)
+      }
       val interval = math.max(
-        (StarGameState.tickSizeYears/state.yearsPerDay*86400*1000).toLong,
+        (StarGameState.tickSizeYears/state.yearsPerDay*(86400*1000)).toLong,
         1000)
         
       intervalTask = Some(ImTimer.addTask(taskF, interval, interval))
@@ -342,7 +345,7 @@ class StarGameComet extends CometActor with Loggable {
           <div id="research-accordian">
           {
             List( TechCategory.values,
-                  Tech.allOrganizedTechs ).transpose map { 
+                  Tech.allOrganizedTechs ).transpose collect { 
               case List(category: TechCategory, categoryTechs: List[Tech]) =>
                 <h4 style="padding-left: 30px;">{category}</h4> ++
                 <div>
