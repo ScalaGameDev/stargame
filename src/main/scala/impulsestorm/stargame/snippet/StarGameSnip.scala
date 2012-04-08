@@ -71,7 +71,7 @@ class StarGameSnip {
     def bindGames(template: NodeSeq) : NodeSeq = {
       allGames.flatMap( g => {
         val status = if(g.finished)
-          "Victory: %s".format(g.players(g.gameVictor).openid.getOrElse("AI"))
+          "Victory: %s".format(g.players(g.gameVictor).alias)
         else if(g.started) 
           "In progress" 
         else 
@@ -82,7 +82,7 @@ class StarGameSnip {
           "mapSize"->g.mapSize,
           "nPlayers"->"%d/%d".format(g.players.length, g.nPlayers),
           "status"-> status,
-          "playLink"-> <a href={"play/"+g._id}>Play</a>
+          "playLink"-> <a href={"/stargame/play/"+g._id}>Play</a>
         )
       })
     }
@@ -100,6 +100,12 @@ class StarGameSnip {
       </lift:comet>
     }
     case _ => S.redirectTo("/stargame/")
+  }
+  
+  def stargameRedirect(in: NodeSeq) = {
+    if(ImOpenIDVendor.loggedIn)
+      S.redirectTo("/stargame/")
+    <div/>
   }
 }
 

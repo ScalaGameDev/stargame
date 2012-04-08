@@ -4,68 +4,30 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     
-		<title>code:app:0.1-SNAPSHOT</title>
+		<title>impulsestorm.stargame</title>
     <lift:CSS.blueprint />
     <lift:CSS.fancyType />
 
-		<link type="text/css" href="/static/css/trontastic/jquery-ui-1.8.9.custom.css" rel="stylesheet" />	
+		<link type="text/css" href="/static/css/trontastic/jquery-ui-1.8.9.custom.css" rel="stylesheet" />
+		<link type="text/css" href="/static/css/stargame.css" rel="stylesheet" />	
 		<script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
 		<script type="text/javascript" src="/static/js/jquery-ui-1.8.9.custom.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.event.wheel-1.0.js"></script>
     <script type="text/javascript" src="/static/js/jquery.ba-outside-events.min.js"></script>
 
     <script id="json" src="/classpath/json.js" type="text/javascript"/>
-    <style type="text/css">
-/* <![CDATA[ */
-.edit_error_class {
-  display: block;
-  color: red;
-}
-
-.sidebar ul {
-	margin:0;
-	padding:0;
-	border-bottom:1px solid #ccc;
-}
-	 
-
-.sidebar ul li {
-	margin:0;
-	padding:0;
-	list-style:none;
-	border:1px solid #ccc;
-	border-bottom:none;
-}
-
-.sidebar ul li a {
-	display:block;
-	padding:3px;
-	text-indent:30px;
-	text-decoration:none;
-}
-
-.sidebar ul li span {
-	display:block;
-	padding:3px;
-	text-indent:30px;
-	text-decoration:none;
-}
-
-.sidebar ul li a:hover {
-	background-color: #eee;
-}
-
-
-  /* ]]> */
-
-  </style>
   
   <link rel="stylesheet" type="text/css" media="screen" href="/static/css/openid.css" />
   </head>
   <body>
     <div class="container">
       <div class="column span-12" style="text-align: left">
-        <h1 class="alt">impulsestorm games<img alt="" id="ajax-loader" style="display:none; margin-bottom: 0px; margin-left: 5px" src="/images/ajax-loader.gif"/></h1>
+        <h1 class="alt">
+          <a href="/" style="text-decoration: none; color: #dddddd;">
+            impulsestorm.stargame
+          </a>
+          <img alt="" id="ajax-loader" style="display:none; margin-bottom: 0px; margin-left: 5px" src="/images/ajax-loader.gif"/>
+        </h1>
       </div>
       <div class="column span-12 last" style="text-align: right">
         <lift:bind name="topRight" /> 
@@ -75,16 +37,12 @@
 
       <hr/>
 
-      <div class="column span-24 last">
-        <lift:msgs />
-        <lift:bind name="baseContent" />
-      </div>
+      <!--<lift:msgs />-->
+      <lift:bind name="baseContent" />
 
       <hr />
       <div class="column span-24 last" style="text-align: center">
-        <h4 class="alt">
-          <a href="http://www.liftweb.net"><i>Lift</i></a> 
-	        is Copyright 2007-2010 WorldWide Conferencing, LLC.  Distributed under an Apache 2.0 License.</h4>
+        <h4 class="alt">Tommy</h4>
       </div>
       
     </div>

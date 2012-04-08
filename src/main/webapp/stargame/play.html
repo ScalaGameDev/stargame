@@ -27,6 +27,15 @@
     <table>
       <tr>
         <td id="playerInfoDashboard" width="600"></td>
+        <td>
+          <button id='btnResearch' class='btnPanel'>Research</button>
+          <button id='btnPlayers' class='btnPanel'>Players</button>
+        </td>
+      </tr>
+      <tr>
+        <td width="600">
+          <canvas id="map-canvas" width="600" height="600" />
+        </td>
         <td rowspan="2" style="vertical-align: top;">
           <div id="starinfo" class="sidebar">
             <table>
@@ -72,16 +81,14 @@
           </div>
         </td>
       </tr>
-      <tr>
-        <td width="600">
-          <canvas id="map-canvas" width="600" height="600" />
-        </td>
-      </tr>
     </table>
   </div>
   
   <div id="research" class="pane" />
   <div id="reports" class="pane"></div>
-  <div id="playersList" class="pane" />
+  <div id="playersList" class="pane">
+    <h2>Existing players</h2>
+    <div id="playersListInner" />
+  </div>
 </lift:surround>
 

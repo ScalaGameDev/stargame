@@ -1,12 +1,9 @@
 <lift:surround with="base">
-  
   <lift:bind-at name="baseContent">
-    <div class="column span-24 last">
-      <lift:bind name="content" />
-    </div>
+    <lift:bind name="content" />
   </lift:bind-at>
-  
   <lift:bind-at name="topRight">
-    <lift:OpenId.form/>
+    <lift:OpenId.logoutOnly/>
   </lift:bind-at>
 </lift:surround>
+

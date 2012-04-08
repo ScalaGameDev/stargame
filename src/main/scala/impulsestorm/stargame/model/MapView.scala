@@ -75,9 +75,10 @@ object MapView {
   def from(s: StarGameState, player: Player) = {
     val starViews = s.stars.map( star => {
       def onlyIfExplored[T](arg: T) = 
-        if(player.exploredStarIds.contains(star.id)) Some(arg) else None
+        if(s.finished || player.exploredStarIds.contains(star.id)) Some(arg) 
+        else None
       def onlyIfOwned[T](arg: T) = 
-        if(star.ownerIdOpt == Some(player.id)) Some(arg) else None
+        if(s.finished || star.ownerIdOpt == Some(player.id)) Some(arg) else None
       
       val knownOwnerId = star.ownerIdOpt match {
         case Some(ownerId) => onlyIfExplored(ownerId)

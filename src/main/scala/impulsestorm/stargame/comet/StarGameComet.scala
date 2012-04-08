@@ -54,7 +54,6 @@ class StarGameComet extends CometActor with Loggable {
     // schedule task to poll as often as the tick length
     if(state.started && !state.finished && intervalTask.isEmpty) {
       def taskF() = {
-        println("I inquire about updates")
         sg ! InquireMapUpdates(stateId, this)
       }
       val interval = math.max(
@@ -150,8 +149,8 @@ class StarGameComet extends CometActor with Loggable {
     val title = 
       if(state.finished) {
         val victor = state.players(state.gameVictor)
-        "Game over. Victory to: %s (%s)".format(
-          victor.alias, victor.openid.getOrElse("AI"))
+        "Game over. Victory to: %s".format(
+          victor.alias)
       } else if(state.started)
         "Game in progress"
       else
@@ -161,13 +160,18 @@ class StarGameComet extends CometActor with Loggable {
     (setTitle(title) & setHtmlPlayersList & 
     (if(owner) setHtmlStartGame else Noop) & 
     setHtmlResearch & setHtmlMapCmds & 
-    showPanes(List("research", "map", "playersList", "startGame", "reports")) &
+    showPanes(List("map", "startGame", "reports")) &
     setMapView & sendHint())
   }
     
-  def viewObserver =
+  def viewObserver(finished: Boolean) =
     setTitle("Game '%s' in progress".format(state.name)) & setHtmlPlayersList &
-      showPane("playerList")
+      showPane("playersList")
+      // The enlightened finished observer isn't ready yet
+      /*(if(finished) 
+        setMapView & showPanes(List("mapView", "playersList")) 
+      else 
+        showPane("playersList"))*/
   
   def viewJoin(owner: Boolean) =
     setTitle("Join game") & setHtmlPlayersList & setHtmlJoin & 
@@ -182,11 +186,11 @@ class StarGameComet extends CometActor with Loggable {
       case Some(state) =>
         val isOwner = openid == state.createdBy
         if(state.finished) {
-          viewPlayer(isOwner)
+          viewObserver(true)
         } else if(state.isOneOfThePlayers(openid)) {
           viewPlayer(isOwner)
         } else if(state.started) {
-          viewObserver
+          viewObserver(false)
         } else {
           viewJoin(isOwner)
         }
@@ -212,17 +216,19 @@ class StarGameComet extends CometActor with Loggable {
   def setHtmlPlayersList : JsCmd = {  
     val players = state.players
     
-    val existingPlayersHtml : NodeSeq = ( 
-      <h2>Existing players</h2>
+    val existingPlayersHtml : NodeSeq = (
       <table>
         {if(players.isEmpty)
            <tr><td /><td>None</td></tr>
          else
-           players.map( p => <tr><td></td><td>{p.alias}</td></tr> )}
+           players.map( p => 
+            <tr><td></td><td>
+            {p.alias}<br/>{p.openid.getOrElse("AI")}
+            </td></tr> )}
       </table>
     ) 
     
-    OnLoad(SetHtml("playersList", existingPlayersHtml))
+    OnLoad(SetHtml("playersListInner", existingPlayersHtml))
   }
   
   def setHtmlStartGame : JsCmd = {
@@ -237,7 +243,8 @@ class StarGameComet extends CometActor with Loggable {
         {"%d out of %d slots filled".format(
           state.players.length, state.nPlayers)}
           <br/>
-          {ajaxButton("Start game filling slots with AI", startGame _)}
+          {ajaxButton("Start game filling slots with AI", startGame _)
+          }
         </p>
       else <div/>
     OnLoad(SetHtml("startGame", startGameHtml))
@@ -313,12 +320,13 @@ class StarGameComet extends CometActor with Loggable {
     
     def techPaneContents(tech: Tech) = 
       <div>
-        <h4>{tech.toString}</h4>
+        <h3>{tech.toString}</h3>
         <p>{tech.description}</p>
         <p>{
           if(player.techs.contains(tech)) "Already Researched" 
           else if(player.gold > tech.cost) 
-            ajaxButton("Buy - " + tech.cost + "RU", () => buyTech(tech))
+            ajaxButton("Buy - " + tech.cost + "RU", () => buyTech(tech),
+            "class"->"btnResearchBuy")
           else
             "Cannot afford."
         }</p>
@@ -326,7 +334,8 @@ class StarGameComet extends CometActor with Loggable {
     
     def showTechPane(tech: Tech) = () => {
       openResearchTech = Some(tech)
-      SetHtml("research-tech-info", techPaneContents(tech))
+      SetHtml("research-tech-info", techPaneContents(tech)) &
+        JsRaw("$('.btnResearchBuy').button();")
     }
     
     def styleTech(tech: Tech) = {
@@ -337,11 +346,10 @@ class StarGameComet extends CometActor with Loggable {
       }
     }
 
-    OnLoad(SetHtml("research", (<h2>Research</h2> ++
+    OnLoad(SetHtml("research", (
         <table>
         <tr>
         <td width="50%">
-          <h3>Technologies</h3>
           <div id="research-accordian">
           {
             List( TechCategory.values,
@@ -376,14 +384,14 @@ class StarGameComet extends CometActor with Loggable {
     )) & (openResearchTech match {
       case None => Noop
       case Some(tech) => showTechPane(tech)()
-    })) & JsRaw("""
+    })) & OnLoad(JsRaw("""
     $('#research-accordian').accordion({
       active: lastResearchCategory
     });
     $('#research-accordian').bind('accordionchangestart', function(event, ui) {
       lastResearchCategory = $('#research-accordian').accordion( "option", "active" );
     });
-    """)
+    """))
     
   }
   

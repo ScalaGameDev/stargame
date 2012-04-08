@@ -12,11 +12,18 @@ import lib.ImOpenIDVendor
 class OpenId {
   def form(in: NodeSeq): NodeSeq =
     ImOpenIDVendor.showUserBox(in)
+    
+  def logoutOnly(in: NodeSeq): NodeSeq = 
+    ImOpenIDVendor.showLogoffOnly(in)
   
   def dedicatedLoginForm(in: NodeSeq): NodeSeq = {
-    println("Redir to: " + ImOpenIDVendor.loginRedirect.get.get)
+    def redirectTo(url: String) = {
+      println("Redir to: " + url)
+      S.redirectTo(url)
+    }
+      
     if(ImOpenIDVendor.loggedIn) {
-      S.redirectTo(ImOpenIDVendor.loginRedirect.get.get)
+      ImOpenIDVendor.loginRedirect.get.getOrElse("/stargame/")
     }
     ImOpenIDVendor.showUserBox(in)
   }

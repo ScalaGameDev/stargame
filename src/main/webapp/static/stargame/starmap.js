@@ -1,17 +1,21 @@
 var mapView = null; // all the visible entities
 function setMapView(mapViewStr) {  
   mapView = JSON.parse(mapViewStr);
-  
+  var playerInfo = mapView.playerInfo;
   // update player dashboard
   $('#playerInfoDashboard').html(
-    "<table><tr>" +
-    "<td class='dashboard'>RU: " + 
-      mapView.playerInfo.player.gold.toFixed(1) + "</td>" +
-    "<td class='dashboard'>Attack: " + 100 + "</td>" +
-    "<td class='dashboard'>Speed: "  + mapView.playerInfo.speed + "</td>" +
-    "<td class='dashboard'>Range: "  + mapView.playerInfo.range + "</td>" +
-    "<td class='dashboard'>Year: "   + mapView.gameYear.toFixed(1) + "</td>" +
-    "</tr></table>");
+    "<table class='dashboard'>" + 
+    "<tr>" +
+      "<td>RU: " + playerInfo.player.gold.toFixed(1) + "</td>" +
+      "<td>Sensor range: "   + mapView.gameYear.toFixed(1) + "</td>" +
+      "<td>Year: "   + mapView.gameYear.toFixed(1) + "</td>" +
+    "</tr>" +
+    "<tr>" +
+      "<td>Ship Attack: " + 100 + "</td>" +
+      "<td>Ship Speed: "  + playerInfo.speed + "</td>" +
+      "<td>Ship Range: "  + playerInfo.range + "</td>" +
+    "</tr>"+
+    "</table>");
   
   drawMap();
   
@@ -19,10 +23,21 @@ function setMapView(mapViewStr) {
   
   // generate battle reports html
   var rptDivs = mapView.lastReports.map(function(r) {
-      return "<div>Battle over " + mapView.starViews[r.starId].name + "<br/>" +
-           "Victor: " + mapView.playerNames[r.victorId] + 
-           " with " + r.shipsRemaining + " ships remaining" +
-           "</div>";
+    var styleClass;
+    var verb;
+    if(pid == r.victorId) {
+      verb = "Won";
+      styleClass = "battlerpt battlewon";
+    } else {
+      verb = "Lost";
+      styleClass = "battlerpt battlelost";
+    }
+    
+    return "<div class='"+styleClass+"'><strong>" + verb + " battle over " +
+         mapView.starViews[r.starId].name + "</strong><br/>" +
+         "Victor: " + mapView.playerNames[r.victorId] + 
+         " with " + r.shipsRemaining + " ships remaining" +
+         "</div>";
   });
   
   $('#reports').html("<h2>Reports</h2>"+rptDivs.join("\n"));
@@ -95,7 +110,7 @@ function initMapPort() {
           // prevent zooming out past a threshold
           var b = bounds;
           // if statement tests if map scale already 'big enough'
-          if( canvas.width/this.PixelsPerLy > b.xRight-b.xLeft + 2*bTol ||
+          if( canvas.width/this.PixelsPerLy > b.xRight-b.xLeft + 2*bTol &&
               canvas.height/this.PixelsPerLy > b.yBottom-b.yTop + 2*bTol )
           { return; }
           else { multiplier = 1/1.2; }

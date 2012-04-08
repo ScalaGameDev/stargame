@@ -53,6 +53,9 @@ object ImOpenIDVendor extends SimpleOpenIDVendor {
     }                 
   )
   
+  def showLogoffOnly(in: NodeSeq) =
+    if(loggedIn) showUserBox(in) else <div/>
+  
   // gets identifier assuming logged in
   def identifier: String = currentUser.get.getIdentifier
   

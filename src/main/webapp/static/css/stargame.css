@@ -1,0 +1,67 @@
+body {
+  background-color: #222222;
+  color: #dddddd;
+}
+
+h1 {
+  color: #dddddd;
+}
+h2 {
+  color: #dddddd;
+}
+h3 {
+  color: #dddddd;
+}
+
+.battlerpt {
+  display: block;
+  padding: 1em;
+  color: #000000;
+}
+
+.battlewon {
+  background-color: #ACFF9C;
+}
+
+.battlelost {
+  background-color: #FFC29C;
+}
+
+.edit_error_class {
+  display: block;
+  color: red;
+}
+
+.sidebar ul {
+	margin:0;
+	padding:0;
+	border-bottom:1px solid #ccc;
+}
+	 
+
+.sidebar ul li {
+	margin:0;
+	padding:0;
+	list-style:none;
+	border:1px solid #ccc;
+	border-bottom:none;
+}
+
+.sidebar ul li a {
+	display:block;
+	padding:3px;
+	text-indent:30px;
+	text-decoration:none;
+}
+
+.sidebar ul li span {
+	display:block;
+	padding:3px;
+	text-indent:30px;
+	text-decoration:none;
+}
+
+.sidebar ul li a:hover {
+	background-color: #eee;
+}
+

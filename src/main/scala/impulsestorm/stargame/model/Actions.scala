@@ -31,8 +31,10 @@ object Actions {
         else newState
       
       val filledPlayersState = fillEmptySlotsWithAI(s)
-      filledPlayersState.copy(started = true, 
-                              realStartTime = new java.util.Date)
+      filledPlayersState
+        .copy(started = true, 
+              realStartTime = new java.util.Date)
+        .advancedOneTick() // force advance of one tick.
     } else s)
                   
   

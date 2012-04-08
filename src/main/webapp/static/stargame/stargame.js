@@ -82,7 +82,7 @@ function showStarSidebar(sv) {
       sv.planets.map(function(p) {
         p.maxPop = p.baseMaxPop*mapView.playerInfo.maxPopMultiplier;
         var pop = p.pop.toFixed(1);
-        var popColor = "#000000";
+        var popColor = "#dddddd";
         var popTitle = pop + "M / " + p.maxPop.toFixed(1) + "M";
         
         if(mapView && mapView.gameStarted) {
@@ -99,11 +99,12 @@ function showStarSidebar(sv) {
             "<strong title='"+popTitle+"' style='color: "+ popColor +"'>" 
             + pop + "</strong>",
           (p.pop*p.mineralWealth).toFixed(1) + " RU/yr",
-          "<button id='BtnPlanet"+p.id+"'>Detail</button>"])
+          "<button class='BtnPlanet' id='BtnPlanet"+p.id+"'>Detail</button>"])
       }).join("") +
       "</table>";
     
     $('#star-planets').html("<strong>Planets</strong><br/>" + planetsTable);
+    $('.BtnPlanet').button();
     
     var productionHtml = "<strong>Production</strong><br/>";
     
@@ -112,21 +113,23 @@ function showStarSidebar(sv) {
       row("th", ["Shipyards", "Enqueued ships"]) +
       row("td", [sv.factories, sv.queuedProduction]) +
       row("td", [
-          "<button id='build-factories-1'>Build Factory</button>",
-          "<button id='build-ships-1'>Build Ship</button>"
+          "<button class='btnBuild' id='build-factories-1'>Build<br/>Factory</button>",
+          "<button class='btnBuild' id='build-ships-1'>Build<br/>Ship</button>"
       ]) + 
       row("td", [
-          "<button id='build-factories-10'>Build 10 Factories</button>",
-          "<button id='build-ships-10'>Build 10 Ships</button>"
+          "<button class='btnBuild' id='build-factories-10'>Build<br/>10 Factories</button>",
+          "<button class='btnBuild' id='build-ships-10'>Build<br/>10 Ships</button>"
       ]) +
       row("td", [
-          "<button id='build-factories-100'>Build 100 Factories</button>",
-          "<button id='build-ships-100'>Build 100 Ships</button>"
+          "<button class='btnBuild' id='build-factories-100'>Build<br/>100 Factories</button>",
+          "<button class='btnBuild' id='build-ships-100'>Build<br/>100 Ships</button>"
       ]) +
       "</table>"
       ;
     
     $('#star-production').html(productionHtml);
+    
+    $('.btnBuild').button().width(120);
     
     $('#build-factories-1').click(function() { buildFactories(sv.id, 1); });
     $('#build-factories-10').click(function() { buildFactories(sv.id, 10); });
@@ -139,7 +142,7 @@ function showStarSidebar(sv) {
     var gold = mapView.playerInfo.player.gold;
     // Shipyard affordability
     function disableWithTitle(id, title) {
-      $('#'+id).attr('disabled', true).attr('title', title);
+      $('#'+id).button('option', 'disabled', true).attr('title', title);
     }
     function checkAfford(id, cost) {
       if(gold < cost) disableWithTitle(id, "Can't afford");
@@ -327,4 +330,21 @@ $(document).ready(function() {
     return false;
   });
   
+  // set up panel buttons
+  $('.btnPanel').button().width(120);
+  function showDivInDiag(divSelector, title) {
+    return function(e) {
+      var diag = divSelector.dialog({
+        title: title,
+        width: 700,
+        height: 400
+      });
+      diag.bind('clickoutside', function() { 
+        diag.dialog('close');
+      });
+      return false;
+    }
+  }
+  $('#btnResearch').click(showDivInDiag($('#research'), "Research"));
+  $('#btnPlayers').click(showDivInDiag($('#playersListInner'), "Player List"));
 });
