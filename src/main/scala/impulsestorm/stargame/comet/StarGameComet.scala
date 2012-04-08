@@ -180,7 +180,9 @@ class StarGameComet extends CometActor with Loggable {
   def viewJoin(owner: Boolean) =
     setTitle("Join game") & setHtmlPlayersList & setHtmlJoin & 
       (if(owner) setHtmlStartGame else Noop) &
-      showPanes(List("playersList", "join", "startGame"))
+      showPanes(List("playersList", "join", "startGame", "research"))
+      // HERE we have a HACK in which we show research, otherwise
+      // the research panel doesn't work right upon joining
   
   def render = {
     stateOpt match {
@@ -271,7 +273,6 @@ class StarGameComet extends CometActor with Loggable {
     def processJoinForm() = {
       logger.info("Registered : " + newPlayer.alias)
       sg ! Actions.RegisterPlayer(this, newPlayer)
-      Noop
     }
 
     val joinHtml = if(state.players.length < state.nPlayers)
@@ -282,7 +283,7 @@ class StarGameComet extends CometActor with Loggable {
         <td>Your player alias:</td>
         <td>{text(newPlayer.alias, a => setAlias _)}</td>
         </tr>
-        <tr>
+        <tr style="display: none;">
         <td>Trait 1: </td>
         <td>
         {
@@ -292,7 +293,7 @@ class StarGameComet extends CometActor with Loggable {
         }
         </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
         <td>Trait 2: </td>
         <td>
         {
@@ -393,7 +394,7 @@ class StarGameComet extends CometActor with Loggable {
     )) & (openResearchTech match {
       case None => Noop
       case Some(tech) => showTechPane(tech)()
-    })) & OnLoad(JsRaw("""
+    }) & JsRaw("""
     $('#research-accordian').accordion({
       active: lastResearchCategory
     });

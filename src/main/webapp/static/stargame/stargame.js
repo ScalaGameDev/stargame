@@ -110,8 +110,10 @@ function showStarSidebar(sv) {
     
     var productionHtml = productionHtml + 
       "<table id='production-table'>" +
-      row("th", ["Shipyards", "Enqueued ships"]) +
-      row("td", [sv.factories, sv.queuedProduction]) +
+      row("th", ["Factories", "Enqueued ships"]) +
+      row("td", ["<strong>sv.factories</strong>", 
+                 "<strong>sv.queuedProduction</strong>"]) +
+      row("td", ["Cost: 100 RU", "Cost:  10 RU"]) +
       row("td", [
           "<button class='btnBuild' id='build-factories-1'>Build<br/>Factory</button>",
           "<button class='btnBuild' id='build-ships-1'>Build<br/>Ship</button>"
@@ -334,13 +336,15 @@ $(document).ready(function() {
   $('.btnPanel').button().width(120);
   function showDivInDiag(divSelector, title) {
     return function(e) {
+      divSelector.show();
       var diag = divSelector.dialog({
         title: title,
         width: 700,
         height: 400
       });
       diag.bind('clickoutside', function() { 
-        diag.dialog('close');
+        diag.dialog('destroy');
+        divSelector.hide();
       });
       return false;
     }

@@ -2,7 +2,8 @@ import sbt._
 import de.element34.sbteclipsify._
 
 
-class LiftProject(info: ProjectInfo) extends DefaultWebProject(info)
+class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) 
+  with com.untyped.ClosureCompilerPlugin
 {
   
   val liftVersion = "2.4"

@@ -13,6 +13,13 @@ h3 {
   color: #dddddd;
 }
 
+.alt {
+  color: #666;
+  font-family: "Warnock Pro", "Goudy Old Style","Palatino","Book Antiqua", Georgia, serif;
+  font-style: italic;
+  font-weight: normal;
+}
+
 .battlerpt {
   display: block;
   padding: 1em;
@@ -65,3 +72,17 @@ h3 {
 	background-color: #eee;
 }
 
+.screenie {
+  border: 3px outset #aaaadd;
+  margin: 15px;
+}
+
+.floatR {
+  float: right;
+  clear: right;
+}
+
+.floatL {
+  float: left;
+  clear: left;
+}

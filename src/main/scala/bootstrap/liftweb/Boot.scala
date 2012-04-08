@@ -32,6 +32,7 @@ class Boot {
     val entries = List(
       Menu("Home") / "index", // the simple way to declare a menu
       Menu("Login") / "login",
+      Menu("How to play") / "howtoplay",
       // more complex because this menu allows anything in the
       // /static path to be visible
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
