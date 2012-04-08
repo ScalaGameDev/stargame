@@ -138,13 +138,13 @@ object Tech extends Enumerator[Tech] {
   val Combat8       = Value("Combat2", "Tempered armor", Combat,
                             30, "Sets battle rating to 360")         
   val Scanner1 = Value("Scanner1", "Deep space scanner", Combat,
-                       5, "Colonies can detect ships 3 ly away")                 
+                       5, "Colonies can detect ships 5 ly away")                 
   val Scanner2 = Value("Scanner2", "Improved space scanner", Combat,
-                       14, "Colonies can detect ships 5 ly away")
+                       14, "Colonies can detect ships 7 ly away")
   val Scanner3 = Value("Scanner3", "Advanced space scanner", Combat,
-                       21, "Colonies can detect ships 7 ly away")
+                       21, "Colonies can detect ships 11 ly away")
   val Scanner4 = Value("Scanner4", "Subspace scanner", Combat,
-                       30, "Colonies can detect ships 11 ly away")
+                       30, "Colonies can detect ships 13 ly away")
   
   //---------------------------------------------------------------------
   // Civil - new planet types, max population, infrastructure cost, maintainence

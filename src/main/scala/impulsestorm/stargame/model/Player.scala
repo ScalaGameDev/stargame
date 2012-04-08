@@ -20,15 +20,15 @@ case class Player( id: Int, openid: Option[String], alias: String,
   
   lazy val sensorRange : Int = {
     if(techs.contains(Scanner4))
-      11
+      13
     else if(techs.contains(Scanner3))
-      7
+      11
     else if(techs.contains(Scanner2))
-      5
+      7
     else if(techs.contains(Scanner1))
-      3
+      5
     else
-      1
+      3
   }
   
   lazy val range : Int = {
