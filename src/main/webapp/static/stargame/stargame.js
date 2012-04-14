@@ -111,8 +111,8 @@ function showStarSidebar(sv) {
     var productionHtml = productionHtml + 
       "<table id='production-table'>" +
       row("th", ["Factories", "Enqueued ships"]) +
-      row("td", ["<strong>sv.factories</strong>", 
-                 "<strong>sv.queuedProduction</strong>"]) +
+      row("td", ["<strong>"+sv.factories+"</strong>", 
+                 "<strong>"+sv.queuedProduction+"</strong>"]) +
       row("td", ["Cost: 100 RU", "Cost:  10 RU"]) +
       row("td", [
           "<button class='btnBuild' id='build-factories-1'>Build<br/>Factory</button>",
